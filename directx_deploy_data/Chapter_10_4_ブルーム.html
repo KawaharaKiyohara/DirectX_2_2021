@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chapter_10_4_ブルーム.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB">はじめに</h2>
+<p>このチャプターでは、次のサンプルプログラムを利用します。ダウンロードをしてください。</p>
+<p><strong><a href="https://drive.google.com/file/d/1u4RK7OvhA4vUceV1aH2S8QNt5j6F6NqD/view?usp=sharing">Sample_10_05.zip</a></strong></br></p>
+<hr>
+<h2 id="104-%E3%83%96%E3%83%AB%E3%83%BC%E3%83%A0">10.4 ブルーム</h2>
+<p>このチャプターでは光が溢れる現象のブルームについて見ていきましょう。</p>
+<h3 id="1041-hdr%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0">10.4.1 HDRレンダリング</h3>
+<p>オブジェクトに対して強い光が当たる、もしくはオブジェクト自身が強い光を放っている場合、その光は図10.15のように溢れ出して周囲に影響を与えます。</br>
+<strong>図10.15</strong></br>
+<img src="fig/10.3.1(ネットから拾ってきた画像です。).jpg" ></img></br>
+このような現象がブルームと呼ばれます。では強い光とは一体どの程度のもののことをいうのでしょうか？私たちはここまでいくつかのライティングの計算を学んできました。ディフューズライト、スペキュラライト、アンビエントライトなど。これらのライトのカラーの値を大きくすることで、強い光を物体にあてることができます。これまでピクセルシェーダーで、ランバート拡散反射などを利用して、物体に光が入射した時の反射光の強さを求めてきました。しかし、どれだけ強い光を当てたとしても、レンダリングターゲットのカラーバッファに書き込まれるカラーの値の範囲は、0～255の256段階しかありませんでした。しかし現実世界での光の明るさの範囲は256段階程度ではありません。明るさはNitという単位で表すことができます。例えば室内の床の明るさは0.08Nit、廊下の壁の明るさは77Nit、蛍光灯の光は6,000Nit、コンクリートの照り返しは10,000Nit、直射日光を反射した車のボディの輝きは300,000Nitです。このように現実世界に存在する光の強さの幅は非常に大きいです。しかし、これまでのプログラムでは、どんなに強い光を当てても、カラーバッファに書き込むことができる光の強さの範囲は0～255までです。これでは表現できる光の強さの範囲が狭すぎるため、ブルームの表現を綺麗に行うことが困難です。そこで、このチャプター以降では、もっと広い光の範囲を扱うことができる、浮動小数点テクスチャをカラーバッファとして利用します。そして、このように、0～255段階という狭い範囲から抜け出して、広い範囲の光を扱うレンダリングのことをHDR( High Dynamic Range )レンダリングと呼びます。</p>
+<h4 id="10421-%E6%B5%AE%E5%8B%95%E5%B0%8F%E6%95%B0%E7%82%B9%E3%83%86%E3%82%AF%E3%82%B9%E3%83%81%E3%83%A3">10.4.2.1 浮動小数点テクスチャ</h4>
+<p>今回実装するブルームでは、カラーバッファに32bitの浮動小数点テクスチャを利用します。これまでは8bit整数テクスチャを利用していました。テクスチャというのは、次のような配列です。</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Color</span>{</span>
+	<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span> r;
+	<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span> g;
+	<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span> b;
+	<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span> a;
+};
+<span class="hljs-comment">//これは8ビットの整数テクスチャ。</span>
+Color texture[<span class="hljs-number">720</span>][<span class="hljs-number">1280</span>];
+</div></code></pre>
+<p>このテクスチャはr,g,b,aが8ビット符号なし整数型となっているため、0～255までの値しか扱えません。これが8bit整数テクスチャです。では、32bit浮動小数点テクスチャとはどのようなテクスチャなのでしょうか。次のプログラムを読んでください。</br></p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Color</span>{</span>
+	<span class="hljs-keyword">float</span> r;
+	<span class="hljs-keyword">float</span> g;
+	<span class="hljs-keyword">float</span> b;
+	<span class="hljs-keyword">float</span> a;
+};
+<span class="hljs-comment">//これは32ビット浮動小数点テクスチャ。</span>
+Color texture[<span class="hljs-number">720</span>][<span class="hljs-number">1280</span>];
+</div></code></pre>
+<p>このテクスチャはr,g,b,aが32ビット浮動小数点型になっているため、8bit整数型とは比べ物にならないくらい、広い範囲の数値を扱えます。浮動小数点が表現できる範囲は言語使用などで異なってきますが、標準規格として普及しているIEEE754であれば、-3.40282×10^38～3.40282×10^38の範囲の数値を扱えます。</p>
+<h3 id="1043-%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0%E3%81%AE%E6%B5%81%E3%82%8C">10.4.3 アルゴリズムの流れ</h3>
+<p>では、ブルームを行うためのアルゴリズムの流れを見ていきましょう。アルゴリズムの流れとしては次のようになります。</p>
+<ol>
+<li>シーンをメインレンダリングターゲットにレンダリング</li>
+<li>シーンの輝度をテクスチャとして抽出</li>
+<li>抽出した輝度テクスチャにブラーをかけてぼかす</li>
+<li>ぼかした輝度テクスチャをメインレンダリングターゲットに加算合成</li>
+</ol>
+<p>この流れを絵で示すと、図10.16のようになります。</p>
+<p><strong>図10.16</strong></br>
+<img src="fig/10.3.2.png" ></img></br>
+では、各ステップを詳細に見ていきましょう。</p>
+<ol>
+<li>
+<p>シーンをメインレンダリングターゲットにレンダリング
+このステップはこれまでのポストエフェクトと何も変わりません。メインレンダリングターゲットに対してゲームのシーンをレンダリングしていきます。ただし、メインレンダリングターゲットのカラーバッファのテクスチャは32ビット浮動小数点テクスチャです。このステップでは図10.17のようなテクスチャが作成されます。この時点では、光の強さとして強い値が描き込まれているのですが、光があふれる表現などは発生しません。</br>
+<strong>図10.17</strong></br>
+<img src="fig/10.17.png" width=400></img></br></p>
+</li>
+<li>
+<p>シーンの輝度をテクスチャとして抽出輝度の抽出
+このステップでは、1で作成したシーンテクスチャを利用して、光が強く反射しているピクセルのみを抽出した輝度テクスチャを作成します。このステップでは図10.18のようなテクスチャが作成されます。</br>
+<strong>図10.18</strong></br>
+<img src="fig/10.18.png" width=400></img></br></p>
+</li>
+<li>
+<p>抽出した輝度テクスチャにブラーをかけてぼかす
+ここでは、2で作成したテクスチャにガウシアンブラーなどを適用して、ボケ画像を作成します。このステップでは図10.19のようなテクスチャが生成されます。輝度テクスチャをぼかすことで、強い光が当たっている箇所が外に広がっている画像が生成されます。</br>
+<strong>図10.19</strong></br>
+<img src="fig/10.19.png" width=400></img></br></p>
+</li>
+<li>
+<p>ぼかした輝度テクスチャをメインレンダリングターゲットに加算合成
+いよいよ、最終ステップです。1で作成されたシーンテクスチャと3で作成した画像を加算合成することで、ブルームエフェクトが完成します(図10.20)。</br>
+<strong>図10.20</strong></br>
+<img src="fig/10.20.png" width=400></img></br></p>
+</li>
+</ol>
+<h3 id="1044%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3%E3%83%96%E3%83%AB%E3%83%BC%E3%83%A0%E3%82%92%E5%AE%9F%E8%A3%85">10.4.4【ハンズオン】ブルームを実装</h3>
+<p>では、ブルームを実装していきましょう。<code>Sample_10_05/Sample_10_05.sln</code>を立ち上げてください。</p>
+<h4 id="step-1-32%E3%83%93%E3%83%83%E3%83%88%E3%81%AE%E6%B5%AE%E5%8B%95%E5%B0%8F%E6%95%B0%E7%82%B9%E3%81%AE%E3%82%AB%E3%83%A9%E3%83%BC%E3%83%90%E3%83%83%E3%83%95%E3%82%A1%E3%82%92%E4%BF%9D%E6%8C%81%E3%81%97%E3%81%9F%E3%83%A1%E3%82%A4%E3%83%B3%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">step-1 32ビットの浮動小数点のカラーバッファを保持したメインレンダリングターゲットを作成する。</h4>
+<p>step-1では、これまで通り、ゲームシーンをレンダリングするレンダリングターゲットを作成するプログラムを実装するのですが、カラーバッファのフォーマットが32bit浮動小数点になっています。これはHDRレンダリングを行うためです。ここに注目して、main.cppの51行目にリスト10.31のプログラムを入力して下さい。</br>
+[リスト10.31 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-1 32ビットの浮動小数点のカラーバッファを保持したメインレンダリングターゲットを作成する。</span>
+RenderTarget mainRenderTarget;
+mainRenderTarget.Create(
+	<span class="hljs-number">1280</span>,
+	<span class="hljs-number">720</span>,
+	<span class="hljs-number">1</span>,
+	<span class="hljs-number">1</span>,
+	<span class="hljs-comment">//【注目】カラーバッファのフォーマットを32bit浮動小数点にしている。</span>
+	DXGI_FORMAT_R32G32B32A32_FLOAT,
+	DXGI_FORMAT_D32_FLOAT
+);
+</div></code></pre>
+<h4 id="step-2-%E5%BC%B7%E3%81%84%E5%85%89%E3%81%AE%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E7%94%A8%E6%84%8F%E3%81%99%E3%82%8B">step-2 強い光のライトを用意する。</h4>
+<p>続いて、3Dモデルにあてるライトを用意します。今回実装するエフェクトは、強い光を反射している箇所から、光が溢れ出てくるエフェクトです。そのため、意図的に強めのライトを設定しています。では、リスト10.32のプログラムを入力してください。</br>
+[リスト10.32 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-2 強い光のライトを用意する。</span>
+Light light;
+<span class="hljs-comment">//【注目】光を強めに設定する。</span>
+light.directionalLight[<span class="hljs-number">0</span>].color.x = <span class="hljs-number">5.8f</span>;
+light.directionalLight[<span class="hljs-number">0</span>].color.y = <span class="hljs-number">5.8f</span>;
+light.directionalLight[<span class="hljs-number">0</span>].color.z = <span class="hljs-number">5.8f</span>;
+
+light.directionalLight[<span class="hljs-number">0</span>].direction.x = <span class="hljs-number">0.0f</span>;
+light.directionalLight[<span class="hljs-number">0</span>].direction.y = <span class="hljs-number">0.0f</span>;
+light.directionalLight[<span class="hljs-number">0</span>].direction.z = <span class="hljs-number">-1.0f</span>;
+light.directionalLight[<span class="hljs-number">0</span>].direction.Normalize();
+
+light.ambinetLight.x = <span class="hljs-number">0.5f</span>;
+light.ambinetLight.y = <span class="hljs-number">0.5f</span>;
+light.ambinetLight.z = <span class="hljs-number">0.5f</span>;
+light.eyePos = g_camera3D-&gt;GetPosition();
+</div></code></pre>
+<h4 id="step-3-%E8%BC%9D%E5%BA%A6%E6%8A%BD%E5%87%BA%E7%94%A8%E3%81%AE%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90">step-3 輝度抽出用のレンダリングターゲットを作成。</h4>
+<p>続いて、輝度抽出用のレンダリングターゲットを作成します。ここでもカラーバッファのフォーマットに32bit浮動小数点を指定しています。では、リスト10.33のプログラムを入力してください。</br>
+[リスト10.33 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-3 輝度抽出用のレンダリングターゲットを作成。</span>
+RenderTarget luminnceRenderTarget;
+<span class="hljs-comment">//解像度、ミップマップレベル</span>
+luminnceRenderTarget.Create(
+	<span class="hljs-number">1280</span>,		<span class="hljs-comment">//解像度はメインレンダリングターゲットと同じ。</span>
+	<span class="hljs-number">720</span>,		<span class="hljs-comment">//解像度はメインレンダリングターゲットと同じ。</span>
+	<span class="hljs-number">1</span>,
+	<span class="hljs-number">1</span>,
+	<span class="hljs-comment">//【注目】カラーバッファのフォーマットを32bit浮動小数点にしている。</span>
+	DXGI_FORMAT_R32G32B32A32_FLOAT,
+	DXGI_FORMAT_D32_FLOAT
+);
+</div></code></pre>
+<h4 id="step-4-%E8%BC%9D%E5%BA%A6%E6%8A%BD%E5%87%BA%E7%94%A8%E3%81%AE%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E5%88%9D%E6%9C%9F%E5%8C%96">step-4 輝度抽出用のスプライトを初期化。</h4>
+<p>続いて、輝度抽出用のスプライトを初期化します。リスト10.34のプログラムを入力してください。</br>
+[リスト10.34 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-4 輝度抽出用のスプライトを初期化。</span>
+<span class="hljs-comment">//初期化情報を作成する。</span>
+SpriteInitData luminanceSpriteInitData;
+<span class="hljs-comment">//輝度抽出用のシェーダーのファイルパスを指定する。</span>
+luminanceSpriteInitData.m_fxFilePath = <span class="hljs-string">"Assets/shader/samplePostEffect.fx"</span>;
+<span class="hljs-comment">//頂点シェーダーのエントリーポイントを指定する。</span>
+luminanceSpriteInitData.m_vsEntryPointFunc = <span class="hljs-string">"VSMain"</span>;
+<span class="hljs-comment">//ピクセルシェーダーのエントリーポイントを指定する。</span>
+luminanceSpriteInitData.m_psEntryPoinFunc = <span class="hljs-string">"PSSamplingLuminance"</span>;
+<span class="hljs-comment">//スプライトの幅と高さはluminnceRenderTargetと同じ。</span>
+luminanceSpriteInitData.m_width = <span class="hljs-number">1280</span>;
+luminanceSpriteInitData.m_height = <span class="hljs-number">720</span>;
+<span class="hljs-comment">//テクスチャはメインレンダリングターゲットのカラーバッファ。</span>
+luminanceSpriteInitData.m_textures[<span class="hljs-number">0</span>] = &amp;mainRenderTarget.GetRenderTargetTexture();
+<span class="hljs-comment">//描き込むレンダリングターゲットのフォーマットを指定する。</span>
+luminanceSpriteInitData.m_colorBufferFormat[<span class="hljs-number">0</span>] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+
+<span class="hljs-comment">//作成した初期化情報をもとにスプライトを初期化する。</span>
+Sprite luminanceSprite;
+luminanceSprite.Init( luminanceSpriteInitData );
+</div></code></pre>
+<h4 id="step-5-%E3%82%AC%E3%82%A6%E3%82%B7%E3%82%A2%E3%83%B3%E3%83%96%E3%83%A9%E3%83%BC%E3%82%92%E5%88%9D%E6%9C%9F%E5%8C%96">step-5 ガウシアンブラーを初期化。</h4>
+<p>輝度テクスチャをぼかすためのガウシアンブラーを初期化します。ガウシアンブラーはブルーム以外の処理でも頻繁に利用する処理なので、再利用しやすいように、著者の方でGaussianBlurクラスを用意しました。GaussianBlur::Init関数にブラーをかけたいテクスチャを渡して、後述するGaussianBlur::ExecuteOnGPU()を呼び出すと、指定したテクスチャにブラーをかけてくれます。リスト10.35のプログラムを入力してください。</br>
+[リスト10.35 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-5 ガウシアンブラーを初期化。</span>
+GaussianBlur gaussianBlur;
+gaussianBlur.Init(&amp;luminnceRenderTarget.GetRenderTargetTexture());
+</div></code></pre>
+<h4 id="step-6-%E3%83%9C%E3%82%B1%E7%94%BB%E5%83%8F%E3%82%92%E5%8A%A0%E7%AE%97%E5%90%88%E6%88%90%E3%81%99%E3%82%8B%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E5%88%9D%E6%9C%9F%E5%8C%96">step-6 ボケ画像を加算合成するスプライトを初期化。</h4>
+<p>続いて、ガウシアンブラーで生成したボケ画像を、メインレンダリングターゲットに加算合成するためのスプライトを初期化します。加算合成を行うので、アルファブレンディングに加算モードを指定しています。リスト10.36のプログラムを入力してください。</br>
+[リスト10.36 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-6 ボケ画像を加算合成するスプライトを初期化。</span>
+<span class="hljs-comment">//初期化情報を設定する。</span>
+SpriteInitData finalSpriteInitData;
+finalSpriteInitData.m_textures[<span class="hljs-number">0</span>] = &amp;gaussianBlur.GetBokeTexture();
+<span class="hljs-comment">//解像度はmainRenderTargetの幅と高さ。</span>
+finalSpriteInitData.m_width = <span class="hljs-number">1280</span>;
+finalSpriteInitData.m_height = <span class="hljs-number">720</span>;
+<span class="hljs-comment">//ぼかした画像を、通常の2Dとしてメインレンダリングターゲットに描画するので、</span>
+<span class="hljs-comment">//2D用のシェーダーを使用する。</span>
+finalSpriteInitData.m_fxFilePath = <span class="hljs-string">"Assets/shader/sample2D.fx"</span>;
+<span class="hljs-comment">//ただし、加算合成で描画するので、アルファブレンディングモードを加算にする。</span>
+finalSpriteInitData.m_alphaBlendMode = AlphaBlendMode_Add;
+<span class="hljs-comment">//カラーバッファのフォーマットは例によって、32ビット浮動小数点バッファ。</span>
+finalSpriteInitData.m_colorBufferFormat[<span class="hljs-number">0</span>] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+
+<span class="hljs-comment">//初期化情報を元に加算合成用のスプライトを初期化する。</span>
+Sprite finalSprite;
+finalSprite.Init(finalSpriteInitData);
+</div></code></pre>
+<h4 id="step-7-mainrendertarget%E3%81%AE%E3%83%86%E3%82%AF%E3%82%B9%E3%83%81%E3%83%A3%E3%82%92%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%83%90%E3%83%83%E3%83%95%E3%82%A1%E3%81%AB%E8%B2%BC%E3%82%8A%E4%BB%98%E3%81%91%E3%82%8B%E3%81%9F%E3%82%81%E3%81%AE%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E5%88%9D%E6%9C%9F%E5%8C%96%E3%81%99%E3%82%8B">step-7 mainRenderTargetのテクスチャをフレームバッファに貼り付けるためのスプライトを初期化する。</h4>
+<p>初期化ステップの最後に、メインレンダリングターゲットに描画された絵をフレームバッファにコピーするためのスプライトを初期化します。リスト10.37のプログラムを入力してください。</br>
+[リスト10.37 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-7 mainRenderTargetのテクスチャをフレームバッファに貼り付けるためのスプライトを初期化する。</span>
+<span class="hljs-comment">//スプライトの初期化オブジェクトを作成する。</span>
+SpriteInitData spriteInitData;
+<span class="hljs-comment">//テクスチャはmainRenderTargetのカラーバッファ。</span>
+spriteInitData.m_textures[<span class="hljs-number">0</span>] = &amp;mainRenderTarget.GetRenderTargetTexture();
+spriteInitData.m_width = <span class="hljs-number">1280</span>;
+spriteInitData.m_height = <span class="hljs-number">720</span>;
+<span class="hljs-comment">//モノクロ用のシェーダーを指定する。</span>
+spriteInitData.m_fxFilePath = <span class="hljs-string">"Assets/shader/sample2D.fx"</span>;
+<span class="hljs-comment">//初期化オブジェクトを使って、スプライトを初期化する。</span>
+Sprite copyToFrameBufferSprite;
+copyToFrameBufferSprite.Init(spriteInitData);
+</div></code></pre>
+<h4 id="step-8-%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E3%82%92mainrendertarget%E3%81%AB%E5%A4%89%E6%9B%B4%E3%81%99%E3%82%8B">step-8 レンダリングターゲットをmainRenderTargetに変更する。</h4>
+<p>step-8からはゲームループの処理です。まずは、いつも通りレンダリングターゲットをメインレンダリングターゲットに変更します。リスト10.38のプログラムを入力してください。</br>
+[リスト10.38 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-8 レンダリングターゲットをmainRenderTargetに変更する。</span>
+<span class="hljs-comment">//レンダリングターゲットとして利用できるまで待つ。</span>
+renderContext.WaitUntilToPossibleSetRenderTarget(mainRenderTarget);
+<span class="hljs-comment">//レンダリングターゲットを設定。</span>
+renderContext.SetRenderTargetAndViewport(mainRenderTarget);
+<span class="hljs-comment">//レンダリングターゲットをクリア。</span>
+renderContext.ClearRenderTargetView(mainRenderTarget);
+</div></code></pre>
+<h4 id="step-9-mainrendertarget%E3%81%AB%E5%90%84%E7%A8%AE%E3%83%A2%E3%83%87%E3%83%AB%E3%82%92%E6%8F%8F%E7%94%BB%E3%81%99%E3%82%8B">step-9 mainRenderTargetに各種モデルを描画する。</h4>
+<p>step-9もいつも通りの処理です。メインレンダリングターゲットに対して、各種モデルを描画します。リスト10.39のプログラムを入力してください。</br>
+[リスト10.39 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-9 mainRenderTargetに各種モデルを描画する。</span>
+plModel.Draw(renderContext);
+<span class="hljs-comment">//レンダリングターゲットへの書き込み終了待ち。</span>
+renderContext.WaitUntilFinishDrawingToRenderTarget(mainRenderTarget);
+</div></code></pre>
+<h4 id="step-10-%E8%BC%9D%E5%BA%A6%E6%8A%BD%E5%87%BA">step-10 輝度抽出</h4>
+<p>続いて輝度抽出です。レンダリングターゲットを輝度抽出用に変更します。変更できたら、輝度抽出用のスプライトを描画します。リスト10.39のプログラムを入力してください。</br>
+[リスト10.39 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-10 輝度抽出</span>
+<span class="hljs-comment">//輝度抽出用のレンダリングターゲットに変更。</span>
+renderContext.WaitUntilToPossibleSetRenderTarget(luminnceRenderTarget);
+<span class="hljs-comment">//レンダリングターゲットを設定。</span>
+renderContext.SetRenderTargetAndViewport(luminnceRenderTarget);
+<span class="hljs-comment">//レンダリングターゲットをクリア。</span>
+renderContext.ClearRenderTargetView(luminnceRenderTarget);
+<span class="hljs-comment">//輝度抽出を行う。</span>
+luminanceSprite.Draw(renderContext);
+<span class="hljs-comment">//レンダリングターゲットへの書き込み終了待ち。</span>
+renderContext.WaitUntilFinishDrawingToRenderTarget(luminnceRenderTarget);
+</div></code></pre>
+<h4 id="step-11-%E3%82%AC%E3%82%A6%E3%82%B7%E3%82%A2%E3%83%B3%E3%83%96%E3%83%A9%E3%83%BC%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B">step-11 ガウシアンブラーを実行する。</h4>
+<p>輝度テクスチャを作成することができたら、そのテクスチャにガウシアンブラーを実行します。前述したように、今回は著者の方で用意した、GaussianBlurクラスを利用します。GaussianBlur::ExecuteOnGPU関数の第二引数は画像のボケ具合です。値を大きくすると、画像が強くボケるようになります。今回のサンプルでは20を指定しています。では、リスト10.40のプログラムを入力してください。</br>
+[リスト10.40 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-11 ガウシアンブラーを実行する。</span>
+gaussianBlur.ExecuteOnGPU(renderContext, <span class="hljs-number">20</span>);
+</div></code></pre>
+<h4 id="step-12-%E3%83%9C%E3%82%B1%E7%94%BB%E5%83%8F%E3%82%92%E3%83%A1%E3%82%A4%E3%83%B3%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E3%81%AB%E5%8A%A0%E7%AE%97%E5%90%88%E6%88%90">step-12 ボケ画像をメインレンダリングターゲットに加算合成。</h4>
+<p>続いて、レンダリングターゲットをメインレンダリングターゲットに切り替えて、ボケ画像を加算合成します。リスト10.41のプログラムを入力してください。</br>
+[リスト10.41 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-12 ボケ画像をメインレンダリングターゲットに加算合成。</span>
+<span class="hljs-comment">//レンダリングターゲットとして利用できるまで待つ。</span>
+renderContext.WaitUntilToPossibleSetRenderTarget(mainRenderTarget);
+<span class="hljs-comment">//レンダリングターゲットを設定。</span>
+renderContext.SetRenderTargetAndViewport(mainRenderTarget);
+<span class="hljs-comment">//最終合成。</span>
+finalSprite.Draw(renderContext);
+<span class="hljs-comment">//レンダリングターゲットへの書き込み終了待ち。</span>
+renderContext.WaitUntilFinishDrawingToRenderTarget(mainRenderTarget);
+</div></code></pre>
+<h4 id="step-13-%E3%83%A1%E3%82%A4%E3%83%B3%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E3%81%AE%E7%B5%B5%E3%82%92%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%83%90%E3%83%83%E3%83%95%E3%82%A1%E3%81%AB%E3%82%B3%E3%83%94%E3%83%BC">step-13 メインレンダリングターゲットの絵をフレームバッファにコピー。</h4>
+<p>step-13でcpp側のプログラムを終了です。step-12のプログラムでブルームエフェクトは完成しているので、あとは、完成した絵をフレームバッファにコピーするだけです。リスト10.42のプログラムを入力してください。</br>
+[リスト10.42 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-13 メインレンダリングターゲットの絵をフレームバッファにコピー。</span>
+renderContext.SetRenderTarget(
+	g_graphicsEngine-&gt;GetCurrentFrameBuffuerRTV(),
+	g_graphicsEngine-&gt;GetCurrentFrameBuffuerDSV()
+);
+copyToFrameBufferSprite.Draw(renderContext);	
+</div></code></pre>
+<h4 id="step-14-%E8%BC%9D%E5%BA%A6%E3%82%92%E6%8A%BD%E5%87%BA%E3%81%99%E3%82%8B%E3%83%94%E3%82%AF%E3%82%BB%E3%83%AB%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%82%92%E5%AE%9F%E8%A3%85">step-14 輝度を抽出するピクセルシェーダーを実装。</h4>
+<p>今回の実装で、シェーダー側の実装は輝度抽出のピクセルシェーダーだけです。今回は内積を利用して、サンプリングしてきたテクスチャカラーの明るさを計算しています。clip()は引数の値がマイナスになると、ピクセルシェーダーの処理が打ち切られます。今回の実装では、明るさtが1.0以下の場合、処理が打ち切られるため、ピクセルカラーが描き込まれません。ですので、明るさが1.0以上になっているテクセルのみ、カラーバッファに描き込まれます。リスト10.43のプログラムを入力してください。入力出来たら実行してみてください。図10.21のようなプログラムが実行できたら完成しています。</br>
+[リスト10.43 <code>samplePostEffect.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-14 輝度を抽出するピクセルシェーダーを実装。</span>
+<span class="hljs-comment">//メインレンダリングターゲットからカラーをサンプリング。</span>
+float4 color = mainRenderTargetTexture.Sample(Sampler, In.uv);
+<span class="hljs-comment">//サンプリングしたカラーの明るさを計算。</span>
+<span class="hljs-keyword">float</span> t = dot( color.xyz, float3(<span class="hljs-number">0.2125f</span>, <span class="hljs-number">0.7154f</span>, <span class="hljs-number">0.0721f</span>) );
+<span class="hljs-comment">//clip関数は引数の値がマイナスになると、以降の処理をスキップする。</span>
+<span class="hljs-comment">//なので、マイナスになるとピクセルカラーは出力されない。</span>
+<span class="hljs-comment">//今回の実装はカラーの明るさが１以下ならピクセルキルする。</span>
+clip(t - <span class="hljs-number">1.0f</span>);
+<span class="hljs-keyword">return</span> color;
+</div></code></pre>
+<p><strong>図10.21</strong></br>
+<img src="fig/10.21.png" width=400></img></br></p>
+<h4 id="%E6%9B%B4%E3%81%AB%E5%BC%B7%E3%81%84%E5%85%89%E3%82%92%E3%81%82%E3%81%A6%E3%82%8B%E3%81%A8%E3%81%A9%E3%81%86%E3%81%AA%E3%82%8B">更に強い光をあてるとどうなる？</h4>
+<p>さて、先ほど実装したブルームのプログラムで、キャラに更に強い光をあてるとどうなるでしょうか？先ほどのサンプルはコントローラーの左スティックの入力(キーボードならA,D)の入力でライトの強さを変更することができます。ライトの強さを大きくしてみて下さい。すると、綺麗に光が広がらず、図10.22のようになってしまっていると思います。</br>
+<strong>図10.22</strong></br>
+<img src="fig/10.22.png" width=400></img></br>
+では、次の節ではこのブルームの処理を改良した川瀬式ブルームフィルタを見ていきます。川瀬式ブルームフィルタを実装すると、同じように強い光を当てた時に、図10.23のように綺麗に光が広がっていくようになります。</br></p>
+<p><strong>図10.23</strong></br>
+<img src="fig/10.23.png" width=400></img></br></p>
+<h2 id="%E8%A9%95%E4%BE%A1%E3%83%86%E3%82%B9%E3%83%88">評価テスト</h2>
+<p>次の評価テストを行いなさい。</br>
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSe1EuY8YuUvCLXsYi2wwIKdDUCVkYkP0-szkxI56iXY8UE8_w/viewform?usp=sf_link">評価テストへジャンプ</a>
+</br></p>
+
+</body>
+</html>

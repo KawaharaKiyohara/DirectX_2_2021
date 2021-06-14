@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chapter_5_3_リムライト.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB">はじめに</h2>
+<p>このチャプターでは、次のサンプルプログラムを利用します。ダウンロードをしてください。</br>
+<strong><a href="https://drive.google.com/file/d/11R6dSppHeIAbBn4JRisEJQMuwzhJNcTb/view?usp=sharing">Sample_05_03.zip</a></strong></br></p>
+<hr>
+<h2 id="53-%E3%83%AA%E3%83%A0%E3%83%A9%E3%82%A4%E3%83%88">5.3 リムライト</h2>
+<p>リムライトは逆光ライトとも呼ばれます。図5.12のような表現のことです。</br></p>
+<p><strong>図5.12</strong></br>
+<img src="fig/5.12(ネットから拾ってきた画像です。).jpg" width = 200></img></br></p>
+<p>図5.12の写真は後ろから当たっている光が被写体を透過して、図5.13のように被写体の輪郭がうっすらと光っています。</br>
+<strong>図5.13</strong></br>
+<img src="fig/5.13(ネットから拾ってきた画像です。).png" width = 200></img></br>
+このような現象を再現するのがリムライトです。この逆光表現は動物の毛の表現でも使われることがあり、ファーシェーダーというように呼ばれていたりもします。(図5.14)</br></p>
+<p><strong>図5.14</strong></br>
+<img src="fig/5.14(ネットから拾ってきた画像です。).jpg" width = 200></img></br>
+逆光ライトは次の２点について考えることで実装することができます。</p>
+<p>1.サーフェイスの法線と光の入射方向</p>
+<p>2.サーフェイスの法線と視線の方向</p>
+<p>では、この２点について詳しく見ていきましょう。</p>
+<hr>
+<h3 id="531-%E3%82%B5%E3%83%BC%E3%83%95%E3%82%A7%E3%82%A4%E3%82%B9%E3%81%AE%E6%B3%95%E7%B7%9A%E3%81%A8%E5%85%89%E3%81%AE%E5%85%A5%E5%B0%84%E6%96%B9%E5%90%91">5.3.1 サーフェイスの法線と光の入射方向</h3>
+<p>まず、リムライトは図5.15のように、光の向きとサーフェイスの法線が垂直に近い箇所で強く発生すると考えることができます。</br>
+<strong>図5.15</strong></br>
+<img src="fig/5.15.png" witdh=600></img></br>
+この強さは光の向きとサーフェイスの法線とで内積を利用すると求めることができます。</br>
+内積には次のような性質があります。</br>
+<strong>「正規化された二つのベクトルの内積は、その二つのベクトルのなす角が0度なら1.0、90度なら0.0、180度なら-1.0を返す」</strong></br>
+図5.16を見てみてください。</br>
+<strong>図5.16</strong></br>
+<img src="fig/5.16.png" witdh=600></img></br>
+この性質は非常に重要で、リアルタイムCGの計算で何度も出てきます。実はこれは、ランバート拡散反射で光の強さを求めるときに利用したものと全く同じです。図4.10と表4.1を見てみてください。二つのベクトルのなす角度が0度の内積は1、90度の内積は0、180度の内積は-1になっています。</br>
+今回は光の向きとサーフェイスの法線が垂直(90度)になるほどリムライトの影響を強くしたい(100%にしたい)わけなので、下記のような計算でリムライトの強さを求めることができます。</br>
+<strong>1 - max{ 0,  ライトの方向 ・ 法線  }</strong></br>
+ライトの方向と法線の角度が垂直であれば、内積の結果は0になるため、計算すると1(100%)になります。逆にライトの方向と法線が同じ向きであれば、1になるため、計算すると0(0%)となります。これをリムライトの強さとして考えます。</p>
+<hr>
+<h3 id="532-%E3%82%B5%E3%83%BC%E3%83%95%E3%82%A7%E3%82%A4%E3%82%B9%E3%81%AE%E6%B3%95%E7%B7%9A%E3%81%A8%E8%A6%96%E7%B7%9A%E3%81%AE%E6%96%B9%E5%90%91">5.3.2 サーフェイスの法線と視線の方向</h3>
+<p>リムライトの強さを決めるのは、サーフェイスの法線とライトの方向のみではありません。サーフェイスの法線と視線の方向でも決まります。図5.17と図5.18を見てみてください。</br>
+<strong>図5.18</strong></br>
+<img src="fig/5.18.png" witdh=600></img></br></p>
+<p><strong>図5.19</strong></br>
+<img src="fig/5.19.png" witdh=600></img></br></p>
+<p>つまり、リムライトさは「サーフェイスの法線と視線の方向が９０度に近いほど強くなる」という特性あります。この強さの求め方は5.3.1節と全く同じ考え方です。次の計算を行うことで求めることができます。</br>
+<strong>1 - max{ 0, 視線の方向 ・ 法線 * -1 }</strong></br>
+ライトの方向との時と違う点は、視線の方向がライトとは逆向きなので、-1を乗算していることです。</p>
+<hr>
+<h3 id="533-%E3%83%AA%E3%83%A0%E3%83%A9%E3%82%A4%E3%83%88%E3%81%AE%E5%BC%B7%E3%81%95%E3%82%92%E4%B9%97%E7%AE%97%E3%81%99%E3%82%8B">5.3.3 リムライトの強さを乗算する</h3>
+<p>さて、5.3.1と5.3.2でリムライトの強さに影響を与える二つの要素について計算することができました。後は、その二つを乗算することで最終的なリムライトの強さを求めることができます。では、最後にリムライトの強さを求める疑似コードを示します。</br></p>
+<pre class="hljs"><code><div><span class="hljs-comment">//ライトの方向をL、視線の方向をeyeDir、法線をNとする。</span>
+
+<span class="hljs-comment">//ライトの方向と法線で内積を計算。</span>
+<span class="hljs-keyword">float</span> power1 = dot( L, N );		
+<span class="hljs-comment">//内積結果がマイナスであれば0にする。</span>
+power1 = max( <span class="hljs-number">0.0f</span>, power1 );	
+<span class="hljs-comment">//1から引いて、ライトの方向に依存するリムの強さを計算する。</span>
+power1 = <span class="hljs-number">1.0f</span> - power1;
+
+<span class="hljs-comment">//視線の逆方向と法線で内積を計算する。</span>
+<span class="hljs-keyword">float</span> power2 = dot( -eyeDir, N );
+<span class="hljs-comment">//内積結果がマイナスであれば0にする。</span>
+power2 = max( <span class="hljs-number">0.0f</span>, power2 );	
+<span class="hljs-comment">//1から引いて、視線の方向に依存するリムの強さを計算する。</span>
+power2 = <span class="hljs-number">1.0f</span> - power2;
+
+<span class="hljs-comment">//二つの強さを乗算して、最終的なリムの強さを求める。</span>
+<span class="hljs-keyword">float</span> limPower = power1 * power2;
+</div></code></pre>
+<p><code>max()</code>はHLSLの組み込み関数です。二つの引数を受け取り、大きいほうの数値を返します。マイナスになる値を0に補正する場合などによく利用されます。</p>
+<hr>
+<h3 id="534-%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3%E3%83%AA%E3%83%A0%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%97%E3%82%88%E3%81%86">5.3.4 【ハンズオン】リムライトを実装しよう。</h3>
+<p>では、ハンズオンでリムライトを実装していきましょう。今回の実装ではディレクションライトによるリムライトを実装します。すでにディレクションライトの情報をグラフィックメモリに転送するコードは実装できているので、今回改造するのはシェーダー側だけとなります。<code>Sample_05_03/Sample_05_03.sln</code>を立ち上げてください。</p>
+<h4 id="step-1-%E3%83%94%E3%82%AF%E3%82%BB%E3%83%AB%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%81%B8%E3%81%AE%E5%85%A5%E5%8A%9B%E3%81%AB%E3%82%AB%E3%83%A1%E3%83%A9%E7%A9%BA%E9%96%93%E3%81%AE%E6%B3%95%E7%B7%9A%E3%82%92%E8%BF%BD%E5%8A%A0">step-1 ピクセルシェーダーへの入力にカメラ空間の法線を追加。</h4>
+<p>まずは、ピクセルシェーダーへの入力にカメラ空間の法線を追加します。これはカメラを原点(0,0,0)、カメラの右をX軸(1,0,0)、上をY軸(0,1,0)、奥をZ軸(0,0,1)とした空間です。この空間のサーフェイスの法線をピクセルシェーダーに渡すようにしたいわけです。この理由は後述します。Assets/shader/sample.fxを開いてリスト5.27のプログラムを入力してください。</br></p>
+<p>[リスト5.27 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-1 ピクセルシェーダーへの入力にカメラ空間の法線を追加。</span>
+float3 normalInView	: TEXCOORD2;	<span class="hljs-comment">//カメラ空間の法線。</span>
+</div></code></pre>
+<h4 id="step-2-%E3%82%AB%E3%83%A1%E3%83%A9%E7%A9%BA%E9%96%93%E3%81%AE%E6%B3%95%E7%B7%9A%E3%82%92%E6%B1%82%E3%82%81%E3%82%8B">step-2 カメラ空間の法線を求める。</h4>
+<p>ピクセルシェーダーの入力にカメラ空間の法線を追加したので、頂点シェーダーでカメラ空間の法線を計算します。カメラ空間に変換するのは、ワールド空間の法線に、カメラ行列を乗算するだけです。リスト5.28のプログラムを入力してください。</br></p>
+<p>[リスト5.28 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-2 カメラ空間の法線を求める。</span>
+psIn.normalInView = mul( mView, psIn.normal);<span class="hljs-comment">//カメラ空間の法線を求める。</span>
+</div></code></pre>
+<h4 id="step-3-%E3%82%B5%E3%83%BC%E3%83%95%E3%82%A7%E3%82%A4%E3%82%B9%E3%81%AE%E6%B3%95%E7%B7%9A%E3%81%A8%E5%85%89%E3%81%AE%E5%85%A5%E5%B0%84%E6%96%B9%E5%90%91%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%99%E3%82%8B%E3%83%AA%E3%83%A0%E3%81%AE%E5%BC%B7%E3%81%95%E3%82%92%E6%B1%82%E3%82%81%E3%82%8B">step-3 サーフェイスの法線と光の入射方向に依存するリムの強さを求める。</h4>
+<p>いよいよピクセルシェーダーにリムライトの計算のプログラムを実装していきます。最初の計算はサーフェイスの法線と光の入射方向に依存するリムの強さを求めています。これは5.3.1節で説明した内容です。リスト5.29のプログラムを入力してください。</br></p>
+<p>[リスト5.29 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-3 サーフェイスの法線と光の入射方向に依存するリムの強さを求める。</span>
+<span class="hljs-keyword">float</span> power1 = <span class="hljs-number">1.0f</span> - max( <span class="hljs-number">0.0f</span>, dot( dirDirection, psIn.normal));
+</div></code></pre>
+<h4 id="step-4-%E3%82%B5%E3%83%BC%E3%83%95%E3%82%A7%E3%82%A4%E3%82%B9%E3%81%AE%E6%B3%95%E7%B7%9A%E3%81%A8%E8%A6%96%E7%B7%9A%E3%81%AE%E6%96%B9%E5%90%91%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%99%E3%82%8B%E3%83%AA%E3%83%A0%E3%81%AE%E5%BC%B7%E3%81%95%E3%82%92%E6%B1%82%E3%82%81%E3%82%8B">step-4 サーフェイスの法線と視線の方向に依存するリムの強さを求める。</h4>
+<p>続いて、サーフェイスの法線と視線の方向に依存するリムの強さを求めます。これも5.3.2節で説明した内容なのですが、今回は計算を簡略化するために、カメラ空間のサーフェイスの法線を利用しています。視線の方向はカメラ空間なので(0,0,1)となります。内積の公式は次のようなものでした。</br>
+<strong>V1.x × V2.x + V1.y × V2.y + V1.z × V2.z</strong></br>
+視線のX方向とY方向の値は0、Zの方向は1とになっているため、内積の結果は法線のZの値と同じになります。ですので、リスト5.30のプログラムでは<code>dot()</code>は利用しておらず、カメラ空間の法線のZ値をそのまま使用しています。では、リスト5.30のプログラムを入力してください。</br></p>
+<p>[リスト5.30 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-4 サーフェイスの法線と視線の方向に依存するリムの強さを求める。</span>
+<span class="hljs-keyword">float</span> power2 = <span class="hljs-number">1.0f</span> - max( <span class="hljs-number">0.0f</span>, psIn.normalInView.z * <span class="hljs-number">-1.0f</span>);
+</div></code></pre>
+<h4 id="step-5-%E6%9C%80%E7%B5%82%E7%9A%84%E3%81%AA%E3%83%AA%E3%83%A0%E3%81%AE%E5%BC%B7%E3%81%95%E3%82%92%E6%B1%82%E3%82%81%E3%82%8B">step-5 最終的なリムの強さを求める。</h4>
+<p>「サーフェイスの法線と光の入射方向に依存するリムの強さ」と「サーフェイスの法線と視線の方向に依存するリムの強さ」が求まったら、その二つの強さを乗算して最終的なリムの強さを求めましょう。また、ここでも<code>pow()</code>を利用して、リムの強さの変化を指数関数的にしています。ここでは1.3乗しています。では、リスト5.31のプログラムを入力してください。</br></p>
+<p>[リスト5.31 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-5 最終的なリムの強さを求める。</span>
+<span class="hljs-keyword">float</span> limPower = power1 * power2;
+<span class="hljs-comment">//pow()を使用して、強さの変化を指数関数的にする。</span>
+limPower = <span class="hljs-built_in">pow</span>( limPower, <span class="hljs-number">1.3f</span>);
+</div></code></pre>
+<h4 id="step-6-%E6%9C%80%E7%B5%82%E7%9A%84%E3%81%AA%E5%8F%8D%E5%B0%84%E5%85%89%E3%81%AB%E3%83%AA%E3%83%A0%E3%83%A9%E3%82%A4%E3%83%88%E3%81%AE%E5%8F%8D%E5%B0%84%E5%85%89%E3%82%92%E5%90%88%E7%AE%97%E3%81%99%E3%82%8B">step-6 最終的な反射光にリムライトの反射光を合算する。</h4>
+<p>では最後です。最終的な反射光にリムライトの反射光を合算しましょう。リスト5.32のプログラムを入力して下さい。</br>
+[リスト5.32 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-6 最終的な反射光にリムライトの反射光を合算する。</span>
+<span class="hljs-comment">//まずはリムライトのカラーを計算する。</span>
+float3 limColor = limPower * dirColor;
+<span class="hljs-comment">//最終的な反射光にリムの反射光を合算する。</span>
+finalLig += limColor;
+</div></code></pre>
+<p>入力出来たら実行してみてください。図5.20のようなプログラムが実行できたら完成です。</br></p>
+<p><strong>図5.20</strong></br>
+<img src="fig/5.20.png" width="600"></img></br>
+XInput対応のゲームパッドであれば左スティックを動かすとライトを回すことができます。ゲームパッドがない場合はキーボードのAキーとDキーでまわすことができます。リムライトの効果を確認してみてください。</p>
+<hr>
+<h2 id="%E8%A9%95%E4%BE%A1%E3%83%86%E3%82%B9%E3%83%88-3">評価テスト-3</h2>
+<p>次の評価テストを行いなさい。</br>
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSdRjKAwmpImesGjCFqEtC4mnF9cM4eraGLdpd87TNFoYfvKAw/viewform?usp=sf_link">評価テストへジャンプ</a></p>
+
+</body>
+</html>

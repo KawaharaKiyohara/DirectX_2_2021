@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chapter_8_1_DirectX12で2D描画.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB">はじめに</h2>
+<p>このチャプターでは、次のサンプルプログラムを利用します。ダウンロードをしてください。</br>
+<strong><a href="https://drive.google.com/file/d/1Qt7ieWAt0t1vFJZJbM5Rd4lJxboVzteC/view?usp=sharing">Sample_08_01.zip</a></strong></br></p>
+<hr>
+<h2 id="81-directx12%E3%81%A72d%E6%8F%8F%E7%94%BB">8.1 DirectX12で2D描画</h2>
+<p>まず、大前提としてDirectX12は3Dを描画するためのグラフィックスAPIで、2Dを描画するAPIはありません。正確には2D専用のAPIはありません。では、DirectX12でどのようにして2Dを描画するのかというと、3D描画の機能を使って四角形の板ポリを描画して、あたかも2Dであるかのように見せているのです。ですので、2D描画といっても新しいことを学ぶわけではありません。2D	を表示するために準備必要なデータは、頂点バッファ、インデックスバッファ、テクスチャ、頂点シェーダー、ピクセルシェーダーなど3D表示と全く同じです。</p>
+<h3 id="812%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B32d%E8%A1%A8%E7%A4%BA">8.1.2【ハンズオン】2D表示</h3>
+<p>では、2Dを表示するためのハンズオンを行っていきましょう。Chapter3で行った、三角形ポリゴンの表示とほとんど同じですので、それも思い出しながらハンズオンを実施してみて下さい。</p>
+<h4 id="step-1-%E3%83%AB%E3%83%BC%E3%83%88%E3%82%B7%E3%82%B0%E3%83%8D%E3%83%81%E3%83%A3%E3%82%92%E4%BD%9C%E6%88%90">step-1 ルートシグネチャを作成</h4>
+<p>DirectX12で絵を描画するためにはルートシグネチャが必要になってきます。これはここまで説明はしてきていませんが、3D描画でも当然必要です。ルートシグネチャとは大雑把に説明すると、これから絵を描くための情報のデータ構造などを定義しているものです。今回は著者の方でルートシグネチャをラップしているRootSinatureクラスを利用します。`Sample_08_01/Sample_08_01.slnを立ち上げてmain.cppの26行目にリスト8.1のプログラムを入力してください。</br></p>
+<p>[リスト8.1 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-1 ルートシグネチャを作成。</span>
+RootSignature rootSignature;
+InitRootSignature(rootSignature);
+</div></code></pre>
+<h4 id="step-2-%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%82%92%E3%83%AD%E3%83%BC%E3%83%89%E3%81%99%E3%82%8B">step-2 シェーダーをロードする。</h4>
+<p>続いて2D描画用のシェーダーをロードします。リスト8.2のプログラムを入力して下さい。</br>
+[リスト8.2 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step2 シェーダーをロード。</span>
+Shader vs, ps;
+<span class="hljs-comment">//頂点シェーダーをロード。</span>
+vs.LoadVS(<span class="hljs-string">"Assets/shader/sample.fx"</span>, <span class="hljs-string">"VSMain"</span>);
+<span class="hljs-comment">//ピクセルシェーダーをロード。</span>
+ps.LoadPS(<span class="hljs-string">"Assets/shader/sample.fx"</span>, <span class="hljs-string">"PSMain"</span>);
+</div></code></pre>
+<h4 id="step-3-%E3%83%91%E3%82%A4%E3%83%97%E3%83%A9%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%86%E3%83%BC%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">step-3 パイプラインステートを作成する。</h4>
+<p>パイプラインステートとは、レンダリングパイプラインの設定です。Chapter1でレンダリングパイプラインについて少しだけ勉強しました。絵が表示されるまでには色々な工程があります。その各種工程に関する設定です。このレンダリングパイプラインについてはあとで、新しい設定を二つほど勉強します。そこでまた詳しく説明します。では、リスト8.3のプログラムを入力してください。</br></p>
+<p>[リスト8.3 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-3 パイプラインステートを作成。</span>
+PipelineState pipelineState;
+InitPipelineState(pipelineState, rootSignature, vs, ps);
+</div></code></pre>
+<h4 id="step-4-%E5%9B%9B%E8%A7%92%E5%BD%A2%E3%81%AE%E6%9D%BF%E3%83%9D%E3%83%AA%E3%81%AE%E9%A0%82%E7%82%B9%E3%83%90%E3%83%83%E3%83%95%E3%82%A1%E3%82%92%E4%BD%9C%E6%88%90">step-4 四角形の板ポリの頂点バッファを作成</h4>
+<p>続いて、四角形の板ポリの頂点バッファを定義します。今回の頂点は頂点座標とUV座標のデータを保持しています。では、リスト8.4のプログラムを入力して下さい。</br></p>
+<p>[リスト8.4 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-4 四角形の板ポリの頂点バッファを作成</span>
+<span class="hljs-comment">//頂点配列を定義。</span>
+SimpleVertex vertices[] = {
+	{
+		{ <span class="hljs-number">-1.0f</span>, <span class="hljs-number">-1.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span> },	<span class="hljs-comment">//座標</span>
+		{ <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>},					<span class="hljs-comment">//UV座標</span>
+	},
+	{
+		{ <span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span> },		<span class="hljs-comment">//座標</span>
+		{ <span class="hljs-number">1.0f</span>, <span class="hljs-number">0.0f</span>},					<span class="hljs-comment">//UV座標</span>
+	},
+	{
+		{ <span class="hljs-number">1.0f</span>, <span class="hljs-number">-1.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span> },	<span class="hljs-comment">//座標</span>
+		{ <span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>},					<span class="hljs-comment">//UV座標</span>
+	},
+	{
+		{ <span class="hljs-number">-1.0f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span> },	<span class="hljs-comment">//座標。</span>
+		{ <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>},					<span class="hljs-comment">//UV座標</span>
+	}
+};
+<span class="hljs-comment">//頂点配列から頂点バッファを作成。</span>
+VertexBuffer triangleVB;
+triangleVB.Init(<span class="hljs-keyword">sizeof</span>(vertices), <span class="hljs-keyword">sizeof</span>(vertices[<span class="hljs-number">0</span>]));
+triangleVB.Copy(vertices);
+</div></code></pre>
+<h4 id="step-5-%E6%9D%BF%E3%83%9D%E3%83%AA%E3%81%AE%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E3%83%90%E3%83%83%E3%83%95%E3%82%A1%E3%82%92%E4%BD%9C%E6%88%90">step-5 板ポリのインデックスバッファを作成。</h4>
+<p>頂点バッファを作成出来たらインデックスバッファを作詞しましょう。リスト8.5のプロ宇グラムを入力してください。</br>
+[リスト8.5 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-5 板ポリのインデックスバッファを作成。</span>
+<span class="hljs-comment">//インデックスの配列</span>
+<span class="hljs-keyword">uint16_t</span> indices[] = {
+	<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,
+	<span class="hljs-number">3</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>,
+};
+<span class="hljs-comment">//インデックスの配列からインデックスバッファを作成する。</span>
+IndexBuffer triangleIB;
+triangleIB.Init(<span class="hljs-keyword">sizeof</span>(indices), <span class="hljs-number">2</span>);
+triangleIB.Copy(indices);
+</div></code></pre>
+<h4 id="ste-6-%E3%83%86%E3%82%AF%E3%82%B9%E3%83%81%E3%83%A3%E3%82%92%E3%83%AD%E3%83%BC%E3%83%89">ste-6 テクスチャをロード。</h4>
+<p>板ポリに貼り付けるテクスチャをロードしましょう。リスト8.6のプログラムを入力して下さい。</br>
+[リスト8.6 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-6 テクスチャをロード。</span>
+Texture texture;
+texture.InitFromDDSFile(<span class="hljs-string">L"Assets/image/test.dds"</span>);
+</div></code></pre>
+<h4 id="step-7-%E3%83%87%E3%82%A3%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%82%BF%E3%83%92%E3%83%BC%E3%83%97%E3%82%92%E4%BD%9C%E6%88%90">step-7 ディスクリプタヒープを作成。</h4>
+<p>テクスチャが作成出来たら、ディスクリプタヒープを作成して、テクスチャを登録しましょう。リスト8.7のプログラムを入力してください。</br></p>
+<p>[リスト8.7 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-7 ディスクリプタヒープを作成。</span>
+DescriptorHeap ds;
+ds.RegistShaderResource(<span class="hljs-number">0</span>, texture);
+ds.Commit();
+</div></code></pre>
+<h4 id="step-8-%E3%83%89%E3%83%AD%E3%83%BC%E3%82%B3%E3%83%BC%E3%83%AB%E3%82%92%E5%AE%9F%E8%A1%8C">step-8 ドローコールを実行。</h4>
+<p>step-7までのプログラムで２Ｄを描くためのデータの準備は終わりました。では、c++側の最後の実装です。ドローコールを実装しましょう。リスト8.8のプログラムを入力してください。</br>
+[リスト8.8 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-8 ドローコールを実行。</span>
+<span class="hljs-comment">//ルートシグネチャを設定。</span>
+renderContext.SetRootSignature(rootSignature);
+<span class="hljs-comment">//パイプラインステートを設定。</span>
+renderContext.SetPipelineState(pipelineState);
+<span class="hljs-comment">//プリミティブのトポロジーを設定。</span>
+renderContext.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+<span class="hljs-comment">//頂点バッファを設定。</span>
+renderContext.SetVertexBuffer(triangleVB);
+<span class="hljs-comment">//インデックスバッファを設定。</span>
+renderContext.SetIndexBuffer(triangleIB);
+<span class="hljs-comment">//ディスクリプタヒープを登録。</span>
+renderContext.SetDescriptorHeap(ds);
+<span class="hljs-comment">//ドローコール</span>
+renderContext.DrawIndexed(<span class="hljs-number">6</span>); <span class="hljs-comment">//引数はインデックスの数。</span>
+</div></code></pre>
+<h4 id="step-9-%E9%A0%82%E7%82%B9%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%82%92%E5%AE%9F%E8%A3%85">step-9 頂点シェーダーを実装</h4>
+<p>では、続いてシェーダー側です。<code>Assets/shader/sample.fx</code>を開いて下さい。まずは頂点シェーダーを実装していきます。リスト8.9のプログラムを入力してください。</br>
+[リスト8.9 sample.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-9 頂点シェーダーを実装。</span>
+<span class="hljs-comment">//１．引数は変換前の頂点情報。</span>
+<span class="hljs-comment">//２．戻り値は変換後の頂点情報。</span>
+<span class="hljs-function">VSOutput <span class="hljs-title">VSMain</span><span class="hljs-params">(VSInput In)</span> 
+</span>{
+	VSOutput vsOut = (VSOutput)<span class="hljs-number">0</span>;
+    <span class="hljs-comment">//入力された頂点座標を変換せずに出力する。</span>
+    vsOut.pos = In.pos;
+	vsOut.uv = In.uv;
+	<span class="hljs-keyword">return</span> vsOut;
+}
+</div></code></pre>
+<p>今回入力してもらった頂点シェーダーは、座標変換など一切行わずに、そのままピクセルシェーダーに渡しています。これは入力された頂点の座標が、すでに正規化されたスクリーン座標系になっているからです。</p>
+<h4 id="step-10-%E3%83%94%E3%82%AF%E3%82%BB%E3%83%AB%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%82%92%E5%AE%9F%E8%A3%85">step-10 ピクセルシェーダーを実装</h4>
+<p>では、いよいよ最後の実装です。ピクセルシェーダーを実装します。今回のピクセルシェーダーはテクスチャカラーをサンプリングして、それを返しているだけです。リスト8.10のプログラムを入力してください。</br>
+[リスト8.10 sample.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-10 ピクセルシェーダーを実装。</span>
+<span class="hljs-comment">//１．引数は頂点シェーダーの出力を元に計算された情報。</span>
+<span class="hljs-comment">//２．戻り値はピクセルのカラー。</span>
+<span class="hljs-function">float4 <span class="hljs-title">PSMain</span><span class="hljs-params">( VSOutput In )</span> : SV_Target0
+</span>{
+	<span class="hljs-keyword">return</span> g_texture.Sample( g_sampler, In.uv );
+}
+</div></code></pre>
+<p>入力出来たら実行してください。図8.1のようなプログラムが実行できていたら完成です。</br>
+<strong>図8.1</strong></br>
+<img src="fig/8.1.jpg" ></img></br></p>
+<h2 id="%E8%A9%95%E4%BE%A1%E3%83%86%E3%82%B9%E3%83%88-4">評価テスト-4</h2>
+<p>次の評価テストを行いなさい。</br>
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSfUxOimRHCwFKY8K2mqFhYRxihi4r5ZMADjuqvcxrlcENE_Ug/viewform?usp=sf_link">評価テストへジャンプ</a></p>
+
+</body>
+</html>

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chapter_8_2_アルファブレンディング.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB">はじめに</h2>
+<p>このチャプターでは、次のサンプルプログラムを利用します。ダウンロードをしてください。</br>
+<strong><a href="https://drive.google.com/file/d/1lXikdQ36n8QlQGa8oOzAmHLc2SVqIrUU/view?usp=sharing">Sample_08_02.zip</a></strong></br>
+<strong><a href="https://drive.google.com/file/d/1H5kgeyiZHu8BxyMWdCV145YBnKttO_kn/view?usp=sharing">Sample_08_03.zip</a></strong></br></p>
+<hr>
+<h2 id="82-%E3%82%A2%E3%83%AB%E3%83%95%E3%82%A1%E3%83%96%E3%83%AC%E3%83%B3%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0">8.2 アルファブレンディング</h2>
+<p>この節では半透明合成や、加算合成を行うために必要なαブレンディングについて説明します。アルファブレンディングを理解することで、窓ガラスなどの半透明な物体の描画や、光り輝くエフェクトの描画などを行うことができます。</p>
+<h3 id="821-%E3%82%A2%E3%83%AB%E3%83%95%E3%82%A1%E3%83%96%E3%83%AC%E3%83%B3%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%A8%E3%81%AF">8.2.1 アルファブレンディングとは</h3>
+<p>アルファブレンディングとは、ピクセルシェーダーで計算されたカラー(RGBA)をカラーバッファ(ここでは画面に表示される絵だと考えてください。)にどのように描き込むのかを指定するものとなります。その描き込みの際にアルファ値を使用して描き込む方法を決定するため、アルファブレンディングと言われます。このチャプターでは代表的なアルファブレンディングの、半透明合成と加算合成を見ていこうと思います。例えば次の順番でモデルを描画するケースを考えてみてください。</br></p>
+<ol>
+<li>地面を描画</li>
+<li>キャラクターを描画</li>
+</ol>
+<p>地面を描画した後で、キャラクターを描画しています。この場合、先に地面の絵がカラーバッファに書き込まれます(図8.2)。</br>
+<strong>図8.2</strong></br>
+<img src="fig/8.2.png" ></img></br>
+その後でキャラクターがカラーバッファに書き込まれます(図8.3)。</br></p>
+<p><strong>図8.3</strong></br>
+<img src="fig/8.3.png" ></img></br>
+この時、キャラクターが描画されたことによって、地面のカラーは上書きされてしまっています。ここがポイントです。では、色付きガラスなどの半透明のオブジェクトを描画したい場合はどうしたらいいのでしょうか？このようなオブジェクトを描画するときは、すでに描き込まれているカラーと、これから描き込もうとしているカラーを混ぜ合わせる必要があります(図8.2)。このカラーを合成することをアルファブレンディングといいます。DirectX12では様々なブレンドステートを作成することで、様々なブレンディング方法を指定することができます。では、次の節から代表的なアルファブレンディングの半透明合成と加算合成を見ていきましょう。</p>
+<h3 id="822-%E5%8D%8A%E9%80%8F%E6%98%8E%E5%90%88%E6%88%90">8.2.2 半透明合成</h3>
+<p>アルファブレンディングにおいて、これから描きこもうとしているカラーをソースカラーといいます。そして既にカラーバッファに描きこまれているカラーのことをデスティネーションカラーといいます。半透明合成はソースカラーのアルファ値を使用してソースカラーとデスティネーションカラーを混ぜ合わせることで実現されています。半透明合成の計算式は次のようになります。</br>
+ソースカラー：SRC</br>
+ディスティネーションカラー : DEST</br>
+ソースカラーのα値 : SRC_αとしたとき、</br>
+<strong>描き込まれるカラー = SRC　×　SRC_α + DEST + ( 1 - SRC_α )</strong></br>
+αは0～1の値をとります。αの値が1だと不透明、0.5だと半透明で合成されます(図8.4)。</br>
+<strong>図8.4</strong>
+<img src="fig/8.4.jpg" ></img></br>
+半透明合成は、合成を行うためのブレンディングステートをパイプラインステートに設定することで行うことができます。</p>
+<h3 id="823-%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3%E5%8D%8A%E9%80%8F%E6%98%8E%E3%81%A72d%E3%82%92%E6%8F%8F%E7%94%BB%E3%81%99%E3%82%8B">8.2.3 【ハンズオン】半透明で2Dを描画する。</h3>
+<p>では、半透明で2Dを描画してみましょう。以降の2D描画には、著者が用意した、Spriteクラスを利用して2Dを描画していきます。</p>
+<h4 id="step-1-sprite%E3%82%AF%E3%83%A9%E3%82%B9%E3%81%AE%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E5%88%9D%E6%9C%9F%E5%8C%96%E3%81%99%E3%82%8B">step-1 Spriteクラスのオブジェクトを初期化する。</h4>
+<p>まずはSpriteクラスのオブジェクトを定義して初期化します。<code>Sample_08_02/Sample_08_02.sln</code>を立ち上げてmain.cppの35行目にリスト8.11のプログラムを入力してください。</br>
+[リスト8.11 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-1 Spriteクラスのオブジェクトを初期化する。</span>
+
+<span class="hljs-comment">//まずはSpriteクラスの初期化オブジェクト作成する。</span>
+SpriteInitData spriteInitData;
+<span class="hljs-comment">//テクスチャのファイルパスを指定。</span>
+spriteInitData.m_ddsFilePath[<span class="hljs-number">0</span>] = <span class="hljs-string">"Assets/image/test.dds"</span>;
+<span class="hljs-comment">//シェーダーファイルのパスを指定。</span>
+spriteInitData.m_fxFilePath = <span class="hljs-string">"Assets/shader/sample2D.fx"</span>;
+<span class="hljs-comment">//スプライトの幅と高さを指定。</span>
+spriteInitData.m_width = <span class="hljs-number">128.0f</span>;
+spriteInitData.m_height = <span class="hljs-number">128.0f</span>;
+<span class="hljs-comment">//アルファブレンディングモードを半透明にして設定。</span>
+spriteInitData.m_alphaBlendMode = AlphaBlendMode_Trans;
+
+<span class="hljs-comment">//Spriteクラスのオブジェクトを定義して初期化する。</span>
+Sprite test2D;
+<span class="hljs-comment">//Init()に初期化オブジェクトを渡し２Ｄ期化する。</span>
+test2D.Init(spriteInitData);
+</div></code></pre>
+<p><code>Sprite::Init()</code>の中で、２Ｄを表示するための頂点バッファ、インデックスバッファ、パイプラインステートの作成などが行われています。Spriteクラスの初期化オブジェクトに半透明合成の設定を行っていることに注目してみてください。<code>Sprite::Init()</code>の中で、m_alphaBlendModeの値を見て、半透明合成のステートを設定しています。この設定のプログラムは<code>MiniEngine/Sprite.cpp</code>の136行目に記載されています。次のプログラムを見てみてください。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">if</span> (initData.m_alphaBlendMode == AlphaBlendMode_Trans) {
+	<span class="hljs-comment">//半透明合成のブレンドステートを作成する。</span>
+	<span class="hljs-comment">//αブレンディングを有効にする。</span>
+	psoDesc.BlendState.RenderTarget[<span class="hljs-number">0</span>].BlendEnable = <span class="hljs-literal">true</span>;
+	<span class="hljs-comment">//ソースカラーはソースアルファを掛け算する。</span>
+	psoDesc.BlendState.RenderTarget[<span class="hljs-number">0</span>].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	<span class="hljs-comment">//ディステヒネーションカラーに1-ソースアルファを掛け算する。</span>
+	psoDesc.BlendState.RenderTarget[<span class="hljs-number">0</span>].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	<span class="hljs-comment">//ソースカラーとディスティネーションカラーを足し算する。</span>
+	psoDesc.BlendState.RenderTarget[<span class="hljs-number">0</span>].BlendOp = D3D12_BLEND_OP_ADD;
+}
+</div></code></pre>
+<h3 id="step-2-%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E3%81%AE%E3%83%89%E3%83%AD%E3%83%BC%E3%82%B3%E3%83%BC%E3%83%AB%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B">step-2 スプライトのドローコールを実行する。</h3>
+<p>Spriteクラスのオブジェクトの初期化ができたので、次は<code>Sprite::Draw()</code>を利用して、スプライトのドローコールを実行しましょう。リスト8.12のプログラムを入力してください。</br>
+[リスト8.12 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-2 スプライトのドローコールを実行する。</span>
+test2D.Draw(renderContext);
+</div></code></pre>
+<h3 id="step-3-%E3%83%94%E3%82%AF%E3%82%BB%E3%83%AB%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%81%8B%E3%82%89%E5%87%BA%E5%8A%9B%E3%81%99%E3%82%8B%CE%B1%E3%82%92%E5%A4%89%E6%9B%B4%E3%81%99%E3%82%8B">step-3 ピクセルシェーダーから出力するαを変更する。</h3>
+<p>続いて、シェーダー側を改造します。半透明合成を行うためには、ピクセルシェーダーから出力するアルファを変更する必要があります。<code>Assets/shader/sample2D.fx</code>を開いて、リスト8.13のプログラムを入力してください。
+[リスト8.13 sample2D.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-3 ピクセルシェーダーから出力するαを変更する。</span>
+<span class="hljs-comment">//不透明度0.4で出力する。</span>
+color.a = <span class="hljs-number">0.4f</span>;
+</div></code></pre>
+<p>入力出来たら実行してみて下さい。図8.5のように半透明で2Dが描画されていたら完成です。</br>
+<strong>図8.5</strong>
+<img src="fig/8.5.png" ></img></br></p>
+<h3 id="824-%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3%E5%8A%A0%E7%AE%97%E5%90%88%E6%88%90%E3%81%A72d%E3%82%92%E6%8F%8F%E7%94%BB%E3%81%99%E3%82%8B">8.2.4 【ハンズオン】加算合成で2Dを描画する。</h3>
+<h4 id="step-1-%E5%8A%A0%E7%AE%97%E5%90%88%E6%88%90%E3%81%AE%E8%A8%AD%E5%AE%9A%E3%81%A7%E6%8F%8F%E7%94%BB%E3%81%99%E3%82%8B">step-1 加算合成の設定で描画する。</h4>
+<p>では、このチャプターの最後に加算合成で2Dを描画するハンズオンを行いましょう。Spriteクラスを利用して加算合成を行うには、Spriteクラスのオブジェクトを初期化するときの設定を変更するだけです。<code>Sample_08_03/Sample_08_03.sln</code>を立ち上げて、main.cppのにリスト8.13を入力して下さい。</br>
+[リスト8.13 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-1 加算合成の設定で描画する。</span>
+spriteInitData.m_alphaBlendMode = AlphaBlendMode_Add;
+</div></code></pre>
+<p>先ほどの半透明描画の時と同じく、<code>Sprite::Init()</code>の中で、m_alphaBlendModeの値を見て加算合成の設定を行っています。この設定のプログラムは<code>MiniEngine/Sprite.cpp</code>の143行目～記載されています。次のプログラムを見てみてください。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (initData.m_alphaBlendMode == AlphaBlendMode_Add) {
+	<span class="hljs-comment">//加算合成。</span>
+	psoDesc.BlendState.RenderTarget[<span class="hljs-number">0</span>].BlendEnable = <span class="hljs-literal">true</span>;
+	psoDesc.BlendState.RenderTarget[<span class="hljs-number">0</span>].SrcBlend = D3D12_BLEND_ONE;
+	psoDesc.BlendState.RenderTarget[<span class="hljs-number">0</span>].DestBlend = D3D12_BLEND_ONE;
+	psoDesc.BlendState.RenderTarget[<span class="hljs-number">0</span>].BlendOp = D3D12_BLEND_OP_ADD;
+}
+</div></code></pre>
+<h2 id="%E8%A9%95%E4%BE%A1%E3%83%86%E3%82%B9%E3%83%88-5">評価テスト-5</h2>
+<p>次の評価テストを行いなさい。</br>
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSeSCZ8aEoX51Ft3dvpYWQUh9N1iL6MM-wR6YHBk_vDrFTshsw/viewform?usp=sf_link">評価テストへジャンプ</a></p>
+
+</body>
+</html>

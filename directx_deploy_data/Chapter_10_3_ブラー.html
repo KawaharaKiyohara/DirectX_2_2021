@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chapter_10_3_ブラー.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB">はじめに</h2>
+<p>このチャプターでは、次のサンプルプログラムを利用します。ダウンロードをしてください。</br>
+<strong><a href="https://drive.google.com/file/d/1sW7ntR9o5LJRDaJryNxSX4sESxYKFCQ7/view?usp=sharing">Sample_10_03.zip</a></strong></br>
+<strong><a href="https://drive.google.com/file/d/18Lqg76eVYgktApQfeLvN0hM39vvuYH7Q/view?usp=sharing">Sample_10_04.zip</a></strong></br></p>
+<hr>
+<h2 id="103-%E3%83%96%E3%83%A9%E3%83%BC">10.3 ブラー</h2>
+<p>このチャプターでは画像をぼかす、ブラーについて見ていきましょう。ブラーは、ブルーム、SSR、被写界深度など、様々なポストエフェクトで利用される画像加工処理です。</p>
+<h3 id="1031-%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3%E5%B9%B3%E5%9D%87%E3%83%96%E3%83%A9%E3%83%BC%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%99%E3%82%8B">10.3.1 【ハンズオン】平均ブラーを実装する</h3>
+<p>では、最もシンプルな平均ブラーの処理を実装していきましょう。平均ブラーはピクセルシェーダーで複数のテクセルをサンプリングして、平均を取ることでぼかしていきます。今回のブラーの処理は、オフスクリーンレンダリングされたゲームシーンの絵をフレームバッファに貼り付ける処理のピクセルシェーダーでぼかしを入れていきます。ですので、C++側の処理の流れは10.3節のモノクロ化と全く同じです。</p>
+<h4 id="step-1-%E5%9F%BA%E6%BA%96%E3%83%86%E3%82%AF%E3%82%BB%E3%83%AB%EF%BC%8B%E8%BF%91%E5%82%8D8%E3%83%86%E3%82%AF%E3%82%BB%E3%83%AB%E3%81%AE%E5%B9%B3%E5%9D%87%E3%82%92%E8%A8%88%E7%AE%97%E3%81%99%E3%82%8B">step-1 基準テクセル＋近傍8テクセルの平均を計算する。</h4>
+<p>では、Sample_10_03/Sample_10_03.slnを立ち上げてください。C++側の処理はモノクロ化と全く同じなので、今回はシェーダー側だけの実装です。<code>Assets/shader/samplePostEffect.fx</code>を開いてリスト10.15のプログラムを入力してください。</br>
+[リスト10.15 samplePostEffect.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-1 基準テクセル＋近傍8テクセルの平均を計算する。</span>
+
+<span class="hljs-comment">//1.5テクセル分ずらすためのUV値を求める。</span>
+<span class="hljs-keyword">float</span> offsetU = <span class="hljs-number">1.5f</span> / <span class="hljs-number">1280.0f</span>;
+<span class="hljs-keyword">float</span> offsetV = <span class="hljs-number">1.5f</span> / <span class="hljs-number">720.0f</span>;
+
+<span class="hljs-comment">//基準テクセルから右のテクセルのカラーをサンプリングする。</span>
+color += sceneTexture.Sample(Sampler, In.uv + float2( offsetU, <span class="hljs-number">0.0f</span>));
+<span class="hljs-comment">//基準テクセルから左のテクセルのカラーをサンプリングする。</span>
+color += sceneTexture.Sample(Sampler, In.uv + float2( -offsetU, <span class="hljs-number">0.0f</span>));
+<span class="hljs-comment">//基準テクセルから下のテクセルのカラーをサンプリングする。</span>
+color += sceneTexture.Sample(Sampler, In.uv + float2( <span class="hljs-number">0.0f</span>, offsetV));
+<span class="hljs-comment">//基準テクセルから上のテクセルのカラーをサンプリングする。</span>
+color += sceneTexture.Sample(Sampler, In.uv + float2( <span class="hljs-number">0.0f</span>, -offsetV));
+<span class="hljs-comment">//基準テクセルから右下のテクセルのカラーをサンプリングする。</span>
+color += sceneTexture.Sample(Sampler, In.uv + float2( offsetU, offsetV));
+<span class="hljs-comment">//基準テクセルから右上のテクセルのカラーをサンプリングする。</span>
+color += sceneTexture.Sample(Sampler, In.uv + float2( offsetU, -offsetV));
+<span class="hljs-comment">//基準テクセルから左下のテクセルのカラーをサンプリングする。</span>
+color += sceneTexture.Sample(Sampler, In.uv + float2( -offsetU, offsetV));
+<span class="hljs-comment">//基準テクセルから左上のテクセルのカラーをサンプリングする。</span>
+color += sceneTexture.Sample(Sampler, In.uv + float2( -offsetU, -offsetV));
+
+<span class="hljs-comment">//基準テクセルと近傍８テクセルの平均なので9で除算する。</span>
+color /= <span class="hljs-number">9.0f</span>;
+</div></code></pre>
+<p>このプログラムでは基準テクセルとその周囲8テクセルをサンプリングして、その平均を計算しています。入力できたら実行してみてください。図10.8のようにシーンがボケて表示されていれば、実装出来ています。</br>
+<strong>図10.8</strong></br>
+<img src="fig/10.8.png" width = 400></img></br></p>
+<h3 id="1032-%E3%82%AC%E3%82%A6%E3%82%B7%E3%82%A2%E3%83%B3%E3%83%96%E3%83%A9%E3%83%BC">10.3.2 ガウシアンブラー</h3>
+<p>平均化ブラーでは広い範囲の綺麗なブラーを出すのが困難です。そこでブルームエフェクトのブラー処理では、比較的高速で綺麗なブラーをかけることができるガウシアンブラーが使われることが多いです。ガウシアンブラーも複数のテクセルをサンプリングしてぼかしていくことに変わりがないのですが、平均ブラーと異なり、各テクセルに重み(影響度)が付与されます。例えばテクセル0は0.7の重み、テクセル1は0.2の重み、テクセル2は0.1の重みでブレンディングするといった具合です。この場合は、最終的なカラーは次の計算で決定されます。</br></p>
+<p><strong>最終カラー = テクセル0×0.7 + テクセル1×0.2 + テクセル2×0.1</strong></br></p>
+<p>では、この重みはどのように決めるのか？ガウシアンブラーでは、この重みの計算に、ガウス関数を使用します。ガウス関数を利用するためガウシアンブラーと呼ばれます。ガウス関数は次のような式になっています。</br></p>
+<p><strong>F(x) = exp⁡(-x^2/(2σ^2 ))</strong></br></p>
+<p>この関数のxが基準テクセルからの距離です。このxの値に応じて重みを計算してくれます。σは分散具合を決定する定数です。σを大きくすると強くブラーするようになります。本書で勉強する範囲では、この式の意味は分からなくても大丈夫です。ガウス関数とは、基準テクセルからの距離ｘに応じて、いい感じに重みを計算してくれる関数くらいの認識で構いません。図10.8は基準テクセルからの距離(横軸)に応じて重み(縦軸)がどのように変化していくかを表しているグラフです。距離が離れていくほど重みが小さくなっていることが分かると思います。</p>
+<p><strong>図10.9</strong></br>
+<img src="fig/10.9.jpg" ></img></br></p>
+<h4 id="10321-%E6%A8%AA%E3%83%96%E3%83%A9%E3%81%A8%E7%B8%A6%E3%83%96%E3%83%A9%E3%83%BC">10.3.2.1 横ブラと縦ブラー</h4>
+<p>ガウシアンフィルターでは横方向のブラーと縦方向のブラーを２パスに分けて行います。次のコードはガウス関数で計算した重みテーブルを使って、横の解像度1280の画像に対して、横ブラーをかけているピクセルシェーダーの疑似コードです。</p>
+<pre class="hljs"><code><div><span class="hljs-function">float4 <span class="hljs-title">PSXBlur</span><span class="hljs-params">( PS_BlurInput In )</span> : SV_Target0
+	float4 Color</span>;
+	<span class="hljs-comment">//基準テクセルから右に3テクセル、重み付きでサンプリング。</span>
+	Color  = weight[<span class="hljs-number">0</span>] * originalTexture.Sample( 
+		Sampler, 
+		<span class="hljs-comment">//右に1テクセルずらしたUVを計算する</span>
+		In.uv + float2( <span class="hljs-number">1.0f</span> / <span class="hljs-number">1280.0f</span>, <span class="hljs-number">0.0f</span>) 
+	);
+	Color += weight[<span class="hljs-number">1</span>] * originalTexture.Sample( 
+		Sampler, 
+		<span class="hljs-comment">//右に2テクセルずらしたUVを計算する</span>
+		In.uv + float2( <span class="hljs-number">2.0f</span> / <span class="hljs-number">1280.0f</span>, <span class="hljs-number">0.0f</span>) 
+	);
+	Color += weight[<span class="hljs-number">2</span>] * originalTexture.Sample( 
+		Sampler, 
+		<span class="hljs-comment">//右に3テクセルずらしたUVを計算する</span>
+		In.uv + float2( <span class="hljs-number">3.0f</span> / <span class="hljs-number">1280.0f</span>, <span class="hljs-number">0.0f</span>) 
+	);
+
+	<span class="hljs-comment">//基準テクセルに左に3テクセル、重み付きでサンプリング。</span>
+	Color += weight[<span class="hljs-number">0</span>] * originalTexture.Sample( 
+		Sampler, 
+		<span class="hljs-comment">//左に1テクセルずらしたUVを計算する</span>
+		In.uv + float2( <span class="hljs-number">-1.0f</span> / <span class="hljs-number">1280.0f</span>, <span class="hljs-number">0.0f</span>) 
+	);
+	Color += weight[<span class="hljs-number">1</span>] * originalTexture.Sample( 
+		Sampler, 
+		<span class="hljs-comment">//左に2テクセルずらしたUVを計算する</span>
+		In.uv + float2( <span class="hljs-number">-2.0f</span> / <span class="hljs-number">1280.0f</span>, <span class="hljs-number">0.0f</span>) 
+	);
+	Color += weight[<span class="hljs-number">2</span>] * originalTexture.Sample( 
+		Sampler, 
+		<span class="hljs-comment">//左に3テクセルずらしたUVを計算する</span>
+		In.uv + float2( <span class="hljs-number">-3.0f</span> / <span class="hljs-number">1280.0f</span>, <span class="hljs-number">0.0f</span>) 
+	);
+	<span class="hljs-keyword">return</span> Color;
+}
+</div></code></pre>
+<p>weightにガウス関数で計算された重みが記憶されています。次のコードは縦の解像度720の画像に対して、縦ブラーをかけているピクセルシェーダーの疑似コードです。</p>
+<pre class="hljs"><code><div><span class="hljs-function">float4 <span class="hljs-title">PSXBlur</span><span class="hljs-params">( PS_BlurInput In )</span> : SV_Target0
+	float4 Color</span>;
+	<span class="hljs-comment">//基準テクセルから下に3テクセル、重み付きでサンプリング。</span>
+	Color  = weight[<span class="hljs-number">0</span>] * originalTexture.Sample( 
+		Sampler, 
+		<span class="hljs-comment">//下に1テクセルずらしたUVを計算する</span>
+		In.uv + float2( <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span> / <span class="hljs-number">720.0f</span> ) 
+	);
+	Color += weight[<span class="hljs-number">1</span>] * originalTexture.Sample( 
+		Sampler, 
+		<span class="hljs-comment">//下に2テクセルずらしたUVを計算する</span>
+		In.uv + float2( <span class="hljs-number">0.0f</span>, <span class="hljs-number">2.0f</span> / <span class="hljs-number">720.0f</span> ) 
+	);
+	Color += weight[<span class="hljs-number">2</span>] * originalTexture.Sample( 
+		Sampler, 
+		<span class="hljs-comment">//下に3テクセルずらしたUVを計算する</span>
+		In.uv + float2( <span class="hljs-number">0.0f</span>, <span class="hljs-number">3.0f</span> / <span class="hljs-number">720.0f</span> )  
+	);
+
+	<span class="hljs-comment">//基準テクセルに上に3テクセル、重み付きでサンプリング。</span>
+	Color += weight[<span class="hljs-number">0</span>] * originalTexture.Sample( 
+		Sampler, 
+		<span class="hljs-comment">//上に1テクセルずらしたUVを計算する</span>
+		In.uv + float2( <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span> / <span class="hljs-number">720.0f</span> ) 
+	);
+	Color += weight[<span class="hljs-number">1</span>] * originalTexture.Sample( 
+		Sampler, 
+		<span class="hljs-comment">//上に2テクセルずらしたUVを計算する</span>
+		In.uv + float2( <span class="hljs-number">0.0f</span>, <span class="hljs-number">-2.0f</span> / <span class="hljs-number">720.0f</span> ) 
+	);
+	Color += weight[<span class="hljs-number">2</span>] * originalTexture.Sample( 
+		Sampler, 
+		<span class="hljs-comment">//上に3テクセルずらしたUVを計算する</span>
+		In.uv + float2( <span class="hljs-number">0.0f</span>, <span class="hljs-number">-3.0f</span> / <span class="hljs-number">720.0f</span> ) 
+	);
+	<span class="hljs-keyword">return</span> Color;
+}
+</div></code></pre>
+<p>横ブラーも縦ブラーも処理はほとんど同じです。違いがあるのはUVをずらす方向のみです。</p>
+<h4 id="10322-%E3%83%80%E3%82%A6%E3%83%B3%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AA%E3%83%B3%E3%82%B0">10.3.2.2 ダウンサンプリング</h4>
+<p>このあと実装するガウシアンブラーのハンズオンでは、ダウンサンプリングというテクニックも使っています。ダウンサンプリングとは解像度の高いテクスチャを解像度の低いレンダリングターゲットに対して縮小してレンダリングすることを言います。例えば1280×720の解像度のテクスチャを640×360のレンダリングターゲットに対してレンダリングする場合などです(図10.10)。</br>
+<strong>図10.10</strong></br>
+<img src="fig/10.10.png" ></img></br>
+今回の実装では、ダウンサンプリングは横ブラーと縦ブラーをかけるときに行います。次のガウシアンブラーの処理の流れを見てみてください。</p>
+<ol>
+<li>ブラーをかけたい絵をオフスクリーンレンダリング(解像度は1280×720)</li>
+<li>1で作成した絵をテクスチャ(解像度は1280×720)にして、横ブラー用のレンダリングターゲット(解像度は640×720)に描画。</li>
+<li>2で作成した絵をテクスチャ(解像度は640×720)にして、縦ブラー用のレンダリングターゲット(解像度は640×360)に描画。</li>
+</ol>
+<p>2と3の描画の時に、横ブラーと縦ブラーのピクセルシェーダーを実行することになるのですが、この時のテクスチャの解像度とレンダリングターゲットの解像度を比べてみてください。横ブラー用のレンダリングターゲットは、テクスチャの解像度に対して、横幅が半分に、縦ブラー用のレンダリングターゲットは、テクスチャの解像度に対して、縦幅が半分になっています。つまりダウンサンプリングを行っています。では、なぜダウンサンプリングを行っているのでしょうか。実は、ダウンサンプリングには次の二つの効果があります。</p>
+<ol>
+<li>バイリニアフィルタを設定することによって、さらに強力にぼかすことができる。</li>
+<li>レンダリングターゲットの解像度が下がるため、処理が高速になる。</li>
+</ol>
+<p>図10.10の画像の例のように縦横1/2のレンダリングターゲットに描画すると、画素の総数がちょうど1/4になります(1280×720=921600、640×360 = 230400)。つまり640×360のレンダリングターゲットの1ピクセルは、元テクスチャの4テクセルに相当することになります。しかし当然1ピクセルに表現できる画素は1画素です。そのため何もしなければ、3テクセル分の画素は失われることになってしまいます。しかし、この時にバイリニアフィルタを使用すると1ピクセルの画素は、４テクセルの平均のカラーにすることができます。これにより、ガウスフィルタだけではなくバイリニアフィルタをかけることもでき、さらに強力に画像をぼかすことができます。もう一点は処理速度です。ピクセルシェーダーのプログラムはレンダリングターゲットのピクセルの数分だけ実行されます。つまり、1280×720なら921600回実行されます。しかし、解像度を下げて640×360にすると230400回に削減することができ、ピクセルシェーダーの実行回数を1/4にすることができ、処理速度を向上させることができます。では、最後に縦横ブラーをかけていく様子を画像で確認してみましょう。図10.11を見てみてください。</br>
+<strong>図10.11</strong></br>
+<img src="fig/10.11.png" ></img></br></p>
+<h3 id="1033-%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3%E3%82%AC%E3%82%A6%E3%82%B7%E3%82%A2%E3%83%B3%E3%83%96%E3%83%A9%E3%83%BC%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%99%E3%82%8B">10.3.3 【ハンズオン】ガウシアンブラーを実装する</h3>
+<p>では、ガウシアンブラーを実装していきましょう。<code>Sample_10_04/Sample_10_04.sln</code>を立ち上げてください。</p>
+<h4 id="step-1-%E3%82%B2%E3%83%BC%E3%83%A0%E3%82%B7%E3%83%BC%E3%83%B3%E3%82%92%E6%8F%8F%E7%94%BB%E3%81%99%E3%82%8B%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90">step-1 ゲームシーンを描画するレンダリングターゲットを作成。</h4>
+<p>まずはゲームのシーンを描画するレンダリングターゲットを作成しましょう。また、これ以降のチャプターでは、ゲームのシーンを描画するレンダリングターゲットをメインレンダリングターゲットと呼称します。では、main.cppの45行目にリスト10.16のプログラムを入力してください。</br>
+[リスト10.16 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-1 ゲームシーンを描画するレンダリングターゲットを作成。</span>
+RenderTarget mainRenderTarget;
+mainRenderTarget.Create(
+	<span class="hljs-number">1280</span>,
+	<span class="hljs-number">720</span>,
+	<span class="hljs-number">1</span>,
+	<span class="hljs-number">1</span>,
+	DXGI_FORMAT_R8G8B8A8_UNORM,
+	DXGI_FORMAT_D32_FLOAT
+);
+</div></code></pre>
+<h4 id="step-2-%E3%82%AC%E3%82%A6%E3%82%B9%E3%83%96%E3%83%A9%E3%83%BC%E7%94%A8%E3%81%AE%E9%87%8D%E3%81%BF%E3%83%86%E3%83%BC%E3%83%96%E3%83%AB%E3%82%92%E8%A8%88%E7%AE%97%E3%81%99%E3%82%8B">step-2 ガウスブラー用の重みテーブルを計算する</h4>
+<p>続いて、ガウス関数を利用して重みテーブルを計算します。今回は著者が作成した、CalcWeigthsTableFrmGaussian()を利用します。この関数は引数に重みの格納先となるテーブル、テーブルのサイズ、ボケ具合を受け取ります。この関数を呼び出すと、渡されたパラメータに応じて適切な重みを計算してくれます。main.cppにリスト10.17のプログラムを入力してください。</br></p>
+<p>[リスト10.17 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-2 ガウスブラー用の重みテーブルを計算する</span>
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> NUM_WEIGHTS = <span class="hljs-number">8</span>;
+<span class="hljs-comment">//テーブルのサイズは８。</span>
+<span class="hljs-keyword">float</span> weights[NUM_WEIGHTS];
+<span class="hljs-comment">//重みテーブルを計算する。</span>
+CalcWeightsTableFromGaussian(
+	weights,		<span class="hljs-comment">//重みの格納先</span>
+	NUM_WEIGHTS,	<span class="hljs-comment">//重みテーブルのサイズ。</span>
+	<span class="hljs-number">8.0f</span>			<span class="hljs-comment">//ボケ具合。この数値が大きくなるとボケが強くなる。</span>
+);
+</div></code></pre>
+<h4 id="step-3-%E6%A8%AA%E3%83%96%E3%83%A9%E3%83%BC%E7%94%A8%E3%81%AE%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90">step-3 横ブラー用のレンダリングターゲットを作成。</h4>
+<p>続いて、横ブラー用のレンダリングターゲットを作成します。このレンダリングターゲットに、メインレンダリングターゲットに描画されたゲームシーンの絵をテクスチャとしたスプライトを描画します。レンダリングターゲットの横幅の解像度がメインレンダリングターゲットの半分になっているため、ダウンサンプリングを行うことになります。これによりバイリニアフィルタによるぼかしと、処理負荷の軽減の効果が期待できます。リスト10.18のプログラムを入力してください。</br>
+[リスト10.18 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-3 横ブラー用のレンダリングターゲットを作成。</span>
+RenderTarget xBlurRenderTarget;
+xBlurRenderTarget.Create(
+	<span class="hljs-number">640</span>,	<span class="hljs-comment">//横幅の解像度をmainRenderTargetの幅の半分にする。</span>
+	<span class="hljs-number">720</span>,	<span class="hljs-comment">//高さはmainRenderTargetの高さと同じ。</span>
+	<span class="hljs-number">1</span>,
+	<span class="hljs-number">1</span>,
+	DXGI_FORMAT_R8G8B8A8_UNORM,
+	DXGI_FORMAT_D32_FLOAT
+);
+</div></code></pre>
+<h4 id="step-4-%E6%A8%AA%E3%83%96%E3%83%A9%E3%83%BC%E7%94%A8%E3%81%AE%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E5%88%9D%E6%9C%9F%E5%8C%96">step-4 横ブラー用のスプライトを初期化。</h4>
+<p>横ブラー用のレンダリングターゲットを作成することができたら、次は、そのレンダリングターゲットに絵を描くためのスプライトを初期化します。このスプライトに貼り付けるテクスチャはメインレンダリングターゲットのテクスチャです。また、このスプライトを描画するときのピクセルシェーダーで、ガウス関数で計算した重みテーブルを利用した、ガウシアンブラーを行うため、ユーザー拡張の定数バッファに重みテーブルを設定しています。リスト10.19のプログラムを入力してください。</br>
+[リスト10.19 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-4 横ブラー用のスプライトを初期化。</span>
+<span class="hljs-comment">//初期化情報を設定する。</span>
+SpriteInitData xBlurSpriteInitData;
+xBlurSpriteInitData.m_fxFilePath = <span class="hljs-string">"Assets/shader/samplePostEffect.fx"</span>;
+xBlurSpriteInitData.m_vsEntryPointFunc = <span class="hljs-string">"VSXBlur"</span>;
+xBlurSpriteInitData.m_psEntryPoinFunc = <span class="hljs-string">"PSBlur"</span>;
+
+<span class="hljs-comment">//スプライトの解像度はxBlurRenderTargetと同じ。</span>
+xBlurSpriteInitData.m_width = <span class="hljs-number">640</span>;
+xBlurSpriteInitData.m_height = <span class="hljs-number">720</span>;
+<span class="hljs-comment">//【注目】テクスチャはmainRenderTargetのカラーバッファ。</span>
+xBlurSpriteInitData.m_textures[<span class="hljs-number">0</span>] = &amp;mainRenderTarget.GetRenderTargetTexture();
+
+<span class="hljs-comment">//【注目】ユーザー拡張の定数バッファに重みテーブルを設定する。</span>
+xBlurSpriteInitData.m_expandConstantBuffer = &amp;weights;
+xBlurSpriteInitData.m_expandConstantBufferSize = <span class="hljs-keyword">sizeof</span>(weights);
+
+<span class="hljs-comment">//初期化情報をもとに横ブラー用のスプライトを初期化する。</span>
+Sprite xBlurSprite;
+xBlurSprite.Init(xBlurSpriteInitData);
+</div></code></pre>
+<h4 id="step-5-%E7%B8%A6%E3%83%96%E3%83%A9%E3%83%BC%E7%94%A8%E3%81%AE%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90">step-5 縦ブラー用のレンダリングターゲットを作成。</h4>
+<p>続いて、縦ブラー用のレンダリングターゲットを作成しています。縦ブラーは、横ブラーをかけたテクスチャに対して行います。レンダリングターゲットの幅と高さに注目してください。縦幅が横ブラーをかけたテクスチャの半分の大きさになっています。これもダウンサンプリングを行うためです。リスト10.20のプログラムを入力してください。</br></p>
+<p>[リスト10.20 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-5 縦ブラー用のレンダリングターゲットを作成。</span>
+RenderTarget yBlurRenderTarget;
+yBlurRenderTarget.Create(
+	<span class="hljs-number">640</span>,		<span class="hljs-comment">//横幅の解像度はxBlurRenderTargetの幅と同じ。</span>
+	<span class="hljs-number">360</span>,		<span class="hljs-comment">//縦幅の解像度はxBlurRenderTargetの高さの半分。</span>
+	<span class="hljs-number">1</span>,
+	<span class="hljs-number">1</span>,
+	DXGI_FORMAT_R8G8B8A8_UNORM,
+	DXGI_FORMAT_D32_FLOAT
+);
+</div></code></pre>
+<h4 id="step-6-%E7%B8%A6%E3%83%96%E3%83%A9%E3%83%BC%E7%94%A8%E3%81%AE%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E5%88%9D%E6%9C%9F%E5%8C%96">step-6 縦ブラー用のスプライトを初期化。</h4>
+<p>縦ブラーのレンダリングターゲットを作成出来たら、横ブラーと同じように、縦ブラー用のスプライトを初期化しましょう。リスト10.21のプログラムを入力してください。</br>
+[リスト10.21 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-6 縦ブラー用のスプライトを初期化。</span>
+<span class="hljs-comment">//初期化情報を設定する。</span>
+SpriteInitData yBlurSpriteInitData;
+yBlurSpriteInitData.m_fxFilePath = <span class="hljs-string">"Assets/shader/samplePostEffect.fx"</span>;
+yBlurSpriteInitData.m_vsEntryPointFunc = <span class="hljs-string">"VSYBlur"</span>;
+yBlurSpriteInitData.m_psEntryPoinFunc = <span class="hljs-string">"PSBlur"</span>;
+<span class="hljs-comment">//スプライトの幅と高さはyBlurRenderTargetと同じ。</span>
+yBlurSpriteInitData.m_width = <span class="hljs-number">640</span>;
+yBlurSpriteInitData.m_height = <span class="hljs-number">360</span>;
+<span class="hljs-comment">//テクスチャはxBlurRenderTargetのカラーバッファ</span>
+yBlurSpriteInitData.m_textures[<span class="hljs-number">0</span>] = &amp;xBlurRenderTarget.GetRenderTargetTexture();
+
+<span class="hljs-comment">//ユーザー拡張の定数バッファに重みテーブルを設定する。</span>
+yBlurSpriteInitData.m_expandConstantBuffer = &amp;weights;
+yBlurSpriteInitData.m_expandConstantBufferSize = <span class="hljs-keyword">sizeof</span>(weights);
+
+<span class="hljs-comment">//初期化情報をもとに縦ブラー用のスプライトを初期化する。</span>
+Sprite yBlurSprite;
+yBlurSprite.Init(yBlurSpriteInitData);
+</div></code></pre>
+<h4 id="step-7-yblurrendertarget%E3%81%AE%E3%83%86%E3%82%AF%E3%82%B9%E3%83%81%E3%83%A3%E3%82%92%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%83%90%E3%83%83%E3%83%95%E3%82%A1%E3%81%AB%E8%B2%BC%E3%82%8A%E4%BB%98%E3%81%91%E3%82%8B%E3%81%9F%E3%82%81%E3%81%AE%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E5%88%9D%E6%9C%9F%E5%8C%96%E3%81%99%E3%82%8B">step-7 yBlurRenderTargetのテクスチャをフレームバッファに貼り付けるためのスプライトを初期化する。</h4>
+<p>初期化処理の最後に、縦横ブラーをかけた絵をフレームバッファに貼り付けるためのスプライトを初期化しましょう。このスプライトをフレームバッファに描画することで、ガウシアンブラーをかけたボケ画像が画面に表示されます。リスト10.22のプログラムを入力してください。</br>
+[リスト10.22 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-7 yBlurRenderTargetのテクスチャをフレームバッファに貼り付けるためのスプライトを初期化する。</span>
+<span class="hljs-comment">//スプライトの初期化オブジェクトを作成する。</span>
+SpriteInitData spriteInitData;
+<span class="hljs-comment">//テクスチャはyBlurRenderTargetのカラーバッファ。</span>
+spriteInitData.m_textures[<span class="hljs-number">0</span>] = &amp;yBlurRenderTarget.GetRenderTargetTexture();
+<span class="hljs-comment">//レンダリング先がフレームバッファなので、解像度はフレームバッファと同じ。</span>
+spriteInitData.m_width = <span class="hljs-number">1280</span>;
+spriteInitData.m_height = <span class="hljs-number">720</span>;
+
+<span class="hljs-comment">//ボケ画像をそのまま貼り付けるだけなので、通常の2D描画のシェーダーを指定する。</span>
+spriteInitData.m_fxFilePath = <span class="hljs-string">"Assets/shader/sample2D.fx"</span>;
+<span class="hljs-comment">//初期化オブジェクトを使って、スプライトを初期化する。</span>
+Sprite copyToFrameBufferSprite;
+copyToFrameBufferSprite.Init(spriteInitData);
+</div></code></pre>
+<h4 id="step-8-%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E3%82%92mainrendertarget%E3%81%AB%E5%A4%89%E6%9B%B4%E3%81%99%E3%82%8B">step-8 レンダリングターゲットをmainRenderTargetに変更する。</h4>
+<p>step-8からはゲームループの処理です。まずはゲームシーンを描画するためにメインレンダリングターゲットを設定します。レンダリングターゲットを設定する前に、Wait命令を入れることを忘れないようにしてください。準備が整うのを待たずにレンダリングターゲットを設定することはできません。リスト10.23のプログラムを入力してください。</br>
+[リスト10.23 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-8 レンダリングターゲットをmainRenderTargetに変更する。</span>
+<span class="hljs-comment">//レンダリングターゲットとして利用できるまで待つ。</span>
+renderContext.WaitUntilToPossibleSetRenderTarget(mainRenderTarget);
+<span class="hljs-comment">//レンダリングターゲットを設定。</span>
+renderContext.SetRenderTargetAndViewport(mainRenderTarget);
+<span class="hljs-comment">//レンダリングターゲットをクリア。</span>
+renderContext.ClearRenderTargetView(mainRenderTarget);
+</div></code></pre>
+<h4 id="step-9-mainrendertarget%E3%81%AB%E5%90%84%E7%A8%AE%E3%83%A2%E3%83%87%E3%83%AB%E3%82%92%E6%8F%8F%E7%94%BB%E3%81%99%E3%82%8B">step-9 mainRenderTargetに各種モデルを描画する。</h4>
+<p>メインレンダリングターゲットの設定ができたら、各種３Ｄモデルを描画していきましょう。リスト10.24のプログラムを入力してください。このプログラムが実行されると図10.12のような絵がメインレンダリングターゲットに描画されます(注意：オフスクリーンなので画面には表示されません)。リスト10.24のプログラムを入力してください。</br>
+[リスト10.24 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-9 mainRenderTargetに各種モデルを描画する。</span>
+plModel.Draw(renderContext);
+bgModel.Draw(renderContext);
+<span class="hljs-comment">//レンダリングターゲットへの書き込み終了待ち。</span>
+renderContext.WaitUntilFinishDrawingToRenderTarget(mainRenderTarget);
+</div></code></pre>
+<p><strong>図10.12</strong></br>
+<img src="fig/10.12.png" ></img></br></p>
+<h4 id="step-10-mainrendertarget%E3%81%AB%E6%8F%8F%E7%94%BB%E3%81%95%E3%82%8C%E3%81%9F%E7%94%BB%E5%83%8F%E3%81%AB%E6%A8%AA%E3%83%96%E3%83%A9%E3%83%BC%E3%82%92%E3%81%8B%E3%81%91%E3%82%8B">step-10 mainRenderTargetに描画された画像に横ブラーをかける。</h4>
+<p>続いて、横ブラーです。レンダリングターゲットをxBlurRenderTargetに変更して、xBlurSpriteを描画しています。このプログラムが実行されると図10.13のような横ブラーがかけられた画像が生成されます(注意：オフスクリーンなので画面には表示されません)。リスト10.25のプログラムを入力してください。</br>
+[リスト10.25 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-10 mainRenderTargetに描画された画像に横ブラーをかける。</span>
+<span class="hljs-comment">//横ブラー用のレンダリングターゲットに変更。</span>
+<span class="hljs-comment">//レンダリングターゲットとして利用できるまで待つ。</span>
+renderContext.WaitUntilToPossibleSetRenderTarget(xBlurRenderTarget);
+<span class="hljs-comment">//レンダリングターゲットを設定。</span>
+renderContext.SetRenderTargetAndViewport(xBlurRenderTarget);
+<span class="hljs-comment">//レンダリングターゲットをクリア。</span>
+renderContext.ClearRenderTargetView(xBlurRenderTarget);
+<span class="hljs-comment">//2Dを描画。</span>
+xBlurSprite.Draw(renderContext);
+<span class="hljs-comment">//レンダリングターゲットへの書き込み終了待ち。</span>
+renderContext.WaitUntilFinishDrawingToRenderTarget(xBlurRenderTarget);
+</div></code></pre>
+<p><strong>図10.13</strong></br>
+<img src="fig/10.13.png" width=400 ></img></br></p>
+<h4 id="step-11-%E7%B8%A6%E3%83%96%E3%83%A9%E3%83%BC%E3%82%82%E8%A1%8C%E3%81%86">step-11 縦ブラーも行う。</h4>
+<p>横ブラーが実装出来たら次は縦ブラーです。レンダリングターゲットをyBlurRenderTargetに変更して、yBlurSpriteを描画しています。このプログラムが実行されると、ガウシアンブラーが係った、図10.14のような画像が生成されます(注意：オフスクリーンなので画面には表示されません)。リスト10.26のプログラムを入力してください。</br>
+[リスト10.26 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-11 縦ブラーも行う。</span>
+<span class="hljs-comment">//縦ブラー用のレンダリングターゲットに変更。</span>
+<span class="hljs-comment">//レンダリングターゲットとして利用できるまで待つ。</span>
+renderContext.WaitUntilToPossibleSetRenderTarget(yBlurRenderTarget);
+<span class="hljs-comment">//レンダリングターゲットを設定。</span>
+renderContext.SetRenderTargetAndViewport(yBlurRenderTarget);
+<span class="hljs-comment">//レンダリングターゲットをクリア。</span>
+renderContext.ClearRenderTargetView(yBlurRenderTarget);
+<span class="hljs-comment">//2Dを描画。</span>
+yBlurSprite.Draw(renderContext);
+<span class="hljs-comment">//レンダリングターゲットへの書き込み終了待ち。</span>
+renderContext.WaitUntilFinishDrawingToRenderTarget(yBlurRenderTarget);
+</div></code></pre>
+<p><strong>図10.14</strong></br>
+<img src="fig/10.14.png" width=400></img></br></p>
+<h4 id="step-12-%E3%83%A1%E3%82%A4%E3%83%B3%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E3%81%AE%E7%B5%B5%E3%82%92%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%83%90%E3%83%83%E3%83%95%E3%82%A1%E3%81%AB%E3%82%B3%E3%83%94%E3%83%BC">step-12 メインレンダリングターゲットの絵をフレームバッファにコピー</h4>
+<p>いよいよc++側は最後の実装です。step-11までのプログラムで、ガウシアンブラーがかかった画像が生成できました。最後に生成されたボケ画像を画面に表示するために、フレームバッファに貼り付けましょう。リスト10.27のプログラムを入力してください。</br></p>
+<p>[リスト10.27 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-12 メインレンダリングターゲットの絵をフレームバッファにコピー</span>
+renderContext.SetRenderTarget(
+	g_graphicsEngine-&gt;GetCurrentFrameBuffuerRTV(),
+	g_graphicsEngine-&gt;GetCurrentFrameBuffuerDSV()
+);
+<span class="hljs-comment">//ビューポートを指定する。</span>
+D3D12_VIEWPORT viewport;
+viewport.TopLeftX = <span class="hljs-number">0</span>;
+viewport.TopLeftY = <span class="hljs-number">0</span>;
+viewport.Width = <span class="hljs-number">1280</span>;
+viewport.Height = <span class="hljs-number">720</span>;
+viewport.MinDepth = <span class="hljs-number">0.0f</span>;
+viewport.MaxDepth = <span class="hljs-number">1.0f</span>;
+
+renderContext.SetViewportAndScissor(viewport);
+copyToFrameBufferSprite.Draw(renderContext);
+</div></code></pre>
+<h4 id="step-13-%E6%A8%AA%E3%83%96%E3%83%A9%E3%83%BC%E7%94%A8%E3%81%AE%E9%A0%82%E7%82%B9%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%82%92%E5%AE%9F%E8%A3%85">step-13 横ブラー用の頂点シェーダーを実装。</h4>
+<p>続いてシェーダー側です。まずは横ブラー用の頂点シェーダーを実装します。横ブラーは基準テクセルから横方向(U方向)に向かってテクセルをサンプリングしていき、重み付き平均カラーを計算します。ですので、この頂点シェーダーでは基準テクセルから右に15テクセル、左に15テクセルずらしたUV座標を計算しています。samplePostEffect.fxの62行目にリスト10.28のプログラムを入力してください。</br>
+[リスト10.28 samplePostEffect.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-13 横ブラー用の頂点シェーダーを実装。</span>
+PS_BlurInput Out;
+<span class="hljs-comment">//座標変換</span>
+Out.pos = mul(mvp, In.pos);
+
+<span class="hljs-comment">//テクスチャサイズを取得。</span>
+float2 texSize;
+<span class="hljs-keyword">float</span> level;
+sceneTexture.GetDimensions(<span class="hljs-number">0</span>, texSize.x, texSize.y, level);
+<span class="hljs-comment">//基準テクセルのUV座標を記録。</span>
+float2 tex = In.uv;
+
+<span class="hljs-comment">//基準テクセルからU座標を＋１テクセルずらすためのオフセットを計算する。</span>
+Out.tex0.xy = float2( <span class="hljs-number">1.0f</span> / texSize.x, <span class="hljs-number">0.0f</span>);
+<span class="hljs-comment">//基準テクセルからU座標を＋３テクセルずらすためのオフセットを計算する。</span>
+Out.tex1.xy = float2( <span class="hljs-number">3.0f</span> / texSize.x, <span class="hljs-number">0.0f</span>);
+<span class="hljs-comment">//基準テクセルからU座標を＋５テクセルずらすためのオフセットを計算する。</span>
+Out.tex2.xy = float2( <span class="hljs-number">5.0f</span> / texSize.x, <span class="hljs-number">0.0f</span>);
+<span class="hljs-comment">//基準テクセルからU座標を＋７テクセルずらすためのオフセットを計算する。</span>
+Out.tex3.xy = float2( <span class="hljs-number">7.0f</span> / texSize.x, <span class="hljs-number">0.0f</span>);
+<span class="hljs-comment">//基準テクセルからU座標を＋９テクセルずらすためのオフセットを計算する。</span>
+Out.tex4.xy = float2( <span class="hljs-number">9.0f</span> / texSize.x, <span class="hljs-number">0.0f</span>);
+<span class="hljs-comment">//基準テクセルからU座標を＋１１テクセルずらすためのオフセットを計算する。</span>
+Out.tex5.xy = float2( <span class="hljs-number">11.0f</span> / texSize.x, <span class="hljs-number">0.0f</span>);
+<span class="hljs-comment">//基準テクセルからU座標を＋１３テクセルずらすためのオフセットを計算する。</span>
+Out.tex6.xy = float2( <span class="hljs-number">13.0f</span> / texSize.x, <span class="hljs-number">0.0f</span>);
+<span class="hljs-comment">//基準テクセルからU座標を＋１５テクセルずらすためのオフセットを計算する。</span>
+Out.tex7.xy = float2( <span class="hljs-number">15.0f</span> / texSize.x, <span class="hljs-number">0.0f</span>);
+
+<span class="hljs-comment">//オフセットに-1をかけてマイナス方向のオフセットも計算する。</span>
+Out.tex0.zw = Out.tex0.xy * <span class="hljs-number">-1.0f</span>;
+Out.tex1.zw = Out.tex1.xy * <span class="hljs-number">-1.0f</span>;
+Out.tex2.zw = Out.tex2.xy * <span class="hljs-number">-1.0f</span>;
+Out.tex3.zw = Out.tex3.xy * <span class="hljs-number">-1.0f</span>;
+Out.tex4.zw = Out.tex4.xy * <span class="hljs-number">-1.0f</span>;
+Out.tex5.zw = Out.tex5.xy * <span class="hljs-number">-1.0f</span>;
+Out.tex6.zw = Out.tex6.xy * <span class="hljs-number">-1.0f</span>;
+Out.tex7.zw = Out.tex7.xy * <span class="hljs-number">-1.0f</span>;
+
+<span class="hljs-comment">//オフセットに基準テクセルのUV座標を足し算して、</span>
+<span class="hljs-comment">//実際にサンプリングするUV座標に変換する。</span>
+Out.tex0 += float4( tex, tex);
+Out.tex1 += float4( tex, tex);
+Out.tex2 += float4( tex, tex);
+Out.tex3 += float4( tex, tex);
+Out.tex4 += float4( tex, tex);
+Out.tex5 += float4( tex, tex);
+Out.tex6 += float4( tex, tex);
+Out.tex7 += float4( tex, tex);
+
+<span class="hljs-keyword">return</span> Out;
+</div></code></pre>
+<h4 id="step-14-%E7%B8%A6%E3%83%96%E3%83%A9%E3%83%BC%E7%94%A8%E3%81%AE%E9%A0%82%E7%82%B9%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%82%92%E5%AE%9F%E8%A3%85">step-14 縦ブラー用の頂点シェーダーを実装。</h4>
+<p>続いて縦ブラー用の頂点シェーダーの実装です。実装はほとんど横ブラーと同じです。違いは、基準テクセルからのオフセットの計算です。横ブラーはU方向にずらしていましたが、縦ブラーではV方向にずらしていっています。リスト10.29のプログラムを入力してください。</br>
+[リスト10.29 sampleostEffect.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-14 縦ブラー用の頂点シェーダーを実装。</span>
+PS_BlurInput Out;
+<span class="hljs-comment">//座標変換。</span>
+Out.pos = mul(mvp, In.pos);
+
+<span class="hljs-comment">//テクスチャサイズを取得。</span>
+float2 texSize;
+<span class="hljs-keyword">float</span> level;
+sceneTexture.GetDimensions( <span class="hljs-number">0</span>, texSize.x, texSize.y, level );
+
+<span class="hljs-comment">//基準テクセルのUV座標を記録。</span>
+float2 tex = In.uv;
+
+<span class="hljs-comment">//基準テクセルからV座標を＋１テクセルずらすためのオフセットを計算する。</span>
+Out.tex0.xy = float2(<span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span> / texSize.y);
+<span class="hljs-comment">//基準テクセルからV座標を＋３テクセルずらすためのオフセットを計算する。</span>
+Out.tex1.xy = float2(<span class="hljs-number">0.0f</span>, <span class="hljs-number">3.0f</span> / texSize.y);
+<span class="hljs-comment">//基準テクセルからV座標を＋５テクセルずらすためのオフセットを計算する。</span>
+Out.tex2.xy = float2(<span class="hljs-number">0.0f</span>, <span class="hljs-number">5.0f</span> / texSize.y);
+<span class="hljs-comment">//基準テクセルからV座標を＋７テクセルずらすためのオフセットを計算する。</span>
+Out.tex3.xy = float2(<span class="hljs-number">0.0f</span>, <span class="hljs-number">7.0f</span> / texSize.y);
+<span class="hljs-comment">//基準テクセルからV座標を＋９テクセルずらすためのオフセットを計算する。</span>
+Out.tex4.xy = float2(<span class="hljs-number">0.0f</span>, <span class="hljs-number">9.0f</span> / texSize.y);
+<span class="hljs-comment">//基準テクセルからV座標を＋１１テクセルずらすためのオフセットを計算する。</span>
+Out.tex5.xy = float2(<span class="hljs-number">0.0f</span>, <span class="hljs-number">11.0f</span> / texSize.y);
+<span class="hljs-comment">//基準テクセルからV座標を＋１３テクセルずらすためのオフセットを計算する。</span>
+Out.tex6.xy = float2(<span class="hljs-number">0.0f</span>, <span class="hljs-number">13.0f</span> / texSize.y);
+<span class="hljs-comment">//基準テクセルからV座標を＋１５テクセルずらすためのオフセットを計算する。</span>
+Out.tex7.xy = float2(<span class="hljs-number">0.0f</span>, <span class="hljs-number">15.0f</span> / texSize.y);
+
+<span class="hljs-comment">//オフセットに-1をかけてマイナス方向のオフセットも計算する。</span>
+Out.tex0.zw = Out.tex0.xy * <span class="hljs-number">-1.0f</span>;
+Out.tex1.zw = Out.tex1.xy * <span class="hljs-number">-1.0f</span>;
+Out.tex2.zw = Out.tex2.xy * <span class="hljs-number">-1.0f</span>;
+Out.tex3.zw = Out.tex3.xy * <span class="hljs-number">-1.0f</span>;
+Out.tex4.zw = Out.tex4.xy * <span class="hljs-number">-1.0f</span>;
+Out.tex5.zw = Out.tex5.xy * <span class="hljs-number">-1.0f</span>;
+Out.tex6.zw = Out.tex6.xy * <span class="hljs-number">-1.0f</span>;
+Out.tex7.zw = Out.tex7.xy * <span class="hljs-number">-1.0f</span>;
+
+<span class="hljs-comment">//オフセットに基準テクセルのUV座標を足し算して、</span>
+<span class="hljs-comment">//実際にサンプリングするUV座標に変換する。</span>
+Out.tex0 += float4( tex, tex);
+Out.tex1 += float4( tex, tex);
+Out.tex2 += float4( tex, tex);
+Out.tex3 += float4( tex, tex);
+Out.tex4 += float4( tex, tex);
+Out.tex5 += float4( tex, tex);
+Out.tex6 += float4( tex, tex);
+Out.tex7 += float4( tex, tex);
+<span class="hljs-keyword">return</span> Out;
+</div></code></pre>
+<h4 id="step-15-%E6%A8%AA%E7%B8%A6%E3%83%96%E3%83%A9%E3%83%BC%E7%94%A8%E3%81%AE%E3%83%94%E3%82%AF%E3%82%BB%E3%83%AB%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%82%92%E5%AE%9F%E8%A3%85">step-15 横、縦ブラー用のピクセルシェーダーを実装。</h4>
+<p>では、いよいよ最後です。最後は縦、横ブラーの両方で利用されるピクセルシェーダーの実装です。このピクセルシェーダーでは、頂点シェーダーで計算されたUV座標を使って、合計16テクセルの重み付き平均カラーを計算しています。weightにはガウス関数で計算された重みテーブルが設定されています。重みテーブルのサイズは8ですが、サンプリングしているテクセルの数は16です。これは基準テクセルから右に8テクセルの重みと、左に8テクセルの重みは同じになるためです。そのため、16テクセルのサンプリングであっても8つの重みで十分なのです。ではリスト10.30のプログラムを入力してください。入力出来たら実行してください。うまく実装できていると図10.14のボケ画像が画面に表示されます。</br>
+[リスト10.30 sampleostEffect.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-15 X,Yブラー用のピクセルシェーダーを実装。</span>
+float4 Color;
+<span class="hljs-comment">//基準テクセルからプラス方向に8テクセル、重み付きでサンプリング。</span>
+Color  = weight[<span class="hljs-number">0</span>].x * sceneTexture.Sample( Sampler, In.tex0.xy );
+Color += weight[<span class="hljs-number">0</span>].y * sceneTexture.Sample( Sampler, In.tex1.xy );
+Color += weight[<span class="hljs-number">0</span>].z * sceneTexture.Sample( Sampler, In.tex2.xy );
+Color += weight[<span class="hljs-number">0</span>].w * sceneTexture.Sample( Sampler, In.tex3.xy );
+Color += weight[<span class="hljs-number">1</span>].x * sceneTexture.Sample( Sampler, In.tex4.xy );
+Color += weight[<span class="hljs-number">1</span>].y * sceneTexture.Sample( Sampler, In.tex5.xy );
+Color += weight[<span class="hljs-number">1</span>].z * sceneTexture.Sample( Sampler, In.tex6.xy );
+Color += weight[<span class="hljs-number">1</span>].w * sceneTexture.Sample( Sampler, In.tex7.xy );
+
+<span class="hljs-comment">//基準テクセルにマイナス方向に8テクセル、重み付きでサンプリング。</span>
+Color += weight[<span class="hljs-number">0</span>].x * sceneTexture.Sample(Sampler, In.tex0.zw);
+Color += weight[<span class="hljs-number">0</span>].y * sceneTexture.Sample(Sampler, In.tex1.zw);
+Color += weight[<span class="hljs-number">0</span>].z * sceneTexture.Sample(Sampler, In.tex2.zw);
+Color += weight[<span class="hljs-number">0</span>].w * sceneTexture.Sample(Sampler, In.tex3.zw);
+Color += weight[<span class="hljs-number">1</span>].x * sceneTexture.Sample(Sampler, In.tex4.zw);
+Color += weight[<span class="hljs-number">1</span>].y * sceneTexture.Sample(Sampler, In.tex5.zw);
+Color += weight[<span class="hljs-number">1</span>].z * sceneTexture.Sample(Sampler, In.tex6.zw);
+Color += weight[<span class="hljs-number">1</span>].w * sceneTexture.Sample(Sampler, In.tex7.zw);
+
+<span class="hljs-keyword">return</span> float4(Color.xyz, <span class="hljs-number">1.0f</span>);
+</div></code></pre>
+<h2 id="%E8%A9%95%E4%BE%A1%E3%83%86%E3%82%B9%E3%83%88">評価テスト</h2>
+<p>次の評価テストを行いなさい。</br>
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSeC_8oooYelVRDjsoVfdJyj5OS2rjEnll2aFAmD8819Kr8whQ/viewform?usp=sf_link">評価テストへジャンプ</a></p>
+
+</body>
+</html>

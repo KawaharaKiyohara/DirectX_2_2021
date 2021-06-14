@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chapter_5_2_スポットライト.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB">はじめに</h2>
+<p>このチャプターでは、次のサンプルプログラムを利用します。ダウンロードをしてください。</br>
+<strong><a href="https://drive.google.com/file/d/1VXAcdDVYfDBZE8nngRiPNM1ipq8ttgRO/view?usp=sharing">Sample_05_02.zip</a></strong></br></p>
+<hr>
+<h2 id="52-%E3%82%B9%E3%83%9D%E3%83%83%E3%83%88%E3%83%A9%E3%82%A4%E3%83%88">5.2 スポットライト</h2>
+<p> スポットライトとはアイドルのライブステージや、スポーツの試合などで使用される図5.4のようなライトです。</br>
+<strong>図5.4</strong></br>
+<img src="fig/5.4.ネットから拾ってきた画像です。.jpg"></img></br>
+ このチャプターではこのようなスポットライトを実装していきます。しかし、だだし、本来スポットライトというのは、空気中の塵を照らすため、光の筋が見えるような現象も見えるのですが、ここで実装するポイントライトは物体に照射された光のみの実装になります。(図5.5)</p>
+<p><strong>図5.5</strong></br>
+<img src="fig/5.5.png"></img></br>
+ 今回実装するスポットライトはポイントライトとほとんど同じプログラムになります。ポイントライトのデータに光の放射方向と、光の放射角度を追加することで実装できます。処理の手順としては下記のようになります。</p>
+<ol>
+<li>スポットライトの位置を光源とみなして、ポイントライトを計算する。</li>
+<li>スポットライトの位置からサーフェイスに向かって伸びるベクトルを計算する。</li>
+<li>2で求めたベクトルとスポットライトの射出方向とで内積を使って、角度を求める。</li>
+<li>3で求めた角度を使って、ライトの影響率を計算する。</li>
+</ol>
+<p> では、各ステップを詳細に見ていきましょう。</p>
+<hr>
+<h3 id="521-%E3%82%B9%E3%83%9D%E3%83%83%E3%83%88%E3%83%A9%E3%82%A4%E3%83%88%E3%81%AE%E4%BD%8D%E7%BD%AE%E3%82%92%E5%85%89%E6%BA%90%E3%81%A8%E3%81%BF%E3%81%AA%E3%81%97%E3%81%A6%E3%83%9D%E3%82%A4%E3%83%B3%E3%83%88%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E8%A8%88%E7%AE%97%E3%81%99%E3%82%8B">5.2.1 スポットライトの位置を光源とみなして、ポイントライトを計算する。</h3>
+<p> この処理はポイントライトの処理と全く同じです。スポットライトの位置とスポットライトの照射範囲を使ってポイントライトと同じ処理を行います。すると図5.6のようなライティング結果となります。</br></p>
+<p><strong>図5.6</strong></br>
+<img src="fig/5.6.png"></img></br></p>
+<hr>
+<h3 id="522-%E3%82%B9%E3%83%9D%E3%83%83%E3%83%88%E3%83%A9%E3%82%A4%E3%83%88%E3%81%AE%E4%BD%8D%E7%BD%AE%E3%81%8B%E3%82%89%E3%82%B5%E3%83%BC%E3%83%95%E3%82%A7%E3%82%A4%E3%82%B9%E3%81%AB%E5%90%91%E3%81%8B%E3%81%A3%E3%81%A6%E4%BC%B8%E3%81%B3%E3%82%8B%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%82%92%E8%A8%88%E7%AE%97%E3%81%99%E3%82%8B">5.2.2 スポットライトの位置からサーフェイスに向かって伸びるベクトルを計算する。</h3>
+<p> ポイントライトの計算ができたら、図5.7のようにスポットライトの位置からサーフェイスに向かって伸びるベクトルを計算します。</br></p>
+<p><strong>図5.7</strong></br>
+<img src="fig/5.7.png"></img></br>
+ このベクトルは、サーフェイスのワールド座標―スポットライトの座標で求めることができます。また、このベクトルは正規化を行っておく必要があります。</br></p>
+<hr>
+<h3 id="523-2%E3%81%A7%E6%B1%82%E3%82%81%E3%81%9F%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%81%A8%E3%82%B9%E3%83%9D%E3%83%83%E3%83%88%E3%83%A9%E3%82%A4%E3%83%88%E3%81%AE%E5%B0%84%E5%87%BA%E6%96%B9%E5%90%91%E3%81%A8%E3%81%A7%E5%86%85%E7%A9%8D%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E8%A7%92%E5%BA%A6%E3%82%92%E6%B1%82%E3%82%81%E3%82%8B">5.2.3 2で求めたベクトルとスポットライトの射出方向とで内積を使って、角度を求める。</h3>
+<p> 続いて、先ほど求めたベクトルを使って、図5.8のようにスポットライトの射出方向と照射しているサーフェイスの角度を求めます。</br>
+<strong>図5.8</strong></br>
+<img src="fig/5.8.png"></img></br>
+ この角度は内積の下記のような性質を利用すると求めることができます。</br>
+<strong>正規化された二つのベクトルの内積の結果は、その二つのベクトルのなす角θのcos(θ)の値になる。</strong></br>
+ なんのことかよく分らないと思いますが、ようはリスト5.13のようなプログラムで、二つのベクトルの間の角度を求めることができるということです。</br>
+[リスト5.13]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//ベクトルv1とv2のなす角度を求める。</span>
+<span class="hljs-comment">//まずはv1とv2の内積を計算する。</span>
+<span class="hljs-keyword">float</span> t = dot( v1, v2 );
+<span class="hljs-comment">//内積の結果をacos関数に与えて、角度に戻す。</span>
+<span class="hljs-keyword">float</span> angle = <span class="hljs-built_in">acos</span>(t);
+</div></code></pre>
+<p> この性質を利用して、スポットライトの射出方向と照射しているサーフェイスに向かって伸びるベクトルとの内積を求めて、<code>acos()</code>を利用することでサーフェイスとの角度を求めることができます。角度を求めることができたら、スポットライトの照射角度の範囲外は照射しないようにすることで図5.9のようなライティングを行うことができます。</br></p>
+<p><strong>図5.9</strong></br>
+<img src="fig/5.9.png"></img></br></p>
+<hr>
+<h3 id="524-3%E3%81%A7%E6%B1%82%E3%82%81%E3%81%9F%E8%A7%92%E5%BA%A6%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%A9%E3%82%A4%E3%83%88%E3%81%AE%E5%BD%B1%E9%9F%BF%E7%8E%87%E3%82%92%E8%A8%88%E7%AE%97%E3%81%99%E3%82%8B">5.2.4 3で求めた角度を使って、ライトの影響率を計算する。</h3>
+<p> 最後に3で求めた角度を使ってライトの影響を減衰させます(図5.10)。これはポイントライトの減衰と同じ考え方で、角度が大きくなるにしたがってライトの影響率を下げていくことで実現できます。今回のサンプルではポイントライトの実装と同じようにpow関数を利用することで、指数関数的な減衰を実現しています。</br>
+<strong>図5.10</strong></br>
+<img src="fig/5.10.png"></img></br></p>
+<hr>
+<h3 id="524-%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3%E3%82%B9%E3%83%9D%E3%83%83%E3%83%88%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%99%E3%82%8B">5.2.4 【ハンズオン】スポットライトを実装する。</h3>
+<p>では、ハンズオンでスポットライトを実装していきましょう。<code>Smaple_05_02/Sample_05_02.sln</code>を立ち上げてください。</br></p>
+<h4 id="step-1-%E3%83%A9%E3%82%A4%E3%83%88%E6%A7%8B%E9%80%A0%E4%BD%93%E3%81%AB%E3%82%B9%E3%83%9D%E3%83%83%E3%83%88%E3%83%A9%E3%82%A4%E3%83%88%E7%94%A8%E3%81%AE%E3%83%A1%E3%83%B3%E3%83%90%E5%A4%89%E6%95%B0%E3%82%92%E8%BF%BD%E5%8A%A0">step-1 ライト構造体にスポットライト用のメンバ変数を追加。</h4>
+<p>まずは、ライト構造体にスポットライト用のメンバ変数を追加しましょう。スポットライトの実装のために必要なデータは、下記のようになります。</p>
+<ol>
+<li>ライトの座標(ポイントライトと同じ)</li>
+<li>ライトのカラー(ポイントライトと同じ)</li>
+<li>影響範囲(ポイントライトと同じ)</li>
+<li>射出方向</li>
+<li>射出角度</li>
+</ol>
+<p>これらのデータをライト構造体に追加していきましょう。では、<code>main.cpp</code>の23行目にリスト5.13のプログラムを入力してください。</br>
+[リスト5.13 <code>main.cpp</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-1 ライト構造体にスポットライト用のメンバ変数を追加。</span>
+Vector3 spPosition;		<span class="hljs-comment">//位置。</span>
+<span class="hljs-keyword">float</span> pad3;					<span class="hljs-comment">//パディング。</span>
+Vector3 spColor;			<span class="hljs-comment">//カラー。</span>
+<span class="hljs-keyword">float</span> spRange;				<span class="hljs-comment">//影響範囲。</span>
+Vector3 spDirection;	<span class="hljs-comment">//射出方向。</span>
+<span class="hljs-keyword">float</span> spAngle;				<span class="hljs-comment">//射出角度。</span>
+</div></code></pre>
+<h4 id="step-2-%E3%82%B9%E3%83%9D%E3%83%83%E3%83%88%E3%83%A9%E3%82%A4%E3%83%88%E3%81%AE%E3%83%87%E3%83%BC%E3%82%BF%E3%82%92%E5%88%9D%E6%9C%9F%E5%8C%96%E3%81%99%E3%82%8B">step-2 スポットライトのデータを初期化する。</h4>
+<p>続いてスポットライトのデータを初期化しましょう。リスト5.14のプログラムを入力してください。</br>
+[リスト5.14 <code>main.cpp</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-2 スポットライトのデータを初期化する。</span>
+<span class="hljs-comment">//初期座標はX = 0、Y = 50、Z = 0にする。</span>
+light.spPosition.x = <span class="hljs-number">0.0f</span>;
+light.spPosition.y = <span class="hljs-number">0.0f</span>;
+light.spPosition.y = <span class="hljs-number">50.0f</span>;
+<span class="hljs-comment">//ライトのカラーを設定。R = 10、G = 10、B = 10にする。</span>
+light.spColor.x = <span class="hljs-number">10.0f</span>;
+light.spColor.y = <span class="hljs-number">10.0f</span>;
+light.spColor.z = <span class="hljs-number">10.0f</span>;
+
+<span class="hljs-comment">//初期方向は斜め下にする。</span>
+light.spDirection.x = <span class="hljs-number">1.0f</span>;
+light.spDirection.y = <span class="hljs-number">-1.0f</span>;
+light.spDirection.z = <span class="hljs-number">1.0f</span>;
+<span class="hljs-comment">//方向データなので、大きさを１にする必要があるので正規化する。</span>
+light.spDirection.Normalize();
+
+<span class="hljs-comment">//射出範囲は300</span>
+light.spRange = <span class="hljs-number">300.0f</span>;
+<span class="hljs-comment">//射出角度は25度。</span>
+light.spAngle = Math::DegToRad(<span class="hljs-number">25.0f</span>);
+</div></code></pre>
+<p>射出角度はラジアン単位で指定する必要があります。今回は著者のほうで用意している、デグリー角度からラジアン角度を求めるMath::DegToRad()を利用して角度を設定しています。</p>
+<h4 id="step-3-%E3%82%B3%E3%83%B3%E3%83%88%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC%E3%81%AE%E5%B7%A6%E3%82%B9%E3%83%86%E3%82%A3%E3%83%83%E3%82%AF%E3%81%A7%E3%82%B9%E3%83%9D%E3%83%83%E3%83%88%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E7%A7%BB%E5%8B%95%E3%81%95%E3%81%9B%E3%82%8B">step-3 コントローラーの左スティックでスポットライトを移動させる。</h4>
+<p>ライトの初期化ができたら今度はゲームループの中にコントローラーの入力でスポットライトを移動させるプログラムを追加しましょう。リスト5.15のプログラムを入力してください。</br>
+[リスト5.15 <code>main.cpp</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-3 コントローラーの左スティックでスポットライトを移動させる。</span>
+<span class="hljs-comment">//左のアナログスティックで動かす。</span>
+light.spPosition.x -= g_pad[<span class="hljs-number">0</span>]-&gt;GetLStickXF();
+<span class="hljs-keyword">if</span> (g_pad[<span class="hljs-number">0</span>]-&gt;IsPress(enButtonB)) {
+	<span class="hljs-comment">//Bボタンが一緒に押されていたらY軸方向に動かす。</span>
+	light.spPosition.y += g_pad[<span class="hljs-number">0</span>]-&gt;GetLStickYF();
+}
+<span class="hljs-keyword">else</span> {
+	<span class="hljs-comment">//Z軸方向に動かす。</span>
+	light.spPosition.z -= g_pad[<span class="hljs-number">0</span>]-&gt;GetLStickYF();
+}
+</div></code></pre>
+<h4 id="step-4-%E3%82%B3%E3%83%B3%E3%83%88%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC%E5%8F%B3%E3%82%B9%E3%83%86%E3%82%A3%E3%83%83%E3%82%AF%E3%81%A7%E3%82%B9%E3%83%9D%E3%83%83%E3%83%88%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E5%9B%9E%E8%BB%A2%E3%81%95%E3%81%9B%E3%82%8B">step-4 コントローラー右スティックでスポットライトを回転させる。</h4>
+<p>続いて、コントローラーの右スティックの入力でスポットライトを回転させましょう。リスト5.16のプログラムを入力してください。</p>
+<p>[リスト5.16 <code>main.cpp</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-4 コントローラー右スティックでスポットライトを回転させる。</span>
+<span class="hljs-comment">//Y軸周りの回転クォータニオンを計算する。</span>
+Quaternion qRotY;
+qRotY.SetRotationY(g_pad[<span class="hljs-number">0</span>]-&gt;GetRStickXF() * <span class="hljs-number">0.01f</span>);
+<span class="hljs-comment">//計算したクォータニオンでライトの方向を回す。</span>
+qRotY.Apply(light.spDirection);
+
+<span class="hljs-comment">//X軸周りの回転クォータニオンを計算する。</span>
+Vector3 rotAxis;
+rotAxis.Cross(g_vec3AxisY, light.spDirection);
+Quaternion qRotX;
+qRotX.SetRotation(rotAxis, g_pad[<span class="hljs-number">0</span>]-&gt;GetRStickYF() * <span class="hljs-number">0.01f</span>);
+<span class="hljs-comment">//計算したクォータニオンでライトの方向を回す。</span>
+qRotX.Apply(light.spDirection);
+</div></code></pre>
+<p>このコードではクォータニオンを利用してライトの方向を回すプログラムを作成していますが、クォータニオンの説明は本書の目的である、リアルタイムCGプログラミングのアルゴリズムを学ぶという点からずれてしまい、数学的な話になってしまいますので、詳細な説明は割愛させていただきます。本書では、クォータニオンは任意の軸周りの回転を扱うことができ、ベクトルを回したり、回転行列を作成したりすることができる程度の認識で大丈夫です。</br></p>
+<h4 id="step-5-%E3%82%B9%E3%83%9D%E3%83%83%E3%83%88%E3%83%A9%E3%82%A4%E3%83%88%E3%81%AE%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AB%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%99%E3%82%8B%E3%81%9F%E3%82%81%E3%81%AE%E5%A4%89%E6%95%B0%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B">step-5 スポットライトのデータにアクセスするための変数を追加する。</h4>
+<p>続いてシェーダー側のプログラムを実装していきます。まずは、cpp側で用意されたスポットライトのデータにアクセスするための変数を定数バッファに追加しましょう。<code>Assets/shader/sample.fx</code>を開いてリスト5.17のプログラムを入力してください。</br>
+[リスト5.17 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-5 スポットライトのデータにアクセスするための変数を追加する。</span>
+float3 spPosition;	<span class="hljs-comment">//スポットライトの位置。</span>
+float3 spColor;		<span class="hljs-comment">//スポットライトのカラー。</span>
+<span class="hljs-keyword">float</span> spRange;		<span class="hljs-comment">//スポットライトの射出範囲。</span>
+float3 spDirection;	<span class="hljs-comment">//スポットライトの射出方向。</span>
+<span class="hljs-keyword">float</span> spAngle;		<span class="hljs-comment">//スポットライトの射出角度。</span>
+</div></code></pre>
+<h4 id="step-6-%E3%81%93%E3%81%AE%E3%82%B5%E3%83%BC%E3%83%95%E3%82%A7%E3%82%A4%E3%82%B9%E3%81%AB%E5%85%A5%E5%B0%84%E3%81%97%E3%81%A6%E3%81%84%E3%82%8B%E3%82%B9%E3%83%9D%E3%83%83%E3%83%88%E3%83%A9%E3%82%A4%E3%83%88%E3%81%AE%E5%85%89%E3%81%AE%E5%90%91%E3%81%8D%E3%82%92%E8%A8%88%E7%AE%97%E3%81%99%E3%82%8B">step-6 このサーフェイスに入射しているスポットライトの光の向きを計算する。</h4>
+<p>では、ここからはピクセルシェーダーを改造して、スポットライトの計算を行っていきます。step-6～step-10までのプログラムはポイントライトと全く同じになります。では、まずは、スポットライトからサーフェイス(ピクセル)に入射してくる光の向きを計算しましょう。リスト5.18のプログラムを入力してください。</br>
+[リスト5.18 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-6 このサーフェイスに入射しているスポットライトの光の向きを計算する。</span>
+<span class="hljs-comment">//ピクセルの座標 - スポットライトの座標を計算。</span>
+float3 ligDir = psIn.worldPos - spPosition;
+<span class="hljs-comment">//正規化して大きさ１のベクトルにする。</span>
+ligDir = normalize(ligDir);
+</div></code></pre>
+<h4 id="step-7-%E6%B8%9B%E8%A1%B0%E3%81%AA%E3%81%97%E3%81%AE%E3%83%A9%E3%83%B3%E3%83%90%E3%83%BC%E3%83%88%E6%8B%A1%E6%95%A3%E5%8F%8D%E5%B0%84%E5%85%89%E3%82%92%E8%A8%88%E7%AE%97%E3%81%99%E3%82%8B">step-7 減衰なしのランバート拡散反射光を計算する。</h4>
+<p>入射してくる光の向きを計算することができたら、拡散反射光を計算します。リスト5.19のプログラムを入力してください。</br>
+[リスト5.19 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-7 減衰なしのランバート拡散反射光を計算する。</span>
+float3 diffSpotLight = CalcLambertDiffuse(
+	ligDir, 		<span class="hljs-comment">//ライトの方向</span>
+	spColor,	 	<span class="hljs-comment">//ライトのカラー</span>
+	psIn.normal		<span class="hljs-comment">//サーフェイスの法線</span>
+);
+</div></code></pre>
+<h4 id="step-8-%E6%B8%9B%E8%A1%B0%E3%81%AA%E3%81%97%E3%81%AE%E3%83%95%E3%82%A9%E3%83%B3%E9%8F%A1%E9%9D%A2%E5%8F%8D%E5%B0%84%E5%85%89%E3%82%92%E8%A8%88%E7%AE%97%E3%81%99%E3%82%8B">step-8 減衰なしのフォン鏡面反射光を計算する。</h4>
+<p>続いて鏡面反射光を計算しましょう。リスト5.20のプログラムを入力してください。</br>
+[リスト5.20 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-8 減衰なしのフォン鏡面反射光を計算する。</span>
+float3 specSpotLight = CalcPhongSpecular(
+	ligDir, 			<span class="hljs-comment">//ライトの方向。</span>
+	spColor,		 	<span class="hljs-comment">//ライトのカラー。</span>
+	psIn.worldPos, 		<span class="hljs-comment">//サーフェイズのワールド座標。</span>
+	psIn.normal			<span class="hljs-comment">//サーフェイズの法線。</span>
+);
+</div></code></pre>
+<h4 id="step-9-%E8%B7%9D%E9%9B%A2%E3%81%AB%E3%82%88%E3%82%8B%E5%BD%B1%E9%9F%BF%E7%8E%87%E3%82%92%E8%A8%88%E7%AE%97%E3%81%99%E3%82%8B">step-9 距離による影響率を計算する。</h4>
+<p>減衰なしの反射光を求めることができたので、次は距離による減衰率を計算します。この計算もポイントライトのものと全く同じです。リスト5.21のプログラムを入力してください。</br>
+[リスト5.21 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-9 距離による影響率を計算する。</span>
+<span class="hljs-comment">//スポットライトとの距離を計算する。</span>
+float3 distance = length( psIn.worldPos - spPosition );
+
+<span class="hljs-comment">//影響率は距離に比例して小さくなっていく。</span>
+<span class="hljs-keyword">float</span> affect = <span class="hljs-number">1.0f</span> - <span class="hljs-number">1.0f</span> / spRange * distance;
+<span class="hljs-comment">//影響力がマイナスにならないように補正をかける。</span>
+<span class="hljs-keyword">if</span>( affect &lt; <span class="hljs-number">0.0f</span>){
+	affect = <span class="hljs-number">0.0f</span>;
+}
+<span class="hljs-comment">//影響の仕方を指数関数的にする。今回のサンプルでは3乗している。</span>
+affect = <span class="hljs-built_in">pow</span>( affect, <span class="hljs-number">3.0f</span> );
+</div></code></pre>
+<h4 id="step-10-%E6%8B%A1%E6%95%A3%E5%8F%8D%E5%B0%84%E5%85%89%E3%81%A8%E9%8F%A1%E9%9D%A2%E5%8F%8D%E5%B0%84%E5%85%89%E3%81%AB%E5%BD%B1%E9%9F%BF%E7%8E%87%E3%82%92%E4%B9%97%E7%AE%97%E3%81%97%E3%81%A6%E5%8F%8D%E5%B0%84%E5%85%89%E3%82%92%E5%BC%B1%E3%82%81%E3%82%8B">step-10 拡散反射光と鏡面反射光に影響率を乗算して反射光を弱める。</h4>
+<p>距離による影響率を求めることができたので、反射光に影響率を乗算して、反射光を弱めましょう。リスト5.22のプログラムを入力してください。</br>
+[リスト5.22 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-10 拡散反射光と鏡面反射光に影響率を乗算して影響を弱める。</span>
+diffSpotLight *= affect;
+specSpotLight *= affect;
+</div></code></pre>
+<h4 id="step-11-%E5%85%A5%E5%B0%84%E5%85%89%E3%81%A8%E5%B0%84%E5%87%BA%E6%96%B9%E5%90%91%E3%81%AE%E8%A7%92%E5%BA%A6%E3%82%92%E6%B1%82%E3%82%81%E3%82%8B">step-11 入射光と射出方向の角度を求める。</h4>
+<p>ここからはスポットライト固有のプログラムになっていきます。まずはサーフェイスへの入射光とスポットライトの射出方向との角度を求めましょう。この角度は内積と逆余弦関数を利用することで求めることができます。では、リスト5.23のプログラムを入力して下さい。</br>
+[リスト5.23 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-11 入射光と射出方向の角度を求める。</span>
+<span class="hljs-comment">//dot()を利用して内積を求める。</span>
+<span class="hljs-keyword">float</span> angle = dot( ligDir, spDirection);
+<span class="hljs-comment">//dot()で求めた値をacos()に渡して角度を求める。</span>
+angle = <span class="hljs-built_in">acos</span>(angle);
+</div></code></pre>
+<h4 id="step-12-%E8%A7%92%E5%BA%A6%E3%81%AB%E3%82%88%E3%82%8B%E5%BD%B1%E9%9F%BF%E7%8E%87%E3%82%92%E6%B1%82%E3%82%81%E3%82%8B">step-12 角度による影響率を求める。</h4>
+<p>角度を求めることができたら影響率を計算しましょう。この計算の考え方は、距離によるものとよく似ています。角度の大きさに比例して影響率を小さくしていきます。また、影響率を累乗することで、影響率の変化を指数関数的にしています。これも距離によるものと同じ考え方です。リスト5.24のプログラムを入力してください。</br>
+[リスト5.24 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-12 角度による影響率を求める。</span>
+<span class="hljs-comment">//角度に比例して小さくなっていく影響率を計算する。</span>
+affect = <span class="hljs-number">1.0f</span> - <span class="hljs-number">1.0f</span> / spAngle * angle;
+<span class="hljs-comment">//影響力がマイナスにならないように補正をかける。</span>
+<span class="hljs-keyword">if</span>( affect &lt; <span class="hljs-number">0.0f</span>){
+	affect = <span class="hljs-number">0.0f</span>;
+}
+<span class="hljs-comment">//影響の仕方を指数関数的にする。今回のサンプルでは0.5乗している。</span>
+affect = <span class="hljs-built_in">pow</span>( affect, <span class="hljs-number">0.5f</span> );
+</div></code></pre>
+<h4 id="step-13-%E8%A7%92%E5%BA%A6%E3%81%AB%E3%82%88%E3%82%8B%E5%BD%B1%E9%9F%BF%E7%8E%87%E3%82%92%E5%8F%8D%E5%B0%84%E5%85%89%E3%81%AB%E4%B9%97%E7%AE%97%E3%81%97%E3%81%A6%E5%BD%B1%E9%9F%BF%E3%82%92%E5%BC%B1%E3%82%81%E3%82%8B">step-13 角度による影響率を反射光に乗算して、影響を弱める。</h4>
+<p>求めた影響率を反射光に乗算して、影響率を弱めましょう。リスト5.25のプログラムを入力してください。</br>
+[リスト5.25 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-13 角度による影響率を反射光に乗算して、影響を弱める。</span>
+diffSpotLight *= affect;
+specSpotLight *= affect;
+</div></code></pre>
+<h4 id="step-14-%E3%82%B9%E3%83%9D%E3%83%83%E3%83%88%E3%83%A9%E3%82%A4%E3%83%88%E3%81%AE%E5%8F%8D%E5%B0%84%E5%85%89%E3%82%92%E6%9C%80%E7%B5%82%E7%9A%84%E3%81%AA%E5%8F%8D%E5%B0%84%E5%85%89%E3%81%AB%E8%B6%B3%E3%81%97%E7%AE%97%E3%81%99%E3%82%8B">step-14 スポットライトの反射光を最終的な反射光に足し算する。</h4>
+<p>いよいよ最後の実装です。スポットライトの反射光を最終的な反射光に足し算しましょう。リスト5.26のプログラムを入力してください。</br>
+[リスト5.26 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-14 スポットライトの反射光を最終的な反射光に足し算する。</span>
+finalLig += diffSpotLight + specSpotLight;
+</div></code></pre>
+<p>ここまで実装できたら実行してみてください。図5.11のようなプログラムが実行できたら完成です。コントローラーの入力でスポットライトを動かすことができますので、こちらも試してみてください。</br></p>
+<p><strong>図5.11</strong></br>
+<img src="fig/5.11.png"></img></br></p>
+<!-- 改ページ. -->
+<div style="page-break-before:always"></div>
+<hr>
+<h2 id="%E8%A9%95%E4%BE%A1%E3%83%86%E3%82%B9%E3%83%88-2">評価テスト-2</h2>
+<p>次の評価テストを行いなさい。</br>
+<a href="https://docs.google.com/forms/d/e/1FAIpQLScxSMGVU0TC7X5l__XaIv8XxKpVMi1yEjywvVBm0njhUPnNhA/viewform?usp=sf_link">評価テストへジャンプ</a></p>
+
+</body>
+</html>

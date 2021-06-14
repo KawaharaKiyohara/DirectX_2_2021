@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chapter_10_1_オフスクリーンレンダリング.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB">はじめに</h2>
+<p>このチャプターでは、次のサンプルプログラムを利用します。ダウンロードをしてください。</br>
+<strong><a href="https://drive.google.com/file/d/1BM07HjZFiD79DqT2xgth7-Z16Sheacqb/view?usp=sharing">Sample_10_01.zip</a></strong></br></p>
+<hr>
+<h1 id="chapter-10-%E3%83%9D%E3%82%B9%E3%83%88%E3%82%A8%E3%83%95%E3%82%A7%E3%82%AF%E3%83%88">Chapter 10 ポストエフェクト</h1>
+<p>最近の3Dゲームではカメラのピンボケ現象をシミュレーションする被写界深度や、光が溢れ出るブルームといわれる現象を疑似的に再現しています。</br>
+<strong>図10.1</strong></br>
+<img src="fig/10.1.png" ></img></br>
+これらはポストエフェクトと呼ばれる手法で実現されています。このチャプターでは、ポストエフェクトの基礎となるオフスクリーンレンダリングについ見ていった後で、モノクロ化、ブルーム、被写界深度、トーンマップ、Screen Space Reflectionといったいくつかのポストエフェクトを勉強していきます。</p>
+<h2 id="101-%E3%82%AA%E3%83%95%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0">10.1 オフスクリーンレンダリング</h2>
+<p>オフスクリーンレンダリングとは画面に表示されないレンダリングのことです。これまで皆さんが行ってきたレンダリングは、画面に絵が出ていたのでオンスクリーンレンダリングです。一方オフスクリーンレンダリングは画面に表示されないレンダリングです。なぜそんなことをするの？と不思議な気持ちになってしまうかもしれませんが、ポストエフェクトを行うためにはオフスクリーンレンダリングを行う必要があります。では、多様なポストエフェクトのアルゴリズムを勉強する前に、ポストエフェクトの基礎となるオフスクリーンレンダリングについて見ていきましょう。</p>
+<h3 id="1011-%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88">10.1.1 レンダリングターゲット</h3>
+<p>レンダリングターゲットというのは３Ｄモデルの描画先のことです。レンダリングターゲットは次の二つのテクスチャを指します。</p>
+<ol>
+<li>カラーバッファ ： ピクセルシェーダーから出力されたカラーの書き込み先。</li>
+<li>デプスステンシルバッファ : カラーバッファに書き込んだピクセルの深度値の書き込み先。</li>
+</ol>
+<p>カラーバッファはピクセルシェーダーから出力されたピクセルのカラーが描き込まれるテクスチャです。これまで画面に表示されていたのは、フレームバッファと呼ばれるカラーバッファです。画面に表示されるカラーバッファはフレームバッファという特別な名前で呼ばれますが、本質的にはレンダリングターゲットに関連付けられているカラーバッファと変わりはありません。デプスステンシルバッファはカラーバッファに描き込んだピクセルの深度値が描き込まれるテクスチャです。このテクスチャを利用して、ピクセルの前後関係のテストが行われています。DirectX12では必ず絵の描き込み先となるレンダリングターゲットを指定する必要があります。つまり、これまではフレームバッファをカラーバッファとするレンダリングターゲットに絵が描き込まれていたわけです。</br>
+さて、ここでオフスクリーンレンダリングの話に戻します。オフスクリーンレンダリングとは、フレームバッファ以外のテクスチャに絵を描き込むことを指します。画面に表示されるのがフレームバッファであるため、フレームバッファ以外のテクスチャに描き込むのであれば、当然画面に絵は出ません。では、これが何の役に立つのか？画面に絵が出ないのであれば意味がないのではないか？そう思われると思います。実はレンダリングターゲットのカラーバッファに書き込まれた絵は、テクスチャとして利用することができます。カラーバッファはテクスチャなので当然です。つまり、オフスクリーンレンダリングした絵をテクスチャとして３Ｄモデルに張り付けたりすることができるわけです。この技術を使えば、分かりやすい例であれば、車のバックミラー、鏡、テレビ画面といった表現を行うことができます(図10.2)。</br>
+<strong>図10.2</strong></br>
+<img src="fig/10.2(グランツーリスモの絵です).jpg" ></img></br></p>
+<h3 id="1012-%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3%E3%82%AA%E3%83%95%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%81%97%E3%81%9F%E7%B5%B5%E3%82%92%E3%83%86%E3%82%AF%E3%82%B9%E3%83%81%E3%83%A3%E3%81%A8%E3%81%97%E3%81%A6%E8%B2%BC%E3%82%8A%E4%BB%98%E3%81%91%E3%81%A6%E3%81%BF%E3%82%88%E3%81%86">10.1.2 【ハンズオン】オフスクリーンレンダリングした絵をテクスチャとして貼り付けてみよう</h3>
+<p>では、オフスクリーンレンダリングした絵をテクスチャとして貼り付けるプログラムを実装してみましょう。<code>Chapter_10_01/Chapter_10_01.sln</code>を立ち上げてください。</p>
+<h4 id="step-1-%E3%82%AA%E3%83%95%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E6%8F%8F%E7%94%BB%E7%94%A8%E3%81%AE%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90">step-1 オフスクリーン描画用のレンダリングターゲットを作成。</h4>
+<p>では、最初はオフスクリーン描画用のレンダリングターゲットを作成するコードを追加します。本書のMiniEngineにはレンダリングターゲットを扱うためのRenderTargetクラスが用意されています。今回はそれを利用します。レンダリングターゲットで必要なカラーバッファとデプスステンシルバッファはRenderTarget::Create()を利用することで作成することができます。この関数の引数に渡すパラメータはテクスチャの幅、高さ、フォーマットなど、テクスチャを作成するために必要な情報になります。main.cppの21行目にリスト10.1のプログラムを入力してください。</br></p>
+<p>[リスト10.1 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-1 オフスクリーン描画用のレンダリングターゲットを作成。</span>
+<span class="hljs-comment">//RenderTargetクラスのオブジェクトを定義。</span>
+RenderTarget offscreenRenderTarget;
+<span class="hljs-comment">//RenderTarget::Create()を利用して、レンダリングターゲットを作成する。</span>
+offscreenRenderTarget.Create(
+	<span class="hljs-number">1280</span>,						<span class="hljs-comment">//テクスチャの幅。</span>
+	<span class="hljs-number">720</span>,						<span class="hljs-comment">//テクスチャの高さ。</span>
+	<span class="hljs-number">1</span>,							<span class="hljs-comment">//Mipmapレベル。</span>
+	<span class="hljs-number">1</span>,							<span class="hljs-comment">//テクスチャ配列のサイズ。</span>
+	DXGI_FORMAT_R8G8B8A8_UNORM, <span class="hljs-comment">//カラーバッファのフォーマット。</span>
+	DXGI_FORMAT_D32_FLOAT		<span class="hljs-comment">//デプスステンシルバッファのフォーマット。</span>
+);
+</div></code></pre>
+<h4 id="step-2-%E5%90%84%E7%A8%AE3d%E3%83%A2%E3%83%87%E3%83%AB%E3%82%92%E5%88%9D%E6%9C%9F%E5%8C%96%E3%81%99%E3%82%8B">step-2 各種3Dモデルを初期化する。</h4>
+<p>続いて、各種3Dモデルの絵を描画できるように、初期化するプログラムを実装します。リスト10.2のプログラムを入力してください。</br></p>
+<p>[リスト10.2 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-2 各種モデルを初期化する。</span>
+<span class="hljs-comment">//箱モデルを初期化する。</span>
+ModelInitData boxModelInitData;
+boxModelInitData.m_tkmFilePath = <span class="hljs-string">"Assets/modelData/box.tkm"</span>;
+boxModelInitData.m_fxFilePath = <span class="hljs-string">"Assets/shader/sample3D.fx"</span>;
+Model boxModel;
+boxModel.Init(boxModelInitData);
+boxModel.UpdateWorldMatrix({ <span class="hljs-number">100.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span> }, g_quatIdentity, g_vec3One);
+
+<span class="hljs-comment">//背景モデルを初期化。</span>
+ModelInitData bgModelInitData;
+bgModelInitData.m_tkmFilePath = <span class="hljs-string">"Assets/modelData/bg/bg.tkm"</span>;
+bgModelInitData.m_fxFilePath = <span class="hljs-string">"Assets/shader/sample3D.fx"</span>;
+
+<span class="hljs-comment">//背景モデルを初期化。</span>
+Model bgModel;
+bgModel.Init(bgModelInitData);
+
+<span class="hljs-comment">//プレイヤーモデルを初期化。</span>
+ModelInitData plModelInitData;
+plModelInitData.m_tkmFilePath = <span class="hljs-string">"Assets/modelData/unityChan.tkm"</span>;
+plModelInitData.m_fxFilePath = <span class="hljs-string">"Assets/shader/sample3D.fx"</span>;
+Model plModel;
+plModel.Init(plModelInitData);
+</div></code></pre>
+<h4 id="step-3-%E7%AE%B1%E3%83%A2%E3%83%87%E3%83%AB%E3%81%AB%E8%B2%BC%E3%82%8A%E4%BB%98%E3%81%91%E3%82%8B%E3%83%86%E3%82%AF%E3%82%B9%E3%83%81%E3%83%A3%E3%82%92%E5%A4%89%E6%9B%B4%E3%81%99%E3%82%8B">step-3 箱モデルに貼り付けるテクスチャを変更する。</h4>
+<p>今回の実装では、箱モデルにオフスクリーンレンダリングしたテクスチャを貼り付けます。ですので、箱モデルのテクスチャを変更するコードを追加しましょう。リスト10.3のプログラムを入力して下さい。</br>
+[リスト10.3 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-3 箱モデルに貼り付けるテクスチャを変更する。</span>
+<span class="hljs-comment">//箱モデルのテクスチャをオフスクリーンレンダリングされるテクスチャに切り替える。</span>
+boxModel.ChangeAlbedoMap(
+	<span class="hljs-string">""</span>, 
+	offscreenRenderTarget.GetRenderTargetTexture()
+);
+</div></code></pre>
+<h4 id="step-4-%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E3%82%92offscreenrendertarget%E3%81%AB%E5%A4%89%E6%9B%B4%E3%81%99%E3%82%8B">step-4 レンダリングターゲットをoffscreenRenderTargetに変更する。</h4>
+<p>では、いよいよオフスクリーンレンダリングを行うコードを追加していきます。まずは描画先の切り替えのコードです。リスト10.4のプログラムを入力してください。</br>
+[リスト10.4 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-4 レンダリングターゲットをoffscreenRenderTargetに変更する。</span>
+RenderTarget* rtArray[] = { &amp;offscreenRenderTarget };
+<span class="hljs-comment">//レンダリングターゲットとして利用できるまで待つ。</span>
+renderContext.WaitUntilToPossibleSetRenderTargets(<span class="hljs-number">1</span>, rtArray);
+<span class="hljs-comment">//レンダリングターゲットを設定。</span>
+renderContext.SetRenderTargets(<span class="hljs-number">1</span>, rtArray);
+<span class="hljs-comment">//レンダリングターゲットをクリア。</span>
+renderContext.ClearRenderTargetViews(<span class="hljs-number">1</span>, rtArray);
+</div></code></pre>
+<p>では、このプログラムを解説していきます。DirectX12では、レンダリングターゲットを設定する前に、レンダリングターゲットとして利用できる状態になるまで待つ必要があります。これは、GPUがシェーダーリソースのテクスチャとして利用している間はレンダリングターゲットとして利用できないからです。本書では、この処理を薄くラップしているRenderTarget::WaitUntilToPossibleSetRenderTargets()を利用しています。この処理が抜けていると、VisualStudioの出力ウィンドウに、図10.3のようなエラーメッセージが表示されます。</br>
+<strong>図10.3</strong></br>
+<img src="fig/10.3.png"></img></br>
+続いて、RenderContext::SetRenderTargets()を利用して、レンダリングターゲットを設定しています。第一引数はレンダリングターゲットの数です。実はレンダリングターゲットというのは、同時に複数枚設定することが可能です。今回は１枚だけなので、１を指定しています。最後はRenderTarget::ClearRenderTargetViews()を利用して、レンダリングターゲットのクリアを行っています。これは、絵を描くためのキャンパスを綺麗にしているようなイメージです。以前描いた絵を消す感じです。この関数の第一引数もレンダリングターゲットの数です。今回は１を指定しています。</p>
+<h4 id="step-5-offscreenrendertarget%E3%81%AB%E8%83%8C%E6%99%AF%E3%83%97%E3%83%AC%E3%82%A4%E3%83%A4%E3%83%BC%E3%82%92%E6%8F%8F%E7%94%BB%E3%81%99%E3%82%8B">step-5 offscreenRenderTargetに背景、プレイヤーを描画する。</h4>
+<p>レンダリングターゲットを変更することができたら、そのレンダリングターゲットに対し3Dモデルを描画しましょう。この処理は普通のモデル描画と全く同じになります。リスト10.5のプログラムを入力してください。</br>
+[リスト10.5 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-5 offscreenRenderTargetに背景、プレイヤーを描画する。</span>
+<span class="hljs-comment">//背景モデルをドロー。		</span>
+bgModel.Draw(renderContext);
+<span class="hljs-comment">//プレイヤーをドロー。</span>
+plModel.Draw(renderContext);
+<span class="hljs-comment">//レンダリングターゲットへの書き込み終了待ち。</span>
+renderContext.WaitUntilFinishDrawingToRenderTargets(<span class="hljs-number">1</span>, rtArray);
+</div></code></pre>
+<p>この描画処理では画面になにも表示されないことに注意してください。この描画はオフスクリーン(画面に表示されないテクスチャ)に描画しています。</p>
+<h4 id="step-6-%E7%94%BB%E9%9D%A2%E3%81%AB%E8%A1%A8%E7%A4%BA%E3%81%95%E3%82%8C%E3%82%8B%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E3%81%AB%E6%88%BB%E3%81%99">step-6 画面に表示されるレンダリングターゲットに戻す。</h4>
+<p>オフスクリーンレンダリングが終わったら、次は画面に表示されるレンダリングターゲットに戻すプログラムを実装します。リスト10.6のプログラムを入力してください。</br>
+[リスト10.6 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-6 画面に表示されるレンダリングターゲットに戻す。</span>
+renderContext.SetRenderTarget(
+	g_graphicsEngine-&gt;GetCurrentFrameBuffuerRTV(),
+	g_graphicsEngine-&gt;GetCurrentFrameBuffuerDSV()
+);
+</div></code></pre>
+<h4 id="step-7-%E7%94%BB%E9%9D%A2%E3%81%AB%E8%A1%A8%E7%A4%BA%E3%81%95%E3%82%8C%E3%82%8B%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E3%81%AB%E5%90%84%E7%A8%AE%E3%83%A2%E3%83%87%E3%83%AB%E3%82%92%E6%8F%8F%E7%94%BB%E3%81%99%E3%82%8B">step-7 画面に表示されるレンダリングターゲットに各種モデルを描画する。</h4>
+<p>では、いよいよ最後です。画面に表示されるレンダリングターゲットに対して、各種モデルを描画します。リスト10.7のプログラムを入力してください。</br>
+[リスト10.7 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-7 画面に表示されるレンダリングターゲットに各種モデルを描画する。</span>
+<span class="hljs-comment">//背景モデルをドロー。		</span>
+bgModel.Draw(renderContext);
+<span class="hljs-comment">//プレイヤーをドロー。</span>
+plModel.Draw(renderContext);
+<span class="hljs-comment">//箱を描画。</span>
+boxModel.Draw(renderContext);
+</div></code></pre>
+<p>入力出来たら実行してください。うまく実装出来ていると図10.4のようなプログラムが実行できます。箱モデルにオフスクリーンレンダリングされた絵がテクスチャとして貼り付けられています。</br>
+<strong>図10.4</strong></br>
+<img src="fig/10.4.png" width=600></img></br></p>
+<h2 id="%E8%A9%95%E4%BE%A1%E3%83%86%E3%82%B9%E3%83%88">評価テスト</h2>
+<p>次の評価テストを行いなさい。</br>
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSd7Kgz57s0XU_UfRtVHfIVuc1uiG7vkV3-s8NEE2y7anhmLRg/viewform?usp=sf_link">評価テストへジャンプ</a></p>
+
+</body>
+</html>
