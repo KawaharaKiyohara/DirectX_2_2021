@@ -115,5 +115,5 @@ return combineColor;
 
 ## 評価テスト
 次の評価テストを行いなさい。</br>
-[評価テストへジャンプ](https://docs.google.com/forms/d/e/1FAIpQLSe1EuY8YuUvCLXsYi2wwIKdDUCVkYkP0-szkxI56iXY8UE8_w/viewform?usp=sf_link)
+[評価テストへジャンプ](https://docs.google.com/forms/d/e/1FAIpQLSegR2lVZ9LsP_M-r5gipDGw7ip_kcZkZNOVfYtN9KyFNvGfXw/viewform)
 </br>
