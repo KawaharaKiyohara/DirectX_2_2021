@@ -370,7 +370,7 @@ code {
 <p><strong><a href="https://drive.google.com/file/d/1f0uf45BSvGf3UbM7L-UyXyE3qiyFPm4l/view?usp=sharing">Sample_10_07.zip</a></strong></br></p>
 <h2 id="106-%E8%A2%AB%E5%86%99%E7%95%8C%E6%B7%B1%E5%BA%A6">10.6 被写界深度</h2>
 <p>被写界深度(以下DoF)とはカメラのピントが合っているように見える範囲のことを指すのですが、リアルタムＣＧでDoFというと、図10.26のようなカメラのピンボケ現象全般を指します。このピンボケ現象もリアルタイムCGでは、ポストエフェクトで実現されています。</br></p>
-<p><strong>図10.26</strong>
+<p><strong>図10.26</strong></br>
 <img src="fig/10.26.jpg"></img></br></p>
 <h3 id="1061-%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0%E6%A6%82%E8%A6%81">10.6.1 アルゴリズム概要</h3>
 <p>カメラのピンボケ現象は、図10.27のようにカメラ空間での深度値(Z値)によってボケ具合が変わっていきます。</br>
@@ -469,7 +469,7 @@ combineBokeImageSpriteInitData.m_width = <span class="hljs-number">1280</span>;
 combineBokeImageSpriteInitData.m_height = <span class="hljs-number">720</span>;
 <span class="hljs-comment">//合成用のシェーダーを指定する。</span>
 combineBokeImageSpriteInitData.m_fxFilePath = <span class="hljs-string">"Assets/shader/samplePostEffect.fx"</span>;
-combineBokeImageSpriteInitData.m_colorBufferFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
+combineBokeImageSpriteInitData.m_colorBufferFormat[<span class="hljs-number">0</span>] = DXGI_FORMAT_R32G32B32A32_FLOAT;
 <span class="hljs-comment">// 距離を利用してボケ画像をアルファブレンディングするので、半透明合成モードにする。</span>
 combineBokeImageSpriteInitData.m_alphaBlendMode = AlphaBlendMode_Trans;
 <span class="hljs-comment">// 初期化オブジェクトを利用してスプライトを初期化する。</span>
