@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chapter_11_1_投影シャドウ.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB">はじめに</h2>
+<p>このチャプターでは、次のサンプルプログラムを利用します。ダウンロードをしてください。</p>
+<p><strong><a href="https://drive.google.com/file/d/1yyYLV2t6GShFKpPWry9a-WDyfJo5tQZ-/view?usp=sharing">Sample_11_01.zip</a></strong></br>
+<strong><a href="https://drive.google.com/file/d/1EWq6nb021Gm6f1FcuCht0b3waNa9n2Tr/view?usp=sharing">Sample_11_02.zip</a></strong></br></p>
+<h2 id="111-%E6%8A%95%E5%BD%B1%E3%82%B7%E3%83%A3%E3%83%89%E3%82%A6">11.1 投影シャドウ</h2>
+<p>３Ｄゲームにおいて、リアルなグラフィックを実現するために影は非常に重要な要素になります。また、グラフィック面だけではなく、影は３Ｄオブジェクトの空間上の位置をユーザーに教えるための重要な要素となります。このチャプターでは、基本となる古典的な影生成アルゴリズムの投影シャドウについて見ていきます。</p>
+<h3 id="1111-%E3%82%B7%E3%83%A3%E3%83%89%E3%82%A6%E3%83%9E%E3%83%83%E3%83%97">11.1.1 シャドウマップ</h3>
+<p>投影シャドウはシャドウマップと呼ばれるテクスチャを使用して、影を落とすアルゴリズムの一つになります。シャドウマップというのは影が落ちる場所がテクスチャに描きこまれたものとなります。下の図を見てみて下さい。図11.1を見てください。</br>
+<strong>図11.1</strong></br>
+<img src="fig/11.1.png"></img></br>
+このように、影というのは物体によって光が遮られている箇所に発生するものだということが分かります。これは言い方を変えると、光を放っているライトの位置から見たときに、手前に物体が存在していれば影が落ちると言うことができます。図11.2を見てみて下さい。</br></p>
+<p><strong>図11.2</strong></br>
+<img src="fig/11.2.png"></img></br>
+キャラクターの影が岩に落ちているのが分かります。では、これをライトの方向から見た場合はどうなるでしょうか？図11.3を見てください。</p>
+<p><strong>図11.3</strong></br>
+<img src="fig/11.3.png"></img></br>
+このように、ライトの位置から見てみると、影が落ちていた岩の部分は、キャラクターに遮られていることが分かります。このライトから見た絵がシャドウマップです。</br></p>
+<h3 id="1112-%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3%E3%82%B7%E3%83%A3%E3%83%89%E3%82%A6%E3%83%9E%E3%83%83%E3%83%97%E3%82%92%E4%BD%9C%E3%81%A3%E3%81%A6%E3%81%BF%E3%82%8B">11.1.2 【ハンズオン】シャドウマップを作ってみる</h3>
+<p>では、早速ハンズオンでシャドウマップを作っていましょう。シャドウマップというのは、ライトから見た絵です。勘のいい人ならすでに気付いているかもしれませんが、シャドウマップは、これはチャプター10で勉強したオフスクリーンレンダリングを行うことで作成することが出来ます。つまり、ライトをカメラと見立てて影を生成したいオブジェクトを、シャドウマップに対してレンダリングしてやればいいのです。シャドウマップを作成するためのポイントは次の４点です。</p>
+<ol>
+<li>シャドウマップ描画用のレンダリングターゲットを作成する</li>
+<li>ライトの位置にカメラを設置する。</li>
+<li>シャドウマップ描画用のモデルを用意する。</li>
+<li>影を生成したいモデルをシャドウマップに描画する。</li>
+<li>シャドウマップ描画用のピクセルシェーダーを作成する。
+では、この４点をハンズオンで実装していきましょう。<code>Sample_11_01/Sample_11_01.sln</code>を立ち上げてください。</li>
+</ol>
+<h4 id="step-1-%E3%82%B7%E3%83%A3%E3%83%89%E3%82%A6%E3%83%9E%E3%83%83%E3%83%97%E6%8F%8F%E7%94%BB%E7%94%A8%E3%81%AE%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">step-1 シャドウマップ描画用のレンダリングターゲットを作成する</h4>
+<p>まずは。影から見た絵を描画する必要があるので、シャドウマップ描画用のレンダリングターゲットを作成する必要があります。main.cppの23行目にリスト11.1のプログラムを入力してください。</br>
+[リスト11.1 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-1 シャドウマップ描画用のレンダリングターゲットを作成する。</span>
+<span class="hljs-comment">//カラーバッファのクリアカラー</span>
+<span class="hljs-comment">//今回はカラーバッファは真っ白にする。</span>
+<span class="hljs-keyword">float</span> clearColor[<span class="hljs-number">4</span>] = { <span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span> };
+RenderTarget shadowMap;
+shadowMap.Create(
+	<span class="hljs-number">1024</span>,<span class="hljs-comment">//【注目】レンダリングターゲットの横幅</span>
+	<span class="hljs-number">1024</span>,<span class="hljs-comment">//【注目】レンダリングターゲットの縦幅</span>
+	<span class="hljs-number">1</span>,
+	<span class="hljs-number">1</span>,
+	DXGI_FORMAT_R8G8B8A8_UNORM,
+	DXGI_FORMAT_D32_FLOAT,
+	clearColor
+);
+</div></code></pre>
+<p>レンダリングターゲットの解像度は、影生成のクオリティに影響を与えるので、コメントを記載しています。端的に説明しておくと、シャドウマップの解像度を上げると品質は向上し、下げると品質は低下します。では、単純に解像度をあげればいいのかというと、そういう訳でもなく、解像度を上げると影の品質は上がりますが、パフォーマンスは低下することとなります。</p>
+<h4 id="step-2-%E3%83%A9%E3%82%A4%E3%83%88%E3%81%AE%E4%BD%8D%E7%BD%AE%E3%81%AB%E3%82%AB%E3%83%A1%E3%83%A9%E3%82%92%E8%A8%AD%E7%BD%AE%E3%81%99%E3%82%8B">step-2 ライトの位置にカメラを設置する</h4>
+<p>続いて、ライトから見た絵をシャドウマップに描画するのでライトカメラを準備します。ライトカメラはライトの位置置、方向などの情報からカメラを設定します。リスト11.2のプログラムをmain.cppに入力してください。</br>
+[リスト11.2 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-2 影描画用のライトカメラを作成する。</span>
+Camera lightCamera;
+<span class="hljs-comment">//カメラの位置を設定。これはライトの位置。</span>
+lightCamera.SetPosition(<span class="hljs-number">0</span>, <span class="hljs-number">600</span>, <span class="hljs-number">0</span>);
+<span class="hljs-comment">//カメラの注視点を設定。これがライトが照らしている場所。</span>
+lightCamera.SetTarget(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+<span class="hljs-comment">//【注目】上方向を設定。今回はライトが真下を向いているので、X方向を上にしている。</span>
+lightCamera.SetUp(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+<span class="hljs-comment">//今回のサンプルでは画角を狭めにしておく。</span>
+lightCamera.SetViewAngle(Math::DegToRad(<span class="hljs-number">20.0f</span>));
+<span class="hljs-comment">//ライトビュープロジェクション行列を計算している。</span>
+lightCamera.Update();
+</div></code></pre>
+<p>今回のハンズオンはライトが真下を向いているので、カメラの上方向に{0, 1, 0}を指定すると、計算がおかしくなってしまうため、X方向を真上にしています。</p>
+<h4 id="step-3-%E3%82%B7%E3%83%A3%E3%83%89%E3%82%A6%E3%83%9E%E3%83%83%E3%83%97%E6%8F%8F%E7%94%BB%E7%94%A8%E3%81%AE%E3%83%A2%E3%83%87%E3%83%AB%E3%82%92%E7%94%A8%E6%84%8F%E3%81%99%E3%82%8B">step-3 シャドウマップ描画用のモデルを用意する。</h4>
+<p>続いて、シャドウマップ描画用のモデルを定義します。今回のサンプルでは、シャドウマップ描画と通常描画でピクセルシェーダーが異なるため、ティーポットのモデルはシャドウマップ描画用と通常描画用の２種類を用意しています。リスト11.3のプログラムをmain.cppに入力してください。</br>
+[リスト11.3 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-3 シャドウマップ描画用のモデルを用意する。</span>
+ModelInitData teapotShadowModelInitData;
+<span class="hljs-comment">//【注目】シャドウマップ描画用のシェーダーを指定する。</span>
+teapotShadowModelInitData.m_fxFilePath = <span class="hljs-string">"Assets/shader/sampleDrawShadowMap.fx"</span>;
+teapotShadowModelInitData.m_tkmFilePath = <span class="hljs-string">"Assets/modelData/teapot.tkm"</span>;
+Model teapotShadowModel;
+teapotShadowModel.Init(teapotShadowModelInitData);
+teapotShadowModel.UpdateWorldMatrix(
+	{ <span class="hljs-number">0</span>, <span class="hljs-number">50</span>, <span class="hljs-number">0</span> },
+	g_quatIdentity,
+	g_vec3One
+);
+</div></code></pre>
+<h4 id="step-4-%E5%BD%B1%E3%82%92%E7%94%9F%E6%88%90%E3%81%97%E3%81%9F%E3%81%84%E3%83%A2%E3%83%87%E3%83%AB%E3%82%92%E3%82%B7%E3%83%A3%E3%83%89%E3%82%A6%E3%83%9E%E3%83%83%E3%83%97%E3%81%AB%E6%8F%8F%E7%94%BB%E3%81%99%E3%82%8B">step-4 影を生成したいモデルをシャドウマップに描画する。</h4>
+<p>cpp側最後のハンズオンです。影を生成したモデルをシャドウマップに描画しましょう。リスト11.4のプログラムをmain.cppに入力してください。</br>
+[リスト11.4 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-4 影を生成したいモデルをシャドウマップに描画する。</span>
+<span class="hljs-comment">//レンダリングターゲットをシャドウマップに変更する。</span>
+renderContext.WaitUntilToPossibleSetRenderTarget(shadowMap);
+renderContext.SetRenderTargetAndViewport(shadowMap);
+renderContext.ClearRenderTargetView(shadowMap);
+
+<span class="hljs-comment">//影モデルを描画。</span>
+teapotShadowModel.Draw(renderContext, lightCamera);
+
+<span class="hljs-comment">//書き込み完了待ち。</span>
+renderContext.WaitUntilFinishDrawingToRenderTarget(shadowMap);
+</div></code></pre>
+<h4 id="step-5-%E3%82%B7%E3%83%A3%E3%83%89%E3%82%A6%E3%83%9E%E3%83%83%E3%83%97%E6%8F%8F%E7%94%BB%E7%94%A8%E3%81%AE%E3%83%94%E3%82%AF%E3%82%BB%E3%83%AB%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">step-5 シャドウマップ描画用のピクセルシェーダーを作成する。</h4>
+<p>では、最後のハンズオンです。今回のハンズオンでシャドウマップに描き込むカラーはグレースケール(灰色)である必要があります。そこで、シャドウマップ描画用のピクセルシェーダーを実装しましょう。Assets/shader/sampleDrawShadowMap.fxの46行目にリスト11.5のプログラムを入力してください。</br>
+[リスト11.5 sampleDrawShadowMap.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-5 シャドウマップ描画用のピクセルシェーダーを作成する。</span>
+<span class="hljs-keyword">return</span> float4( <span class="hljs-number">0.5f</span>, <span class="hljs-number">0.5f</span>, <span class="hljs-number">0.5f</span>, <span class="hljs-number">1.0f</span>);
+</div></code></pre>
+<p>ここまで実装できたら、実行してみてください。うまく実装できていると図11.4のようなプログラムが実行できます。</br>
+<strong>図11.4</strong></br>
+<img src="fig/11.4.png"></img></br>
+ここまでの実装はシャドウマップを作成しただけなので、まだ投影シャドウの実装の半分です。ですので、まだ影は落ちません。今回のサンプルではシャドウマップが作成できていることを確認するために、画面の左上に描画されたシャドウマップを表示しています。図11.4と同じようなシャドウマップが作れているか確認してください。</p>
+<h3 id="1113-%E3%82%B7%E3%83%A3%E3%83%89%E3%82%A6%E3%83%9E%E3%83%83%E3%83%97%E3%81%AE%E8%B2%BC%E3%82%8A%E4%BB%98%E3%81%91">11.1.3 シャドウマップの貼り付け</h3>
+<p>前節でグレースケールのシャドウマップが作成できました。これで投影シャドウに使用するシャドウマップは完成したことになります。あとは、影を受けたいオブジェクトにシャドウマップを張り付けてやればよいことになります。では、どうやって張り付けるのか見ていきましょう。例えば図11.5絵の岩を画面に描画する際は、岩の頂点座標×ワールド行列×カメラ行列×射影行列という計算を行ってスクリーン座標系に変換します。</br>
+<strong>図11.5</strong></br>
+<img src="fig/11.5.png"></img></br></p>
+<p>シャドウマップを張り付ける場合は、先ほどの変換とは別に岩の頂点座標×ワールド行列×ライトカメラ行列×ライト射影行列という計算を行って、ライトをカメラと見立てたスクリーン座標系への変換も行う必要があります。つまり岩に影を落とす場合、図11.6の２パターンの座標変換を行うことになります。</br>
+<strong>図11.6</strong></br>
+<img src="fig/11.6.png"></img></br>
+では、具体的にコードを見ていきましょう。次のコードは２パターンの座標変換を行っている頂点シェーダーの疑似コードです。</br></p>
+<pre class="hljs"><code><div><span class="hljs-comment">/// &lt;summary&gt;</span>
+<span class="hljs-comment">/// 影が落とされる3Dモデル用の頂点シェーダー。</span>
+<span class="hljs-comment">/// &lt;/summary&gt;</span>
+<span class="hljs-function">SPSIn <span class="hljs-title">VSMain</span><span class="hljs-params">(SVSIn vsIn)</span>
+</span>{
+	<span class="hljs-comment">//シャドウレシーバー用の頂点シェーダーを実装。</span>
+	SPSIn psIn;
+	<span class="hljs-comment">//ここは通常の座標変換</span>
+	float4 worldPos = mul(mWorld, vsIn.pos);
+	psIn.pos = mul(mView, worldPos);
+	psIn.pos = mul(mProj, psIn.pos);
+	psIn.uv = vsIn.uv;
+
+	<span class="hljs-comment">//ここからライトビュースクリーン空間での座標を計算している。</span>
+	psIn.posInLVP = mul( mLVP, worldPos);
+	psIn.normal = mul(mWorld, vsIn.normal);
+	<span class="hljs-keyword">return</span> psIn;
+}
+</div></code></pre>
+<p>psIn.posInLVPというパラメータにライトビュースクリーン空間での座標が記録されており、この値がピクセルシェーダーに渡されています。</p>
+<h4 id="11131-%E6%AD%A3%E8%A6%8F%E5%8C%96%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E5%BA%A7%E6%A8%99%E7%B3%BB">11.1.3.1 正規化スクリーン座標系</h4>
+<p>では、ここで頂点シェーダーで変換されている、スクリーン空間の座標系というのがどのような座標系になっているかみてみましょう。例えば図11.7のように描画された場合、頂点座標は縦横-1.0～1.0の座標系に変換されています。</br>
+<strong>図11.7</strong></br>
+<img src="fig/11.7.png" width=400></img></br></p>
+<p>このように、画面の左下が( -1, -1 )、画面の右上が( 1, 1 )となっている座標系が正規化スクリーン座標系と呼ばれます。実は、これまでの頂点シェーダーで行っていた変換は、最終的に正規化スクリーン座標系に変換していたのです。これがシャドウマップを張り付ける際に重要になってきますので、しっかりと抑えておいてください。</p>
+<h4 id="11132-%E6%AD%A3%E8%A6%8F%E5%8C%96%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E5%BA%A7%E6%A8%99%E7%B3%BB%E3%81%8B%E3%82%89uv%E5%BA%A7%E6%A8%99%E7%B3%BB%E3%81%AB%E5%A4%89%E6%8F%9B">11.1.3.2  正規化スクリーン座標系からUV座標系に変換</h4>
+<p>では、シャドウマップの貼り付けの話に戻りましょう。先ほど頂点シェーダーで影を受けたいオブジェクトの頂点座標にライトビュープロジェクション行列を乗算して、正規化スクリーン座標系に変換を行いました。そうすると岩のオブジェクトは図11.8のような座標系に変換されます。</br>
+<strong>図11.8</strong></br>
+<img src="fig/11.8.png" width=400></img></br></p>
+<p>仮にこの人間のキャラクターがシャドウマップに描画されている場合は図11.9のようなシャドウマップが生成されています。
+<strong>図11.9</strong></br>
+<img src="fig/11.9.png" width=400></img></br>
+図11.8と図11.9を見比べてみると、座標の範囲の違いはありますが、岩に影が落ちる部分はシャドウマップにマッピングするとちょうど灰色になっていることが分かります。つまり、ライトビュープロジェクション行列で変換した座標(-1～1)を、UV座標(0～1)に変換して、それを使って岩にシャドウマップを張り付けてやればうまくいきそうです。次のコードは座標変換の疑似コードです。</br></p>
+<pre class="hljs"><code><div><span class="hljs-comment">//正規化スクリーン座標系( -1～1 )の範囲に0.5をかけて( -0.5～0.5 )の範囲にする。</span>
+<span class="hljs-comment">//yの値が-0.5なのは、上下が逆だから。</span>
+float2 shadowMapUV = psIn.posInLVP.xy * float2( <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>);
+<span class="hljs-comment">//( -0.5～0.5 )の範囲に0.5を足し算することで、( 0.0～1.0 )の範囲にする。</span>
+shadowMapUV += <span class="hljs-number">0.5f</span>; 
+</div></code></pre>
+<p>あとは、計算されたUV座標を利用して、シャドウマップからカラーをサンプリングしてやれば影を落とすことができます。</p>
+<h3 id="1114-%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3%E3%82%B7%E3%83%A3%E3%83%89%E3%82%A6%E3%83%9E%E3%83%83%E3%83%97%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E5%BD%B1%E3%82%92%E8%90%BD%E3%81%A8%E3%81%99">11.1.4 【ハンズオン】シャドウマップを使って影を落とす。</h3>
+<p>では、シャドウマップを貼り付けるプログラムを実装していきましょう。Sample_11_02/Sample_11_02.slnを立ち上げてください。</p>
+<h4 id="step-1-%E5%BD%B1%E3%82%92%E5%8F%97%E3%81%91%E3%82%8B%E8%83%8C%E6%99%AF%E3%83%A2%E3%83%87%E3%83%AB%E3%82%92%E5%88%9D%E6%9C%9F%E5%8C%96">step-1 影を受ける背景モデルを初期化。</h4>
+<p>まずは、影を落とされるモデルを初期化します。影を受けるモデルは、座標変換とシャドウマップからのカラーのサンプリングが必要になるので、シェーダーが通常のモノとは異なります。また、ライトビュースクリーン空間に変換を行う必要があるため、座標変換を行うための行列を定数バッファに設定しています。main.cppの71行目にリスト11.6のプログラムを入力してください。</br></p>
+<p>[リスト11.6 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-1 影を受ける背景モデルを初期化。</span>
+ModelInitData bgModelInitData;
+<span class="hljs-comment">//影が落とされるモデル用のシェーダーを指定する。</span>
+bgModelInitData.m_fxFilePath = <span class="hljs-string">"Assets/shader/sampleShadowReciever.fx"</span>;
+<span class="hljs-comment">//シャドウマップを拡張SRVに設定する。</span>
+bgModelInitData.m_expandShaderResoruceView[<span class="hljs-number">0</span>] = &amp;shadowMap.GetRenderTargetTexture();
+<span class="hljs-comment">//ライトビュープロジェクション行列を拡張定数バッファに設定する。</span>
+bgModelInitData.m_expandConstantBuffer = (<span class="hljs-keyword">void</span>*)&amp;lightCamera.GetViewProjectionMatrix();
+bgModelInitData.m_expandConstantBufferSize = <span class="hljs-keyword">sizeof</span>(lightCamera.GetViewProjectionMatrix());
+bgModelInitData.m_tkmFilePath = <span class="hljs-string">"Assets/modelData/bg/bg.tkm"</span>;
+
+Model bgModel;
+bgModel.Init(bgModelInitData);
+</div></code></pre>
+<h4 id="step-2-%E5%BD%B1%E3%82%92%E5%8F%97%E3%81%91%E3%82%8B%E8%83%8C%E6%99%AF%E3%82%92%E6%8F%8F%E7%94%BB">step-2 影を受ける背景を描画。</h4>
+<p>続いて、影を受けるモデルを描画します。この描画は通常の描画パスです。main.cppにリスト11.7のプログラムを入力してください。</br>
+[リスト11.7 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-2 影を受ける背景を描画。</span>
+bgModel.Draw(renderContext);
+</div></code></pre>
+<h4 id="step-3-%E3%83%A9%E3%82%A4%E3%83%88%E3%83%93%E3%83%A5%E3%83%BC%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E8%A1%8C%E5%88%97%E3%81%AB%E3%82%A2%E3%82%AF%E3%82%BB%E3%81%99%E3%82%8B%E5%AE%9A%E6%95%B0%E3%83%90%E3%83%83%E3%83%95%E3%82%A1%E3%82%92%E5%AE%9A%E7%BE%A9">step-3 ライトビュープロジェクション行列にアクセする定数バッファを定義。</h4>
+<p>step-3からは影を受けるモデル用のシェーダーのプログラムになります。まずは、ライトビュープロジェクション行列にアクセスするための定数バッファを定義しましょう。<code>Assets/shader/sampleShadowReciever.fx</code>を開いて、11行目にリスト11.8のプログラムを入力してください。</br></p>
+<p>[リスト11.8 sampleShadowReciever.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-3 ライトビュープロジェクション行列にアクセする定数バッファを定義。</span>
+cbuffer ShadowCb : <span class="hljs-keyword">register</span>(b1){
+	float4x4 mLVP;
+};
+
+</div></code></pre>
+<h4 id="step-4-%E3%83%A9%E3%82%A4%E3%83%88%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E7%A9%BA%E9%96%93%E3%81%A7%E3%81%AE%E3%83%94%E3%82%AF%E3%82%BB%E3%83%AB%E3%81%AE%E5%BA%A7%E6%A8%99%E3%82%92%E8%BF%BD%E5%8A%A0">step-4 ライトビュースクリーン空間でのピクセルの座標を追加。</h4>
+<p>続いて、ピクセルシェーダーへの入力にライトビュースクリーン空間でのピクセルの座標を追加します。リスト11.9のプログラムを入力してください。</br>
+[リスト11.9 sampleShadowReciever.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-4 ライトビュースクリーン空間でのピクセルの座標を追加。</span>
+float4 posInLVP		: TEXCOORD1;	<span class="hljs-comment">//ライトビュースクリーン空間でのピクセルの座標</span>
+</div></code></pre>
+<h4 id="step-5-%E3%83%A9%E3%82%A4%E3%83%88%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E7%A9%BA%E9%96%93%E3%81%AE%E5%BA%A7%E6%A8%99%E3%82%92%E8%A8%88%E7%AE%97%E3%81%99%E3%82%8B">step-5 ライトビュースクリーン空間の座標を計算する。</h4>
+<p>step-5では、頂点シェーダーでのライトビュースクリーン空間への座標変換を実装します。リスト11.10のプログラムを入力してください。</br>
+[リスト11.10 sampleShadowReciever.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-5 ライトビュースクリーン空間の座標を計算する。</span>
+psIn.posInLVP = mul( mLVP, worldPos);
+</div></code></pre>
+<h4 id="step-6-%E3%83%A9%E3%82%A4%E3%83%88%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E7%A9%BA%E9%96%93%E3%81%8B%E3%82%89uv%E7%A9%BA%E9%96%93%E3%81%AB%E5%BA%A7%E6%A8%99%E5%A4%89%E6%8F%9B">step-6 ライトビュースクリーン空間からUV空間に座標変換。</h4>
+<p>続いてピクセルシェーダーです。まず、頂点シェーダーから渡された、ライトビュースクリーン空間の座標をUV空間に変換しましょう。リスト11.11のプログラムを入力してください。</br></p>
+<p>[リスト11.11 sampleShadowReciever.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-6 ライトビュースクリーン空間からUV空間に座標変換。</span>
+<span class="hljs-comment">//【注目】ライトビュースクリーン空間からUV座標空間に変換している。</span>
+float2 shadowMapUV = psIn.posInLVP.xy / psIn.posInLVP.w;
+shadowMapUV *= float2( <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>);
+shadowMapUV += <span class="hljs-number">0.5f</span>; 
+</div></code></pre>
+<p>ここで一点注意点として、psIn.posInLVP.xyの値をpsIn.posInLVP.wで除算しています。これはまだ説明していませんが、実は正規化スクリーン座標系というのは、wで割り算することで、(-1～1)の範囲に収まることとなります。この数学的な原理の話については本書では詳しくは説明しません。本書では、wで除算することで、正規化スクリーン座標系に変換されるということを覚えておいてくれれば十分です。</p>
+<h4 id="step-7-%E8%A8%88%E7%AE%97%E3%81%97%E3%81%9Fuv%E5%BA%A7%E6%A8%99%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%82%B7%E3%83%A3%E3%83%89%E3%82%A6%E3%83%9E%E3%83%83%E3%83%97%E3%81%8B%E3%82%89%E5%BD%B1%E6%83%85%E5%A0%B1%E3%82%92%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AA%E3%83%B3%E3%82%B0">step-7 計算したUV座標を使って、シャドウマップから影情報をサンプリング。</h4>
+<p>UV座標を計算することができたら、シャドウマップから影情報をサンプリングしましょう。リスト11.12のプログラムを入力してください。</br>
+[リスト11.12 sampleShadowReciever.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-7 計算したUV座標を使って、シャドウマップから影情報をサンプリング</span>
+float3 shadowMap = <span class="hljs-number">1.0f</span>; 
+<span class="hljs-keyword">if</span>( shadowMapUV.x &gt; <span class="hljs-number">0.0f</span> &amp;&amp; shadowMapUV.x &lt; <span class="hljs-number">1.0f</span>
+	&amp;&amp; shadowMapUV.y &gt; <span class="hljs-number">0.0f</span> &amp;&amp; shadowMapUV.y &lt; <span class="hljs-number">1.0f</span>
+){
+	shadowMap = g_shadowMap.Sample(g_sampler, shadowMapUV);
+} 
+</div></code></pre>
+<p>UV座標がUV空間の範囲内の場合だけ、シャドウマップからカラーをサンプリングしています。シャドウマップに描画できる範囲というのは、有限なので、範囲外の場所に影を落とすことはできません。</p>
+<h4 id="step-8-%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AA%E3%83%B3%E3%82%B0%E3%81%97%E3%81%9F%E5%BD%B1%E6%83%85%E5%A0%B1%E3%82%92%E3%83%86%E3%82%AF%E3%82%B9%E3%83%81%E3%83%A3%E3%82%AB%E3%83%A9%E3%83%BC%E3%81%AB%E4%B9%97%E7%AE%97%E3%81%99%E3%82%8B">step-8 サンプリングした影情報をテクスチャカラーに乗算する。</h4>
+<p>では、最後のハンズオンです。影情報をサンプリングできたら、そのカラーをテクスチャカラーに掛け算しましょう。リスト11.13のプログラムを入力してください。</br>
+[リスト11.13 sampleShadowReciever.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-8 サンプリングした影情報をテクスチャカラーに乗算する。</span>
+<span class="hljs-comment">//テクスチャカラーにシャドウマップからサンプリングした情報を掛け算する。</span>
+<span class="hljs-comment">//影が描き込まれていたら0.5になっているので、色味が落ちて影っぽくなる。</span>
+color.xyz *= shadowMap;
+</div></code></pre>
+<p>シャドウマップは1.0でクリアされています。また、影が落ちる箇所には、灰色(0.5, 0.5, 0.5)が格納されています。そのため、影が落ちていなければ1.0が乗算されるため、何も変化が起きず、影が落ちている箇所は0.5が乗算されるため、色味が暗くなります。実装出来たら実行してください。うまく実装できていると図11.10のようなプログラムが実行できます。</br>
+<strong>図11.10</strong></br>
+<img src="fig/11.10.png"></img></br></p>
+<h2 id="%E8%A9%95%E4%BE%A1%E3%83%86%E3%82%B9%E3%83%88">評価テスト</h2>
+<p>次の評価テストを行いなさい。</br>
+<a href="https://docs.google.com/forms/d/e/1FAIpQLScGf2X24p-yuwFZ7_EFtimL-whHH7sn9rHgd5PuWXQei0hm6g/viewform?usp=sf_link">評価テストへジャンプ</a>
+</br></p>
+
+</body>
+</html>
