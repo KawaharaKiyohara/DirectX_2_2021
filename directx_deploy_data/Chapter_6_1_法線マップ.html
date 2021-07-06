@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chapter_6_1_法線マップ.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB">はじめに</h2>
+<p>このチャプターでは、次のサンプルプログラムを利用します。ダウンロードをしてください。</br>
+<strong><a href="https://drive.google.com/file/d/1gQr0c6fmi5SwBojqyUh-UTWiqNEJ_zmR/view?usp=sharing">Sample_06_01.zip</a></strong></br></p>
+<h1 id="chapter-6-%E3%81%84%E3%82%8D%E3%81%84%E3%82%8D%E3%81%AA%E3%83%86%E3%82%AF%E3%82%B9%E3%83%81%E3%83%A3%E3%81%AE%E5%88%A9%E7%94%A8">Chapter 6 いろいろなテクスチャの利用</h1>
+<p>ここまでテクスチャは、「物体の模様を表現するための画像データ」として扱ってきていました。このような、模様を表すテクスチャはディフューズマップと呼ばれます。実はテクスチャは模様を表すディフューズマップ以外にも、凸凹を表現する法線マップ、高さを表すハイトマップ、透明度を表す透明度マップなど、様々なデータとして利用されます。このチャプターでは、このような色々なテクスチャを利用したシェーダープログラミングについて見ていきます。</p>
+<h2 id="61-%E6%B3%95%E7%B7%9A%E3%83%9E%E3%83%83%E3%83%97">6.1 法線マップ</h2>
+<p>法線マップは物体の凸凹を表現するためのテクスチャです。法線マップを活用することで、少ないポリゴン数でも細かなディテールを表現することが可能になります。</p>
+<h3 id="611-%E6%B3%95%E7%B7%9A%E3%83%9E%E3%83%83%E3%83%97%E3%81%AE%E7%99%BB%E5%A0%B4">6.1.1 法線マップの登場</h3>
+<p>コンソールゲーム機で法線マップが本格的に使われだしたのは、PS3、Xbox360が登場してからになります。法線マップはプログラマブルシェーダーが登場してから生まれた技術のため、固定パイプラインには存在しません。そのためプログラマブルシェーダーを本格的に使用することが可能になったPS3、Xbox360の世代でコンソールゲーム機でも法線マップが活用されるようになりました。そして、現在はPS4、XboxOne、PC、スマートフォンなどでリリースされる多くの3Dゲームではあって当たり前の技術になっています。</p>
+<h3 id="612-%E7%B4%B0%E3%81%8B%E3%81%84%E3%83%87%E3%82%A3%E3%83%86%E3%83%BC%E3%83%AB%E3%81%AE%E8%A1%A8%E7%8F%BE">6.1.2 細かいディテールの表現</h3>
+<p>法線マップの目的は低ポリゴンで細かなディテールを表現することです。では、それを具体的に考えていきましょう。例えば道路のアスファルトを考えてみてください。アスファルトを近くでよく観察をしてみると細かな凹凸があることが分かります。もしこの凹凸をポリゴンで表現しようとすると非常に多くのポリゴンが必要になります。多すぎるポリゴンはGPUのパフォーマンスを低下させ、多くのメモリを使用してしまうことになります。このような細かいディテールの表現をポリゴンで行うことには多くの問題がありました。そこでこれらを高いパフォーマンスと少ないメモリ使用量で実現するために法線マップという技術が生まれました。</p>
+<h3 id="613-%E6%B3%95%E7%B7%9A%E3%82%92%E3%83%86%E3%82%AF%E3%82%B9%E3%83%81%E3%83%A3%E3%81%AB%E6%8F%8F%E3%81%8D%E8%BE%BC%E3%82%80">6.1.3 法線をテクスチャに描き込む</h3>
+<p>引き続き、先ほどのアスファルトの凹凸で考えていきましょう。私たちはどうやってアスファルトの凸凹を認識しているのでしょうか？ 実は凸凹を認識するために一番重要な情報は光の陰影になります。図6.1を見てみてください。</br></p>
+<p><strong>図6.1</strong></br>
+<img src="fig/6.1(ネットから拾ってきた画像です).jpg" width="400"></img></br>
+立体的に見えると思います。しかしこれらは全て平らなノートに書かれた絵であって実際には凹凸はありません。このように人間は実際に凹凸がなくても、陰影をつけることで実際に凹凸があるように錯覚します。陰影はChapter5で勉強した拡散反射や鏡面反射の計算で行うことができます。拡散反射や鏡面反射の計算式を思い出してください。ライトによって生成される陰影はライトの方向とモデルの法線によって決まっていました。つまり、ポリゴン数が少なくてもモデルの法線さえ詳細であれば、細かなディテールは表現できることになります。いわゆるだまし絵です。そこで、モデルの法線をテクスチャに書き込んでしまって、ライティングの時にはその法線を使用しようという考えが生まれます。これが法線マップです。図6.2はユニティちゃんの法線マップです。</br></p>
+<p><strong>図6.2</strong></br>
+<img src="fig/6.2.png" width="400"></img></br>
+テクスチャのRGB成分に、法線のXYZ成分を書き込んでテクスチャにしたものです。</p>
+<h3 id="614-%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9%E6%B3%95%E7%B7%9A%E3%83%9E%E3%83%83%E3%83%97%E3%81%A8%E3%82%BF%E3%83%B3%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9%E6%B3%95%E7%B7%9A%E3%83%9E%E3%83%83%E3%83%97">6.1.4 オブジェクトスペース法線マップとタンジェントスペース法線マップ</h3>
+<p>法線マップにはオブジェクトスペース法線マップとタンジェントスペース法線マップという二種類のデータ形式があります。オブジェクトスペース法線マップは、オブジェクト空間の法線マップです。タンジェントペース法線マップは法線空間での法線マップです。ではこの二つについて見ていきましょう。</p>
+<h3 id="615-%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9%E6%B3%95%E7%B7%9A%E3%83%9E%E3%83%83%E3%83%97">6.1.5 オブジェクトスペース法線マップ</h3>
+<p>オブジェクトスペースはタンジェントスペースと比べるとイメージがしやすい法線マップです。この法線マップは単純にオブジェクトの法線のXYZの値をテクスチャのRGBに書き込んでいるだけです。オブジェクトスペース法線マップは図6.3のようなデータになります。</br></p>
+<p><strong>図6.3</strong></br>
+<img src="fig/6.3.jpg" width="400"></img></br>
+先ほどのユニティちゃんの法線マップとは少し違った感じのデータに見えるかと思います。実は先ほどのユニティちゃんの法線マップはタンジェントスペース法線マップです。リスト6.1はオブジェクトスペース法線マップを使って、ランバート拡散反射を計算するHLSLの疑似コードを示します。</br></p>
+<p>[リスト6.1]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//法線マップから法線をサンプリング。</span>
+float3 normal = normalMap.Sample(sampler, In.uv).xyz;
+<span class="hljs-comment">//法線マップに書き込まれている法線は0.0～1.0で、負の数になっていないので</span>
+<span class="hljs-comment">//負の数に復元する。</span>
+normal = ( normal - <span class="hljs-number">0.5f</span> ) * <span class="hljs-number">2.0f</span>;
+<span class="hljs-comment">//法線を回転させて、オブジェクト空間からワールド空間に変換する。</span>
+<span class="hljs-comment">//今回使用している行列は回転成分のみ。</span>
+float3 normal = mul( worldRotMatrix, normal );
+<span class="hljs-comment">//法線マップから計算した法線とディレクションライトの方向を使って</span>
+<span class="hljs-comment">//拡散反射光を計算する。</span>
+float3 lig = max( dot( ligDirection, -normal) ) ) * ligColor;
+</div></code></pre>
+<p>法線マップはテクスチャなので、書き込まれている値は0～1の範囲になっています。しかし、法線というのは-1～1の範囲の値です。そこで、オブジェクトスペース法線マップでは、-1～1の数値を0～1に変換して書き込まれています。しかし、ライティングを計算するタイミングでは、-1～1の範囲に復元する必要があります。そこで、疑似コードでは、法線マップから法線をサンプリングした後で、その法線から0.5を引き算して、2を掛け算しています。この計算をすると、0～1の範囲が-1～1の範囲に復元されます。表6.1は復元前の法線と、復元後の法線を表したものです。</br></p>
+<p><strong>表6.1</strong></br></p>
+<table>
+<thead>
+<tr>
+<th>復元前の法線</th>
+<th>復元後の法線</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>( 0, 0.5, 0.5 )</td>
+<td>(1, 0, 0 )</td>
+</tr>
+<tr>
+<td>( 0.5, 0, 0.5 )</td>
+<td>(0, -1, 0)</td>
+</tr>
+<tr>
+<td>( 0.5, 0.5, 1.0 )</td>
+<td>(0, 0, 1)</td>
+</tr>
+</tbody>
+</table>
+<p>法線を-1～1の範囲に復元することができたら、法線をワールド空間に変換する必要があります。オブジェクトスペースの法線は、オブジェクトが回転していない空間での法線です。しかし、ゲームのキャラクターや、進行方向に向けて回転するなど動いています。なので、ゲーム中の動き(回転)に合わせて、法線も回転させる必要があります。そこで、法線にワールド行列を乗算して、法線をワールド空間に変換しています。ここで注意してほしいのが、法線をワールド空間に変換するときに平行移動成分は不要だということです。法線は向きの情報のみ保持している情報です。平行移動量は不要です。ですので、今回使用している行列は回転成分のみの行列を使っています。</p>
+<h2 id="616-%E3%82%BF%E3%83%B3%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9%E6%B3%95%E7%B7%9A%E3%83%9E%E3%83%83%E3%83%97">6.1.6 タンジェントスペース法線マップ</h2>
+<p>タンジェントスペース法線マップは単純にオブジェクトの法線を埋め込んだものではなく、法線マップを貼り付けるポリゴンの法線座標系から見た法線を書き込んでいることになります。ポリゴンの法線座標系というのはポリゴンの法線をZ軸、ポリゴンの法線と直交している接ベクトル(タンジェント)をX軸、法線と接ベクトルの外積で求めた従法線ベクトルをY軸とした空間のことです。図6.4を見てください。</br>
+<strong>図6.4</strong></br>
+<img src="fig/6.4.jpg" width="400"></img></br>
+この画像ですと、Nが法線、Uが接ベクトル、Vが従法線ベクトルになります。この３軸を基底軸とした空間がタンジェントスペースと呼ばれるものです。例えば、Nが(0.707,  0.0,  0.707)というベクトルだった場合、このNと同じ向きのベクトル(0.707,  0.0,  0.707)をタンジェントスペースに変換すると(0, 0, 1)になります。このように法線マップを貼り付けるポリゴンの法線と同じ向きのベクトルはタンジェントスペースに変換すると(0，0，1)に変換されます。これをテクスチャのRGBに変換して書き込むため、(0，0，255)という青いカラーが書き込まれることになります。多くのオブジェクトで法線マップに書き込む法線の方向は、貼り付けるポリゴンの法線から大きく変化することはありません。そのため、タンジェントスペース法線マップは青の成分が強く出る画像データになります。</p>
+<h2 id="617-%E6%B3%95%E7%B7%9A%E7%A9%BA%E9%96%93%E3%81%8B%E3%82%89%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E7%A9%BA%E9%96%93%E3%81%B8%E3%81%AE%E5%A4%89%E6%8F%9B">6.1.7 法線空間からワールド空間への変換</h2>
+<p>ライティングを行うためには法線をワールド空間に変換する必要がありました。では、法線空間の法線をワールド空間に変換する方法について考えていきましょう。この変換の方法を理解するためには、基底軸について理解する必要があります。話を簡単にするために２次元で考えてみましょう。例えば、基底軸ex(1,0)、ey(0,1)の空間で考えてみましょう。基底軸というのはある座標系のX軸とY軸をワールド空間で表したものです。基底軸がex( 1, 0 ), ey( 0, 1 )ということは、これはワールド空間の基底軸です。では、図6.5を見てみてください。</br>
+<strong>図6.5</strong></br>
+<img src="fig/6.5.png" width="400"></img></br></p>
+<p>図6.6のベクトルVはワールド空間のベクトルです。このベクトルはX軸方向に5、Y軸方向に6の大きさを持っています。ベクトルVは次のような計算が成り立ちます。</br>
+<strong>V = V0 + V1</strong></br></p>
+<p>また、V0とV1は次の計算が成り立ちます。</br></p>
+<p><strong>V0 = V.x × ex</strong></br>
+<strong>V1 = V.y × ey</strong></br></p>
+<p>つまり、ベクトルVは次の計算式で求めることができます。</br></p>
+<p><strong>V = V.x × ex + V.y × ey</strong></br></p>
+<p>exとeyはこの空間の基底軸です。</br>
+では、基底軸がex(0.707, -0.707), ey(0.707, 0.707)の場合を考えましょう。図6.6を見てください。</br>
+<strong>図6.6</strong></br>
+<img src="fig/6.6.png" width="400"></img></br>
+図6.6は図6.5と全く同じですが、基底軸が異なっています。つまり、空間が違うということです。Vはワールド空間でのベクトルではなく、基底軸ex(0.707, -0.707), ey(0.707, 0.707)の空間でのベクトルです。これを基底軸ex(1, 0), ey(0,1)のワールド座標系に変換することを考えます。VはV0とV1の合算で求まります。そこで、まずはワールド空間でV0とV1がどのようなベクトルになるか求めてみましょう。V0とV1は下記の計算で求めることができます。</br></p>
+<p><strong>V0 = V.x × ex</strong></br>
+<strong>V1 = v.y × ey</strong></br></br>
+つまり、ワールド空間のV0とV1は次のようになります。</br></br>
+<strong>V0 = 5 × ( 0.707, -0.707 )</strong></br>
+<strong>V0 = (3.535，－3.535)</strong></br>
+<strong>V1 = 6 × ( 0.707, 0.707 )</strong></br>
+<strong>V1 = (3.535，3.535)</strong></br></br>
+ワールド空間でのV0とV1を求めることができたら、あとはV0とV1を足し算してVを求めます。</br></br>
+<strong>V = (3.535，－3.535) + (3.535，3.535)</strong></br>
+<strong>V = (7.07，0.0)</strong></br></br>
+よって、(7.07，0.0)がVをワールド空間に変換したベクトルということになります。では、法線空間の法線をワールド空間に変換する話に求めましょう。ワールド空間に変換するためには法線空間の基底軸が必要となります。法線空間の基底軸はexが接ベクトル、eyが従法線、ezがサーフェイスの法線です。この基底軸を使って、法線をワールド空間に変換します。リスト6.2は法線マップからサンプリングした法線をワールド空間に変換する疑似コードです。</br>
+[リスト6.2]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//法線マップから法線をサンプリング。</span>
+float3 normalLocal = normalMap.Sample(sampler, In.uv).xyz;
+<span class="hljs-comment">//法線マップに書き込まれている法線は0.0～1.0で、負の数になっていないので</span>
+<span class="hljs-comment">//負の数に復元する。</span>
+normalLocal = ( normal - <span class="hljs-number">0.5f</span> ) * <span class="hljs-number">2.0f</span>;
+<span class="hljs-comment">//ワールド空間の法線を計算する。</span>
+<span class="hljs-comment">//なお、接ベクトルはtangent、従法線はbinormal、サーフェイスの法線はnormalに記録されているものとする。</span>
+float3 normalWorld =  localNormal.x * tangent + localNormal.y * binormal + localNormal * normal:
+</div></code></pre>
+<h2 id="618-%E4%B8%BB%E6%B5%81%E3%81%AF%E3%82%BF%E3%83%B3%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9%E6%B3%95%E7%B7%9A%E3%83%9E%E3%83%83%E3%83%97">6.1.8 主流はタンジェントスペース法線マップ</h2>
+<p>現在主流となっているのはタンジェントスペース法線マップです。特に断りなく法線マップと言った場合はタンジェントスペースを指していると考えてください。
+では、なぜタンジェントスペースが主流なのでしょうか。オブジェクトスペースの方が単純で分かりやすく感じたはずです。実はオブジェクトスペースには頂点の変形に対応できないという欠点があり、その欠点はタンジェントスペースであれば解決できます。今の3Dゲームではモーフィング、クロスシミュレーションなどといったオブジェクトの頂点を変形させる技術が使われています。その場合にオブジェクトスペースを使っていると図6.6のような問題が発生します。</br></p>
+<p><strong>図6.7</strong></br>
+<img src="fig/6.7.png" width="600"></img></br>
+これがオブジェクトスペースの欠点です。一方タンジェントスペースはどうでしょうか？法線はライティングの計算を行うときに、ワールドスペースに変換を行う必要がありましたが、このワールドスペースへの変換を行う時に貼り付けるモデルの法線を使って変換を行うことになります。つまり、オブジェクトが変形した時にポリゴンの法線さえを正しく計算を行っておけば変形後の法線を求めることができます。オブジェクトスペース法線マップは非常にシンプルな考え方になるため、タンジェントスペース法線マップに比べるとGPUパフォーマンスの面では軍配があがります。しかし、頂点の変形に対応できないというデメリットを抱えることとなります。</p>
+<h2 id="619-%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3%E6%B3%95%E7%B7%9A%E3%83%9E%E3%83%83%E3%83%97%E3%82%92%E5%88%A9%E7%94%A8%E3%81%97%E3%81%9F%E3%83%A9%E3%82%A4%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E5%AE%9F%E8%A3%85">6.1.9 【ハンズオン】法線マップを利用したライティング実装</h2>
+<p>では、法線マップを利用したライティングを実装していきましょう。<code>Sample_06_01/Sample_06_01.sln</code>を立ち上げてください。このサンプルはサーフェイスの法線を利用したランバート拡散反射がすでに実装されていて、実行すると図6.8のようなプログラムが実行できます。</br>
+<strong>図6.8</strong></br>
+<img src="fig/6.8.png" width="600"></img></br>
+このデモはゲームコントローラーの左スティックでカメラが回転、十字キーでライトを回転させることができます。では、このサンプルを改造して、法線マップから計算した法線を利用したライティングを実装していきましょう。</p>
+<h3 id="step-1-%E9%A0%82%E7%82%B9%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%81%AE%E5%85%A5%E5%8A%9B%E3%81%AB%E6%8E%A5%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%81%A8%E5%BE%93%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%82%92%E8%BF%BD%E5%8A%A0">step-1 頂点シェーダーの入力に接ベクトルと従ベクトルを追加。</h3>
+<p>今回のデモでは、すでに接ベクトル、従ベクトル、法線マップはGPUで扱えるようになっているため、cpp側は改造する必要がありません。<code>Assets/shader/sample.fx</code>を開いてください。まずは、頂点シェーダーの入力に接ベクトルと従ベクトルを追加します。リスト6.3のプログラムを入力してください。</br>
+[リスト6.3 <code>sample.fx</code>]</br></p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-1 頂点シェーダーの入力に接ベクトルと従ベクトルを追加。</span>
+float3 tangent  : TANGENT;
+float3 biNormal : BINORMAL;
+</div></code></pre>
+<h3 id="step-2-%E3%83%94%E3%82%AF%E3%82%BB%E3%83%AB%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%81%AE%E5%85%A5%E5%8A%9B%E3%81%AB%E6%8E%A5%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%81%A8%E5%BE%93%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%82%92%E8%BF%BD%E5%8A%A0">step-2 ピクセルシェーダーの入力に接ベクトルと従ベクトルを追加。</h3>
+<p>続いて、ピクセルシェーダーの入力にも接ベクトルと従ベクトルを追加します。リスト6.4のプログラムを入力して下さい。</br>
+[リスト6.4 <code>sample.fx</code>]</br></p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-2 ピクセルシェーダーの入力に接ベクトルと従ベクトルを追加。</span>
+float3 tangent		: TANGENT;		<span class="hljs-comment">//接ベクトル。</span>
+float3 biNormal 	: BINORMAL;		<span class="hljs-comment">//従ベクトル。</span>
+</div></code></pre>
+<h3 id="step-3-%E6%B3%95%E7%B7%9A%E3%83%9E%E3%83%83%E3%83%97%E3%81%AB%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%99%E3%82%8B%E3%81%9F%E3%82%81%E3%81%AE%E5%A4%89%E6%95%B0%E3%82%92%E8%BF%BD%E5%8A%A0">step-3 法線マップにアクセスするための変数を追加。</h3>
+<p>次は、法線マップにアクセスするための変数を追加します。このサンプルでは法線マップはレジスタt1にバインドされています。リスト6.5のプログラムを入力してください。</br>
+[リスト6.5 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-3 法線マップにアクセスするための変数を追加。</span>
+Texture2D&lt;float4&gt; g_normalMap : <span class="hljs-keyword">register</span>(t1);
+</div></code></pre>
+<h3 id="step-4-%E6%8E%A5%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%81%A8%E5%BE%93%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%82%92%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E7%A9%BA%E9%96%93%E3%81%AB%E5%A4%89%E6%8F%9B%E3%81%99%E3%82%8B">step-4 接ベクトルと従ベクトルをワールド空間に変換する。</h3>
+<p>各種データにアクセスするための準備が終わったので、いよいよシェーダーを改造していきます。まずは、接ベクトルと従ベクトルを頂点シェーダーからピクセルシェーダーに渡す処理を実装します。リスト6.6のプログラムを入力してください。</br>
+[リスト6.6 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-4 接ベクトルと従ベクトルをワールド空間に変換する。</span>
+psIn.tangent = normalize(mul(mWorld, vsIn.tangent));
+psIn.biNormal = normalize(mul(mWorld, vsIn.biNormal));	
+</div></code></pre>
+<p>頂点シェーダーからピクセルシェーダーにベクトルをワールド空間に変換して渡していることに注意してください。</p>
+<h3 id="step-5-%E6%B3%95%E7%B7%9A%E3%83%9E%E3%83%83%E3%83%97%E3%81%8B%E3%82%89%E3%82%BF%E3%83%B3%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9%E3%81%AE%E6%B3%95%E7%B7%9A%E3%82%92%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AA%E3%83%B3%E3%82%B0%E3%81%99%E3%82%8B">step-5 法線マップからタンジェントスペースの法線をサンプリングする。</h3>
+<p>頂点シェーダーから必要なデータをピクセルシェーダーに送るプログラムが実装できたので、ここからはピクセルシェーダーを改造していきます。まずは、法線マップから法線をサンプリングするプログラムを追加します。リスト6.7のプログラムを入力してください。</br>
+[リスト6.7 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div>float3 localNormal = g_normalMap.Sample( g_sampler, psIn.uv).xyz;
+<span class="hljs-comment">//タンジェントスペースの法線を0～1の範囲から-1～1の範囲に復元する。</span>
+localNormal = (localNormal - <span class="hljs-number">0.5f</span>) * <span class="hljs-number">2.0f</span>;
+
+</div></code></pre>
+<h3 id="step-6-%E3%82%BF%E3%83%B3%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9%E3%81%AE%E6%B3%95%E7%B7%9A%E3%82%92%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9%E3%81%AB%E5%A4%89%E6%8F%9B%E3%81%99%E3%82%8B">step-6 タンジェントスペースの法線をワールドスペースに変換する。</h3>
+<p>では、これで最後です。接ベクトルなどの、タンジェントスペースの基底軸を利用して法線をワールドスペースに変換しましょう。リスト6.8のプログラムを入力してください。</br>
+[リスト6.8 <code>sample.fx</code>]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//spte-6 タンジェントスペースの法線をワールドスペースに変換する。</span>
+normal = psIn.tangent * localNormal.x + psIn.biNormal * localNormal.y + normal * localNormal.z; 
+</div></code></pre>
+<p>実装出来たら実行してカメラやライトを動かしてみてください。法線マップを利用していないバージョンと比べるとモンスターの手の甲の凸凹間に大きな違いが生まれていることが分かります(図6.9)。</br>
+<strong>図6.9</strong></br>
+<img src="fig/6.9.png"></img></br></p>
+
+</body>
+</html>
