@@ -117,3 +117,10 @@ lig += ligColor * t;
 &emsp;ここまで入力できたら実行して動作を確認してください。うまくできていれば、図12.6のようにスペキュラ反射が発生しているはずです。</br>
 **図12.6**</br>
 <img src="fig/12.4.png" width=400></img></br>
+
+## 評価テスト
+次の評価テストを行いなさい。</br>
+[評価テストへジャンプ](https://docs.google.com/forms/d/e/1FAIpQLSdw16DzY1aeEsmlpjgVFjHKjT2-QVof_LPIUet85tfFtUP9Pg/viewform?usp=sf_link)
+</br>
+
+

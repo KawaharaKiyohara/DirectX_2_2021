@@ -60,3 +60,8 @@ float3 normal = psIn.tangent * localNormal.x + psIn.biNormal * localNormal.y + p
 ここで計算した法線が、このプロ宇グラムの後で、G-Bufferに出力可能な範囲に変換されて、出力されています。ディファードレンダリングでの法線マップの利用は、フォワードレンダリングでの利用となにも変わりません。では、実行してみてください。うまく実装できていると、図12.7のようにキャラクターの衣服の部分のシワが、法線マップによって表現されるようになります。</br>
 **図12.7**</br>
 <img src="fig/12.7.png"></img></br>
+
+## 評価テスト
+次の評価テストを行いなさい。</br>
+[評価テストへジャンプ](https://docs.google.com/forms/d/e/1FAIpQLSeaFW7Md__25ak3ZABAOm-iOeOQgA_gQ5z7gmFmdk125WmQsg/viewform?usp=sf_link)
+</br>

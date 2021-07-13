@@ -261,3 +261,8 @@ return finalColor;
 ```
 &emsp;今回のハンズオンではライティングの計算もシンプルだったので、余り恩恵は受けませんが、この後のチャプターで勉強する物理ベースライティングでは、１ピクセル辺りのライティングの計算が更にヘビーになります。そのような重いシェーダーになってきたときはディファードレンダリングの恩恵が大きくなっていきます。
 
+
+## 評価テスト
+次の評価テストを行いなさい。</br>
+[評価テストへジャンプ](https://docs.google.com/forms/d/e/1FAIpQLSfO7xyBUxawn7N3izgkY5hljnEXbwFFi0Br7z7IYlKl9xZiVA/viewform?usp=sf_link)
+</br>

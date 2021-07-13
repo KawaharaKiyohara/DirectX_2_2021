@@ -60,3 +60,9 @@ specColor *= specPower;
 </note>
 <!-- 改ページ. -->
 <div style="page-break-before:always"></div>
+
+## 評価テスト
+次の評価テストを行いなさい。</br>
+[評価テストへジャンプ](https://docs.google.com/forms/d/e/1FAIpQLScmtJZA7pOF00dRPFQNdK2uGLhrFn_D5Oi4Ywmn-PymxdF4PA/viewform?usp=sf_link)
+</br>
+
