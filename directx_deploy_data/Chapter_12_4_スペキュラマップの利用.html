@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chapter_12_ディファードレンダリング(スペキュラマップの利用).md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB">はじめに</h2>
+<p>このチャプターでは、次のサンプルプログラムを利用します。ダウンロードをしてください。</br>
+<strong><a href="https://drive.google.com/file/d/1SXD6J35rEs8UCcFojg1ipn_7dfulAD-O/view?usp=sharing">Sample_12_04.zip</a></strong></br>
+<strong><a href="https://drive.google.com/file/d/10zRg4dyythHpB-bonUYb99PgulA1XZNi/view?usp=sharing">Sample_12_05.zip</a></strong></br></p>
+<h2 id="129-%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3%E3%83%87%E3%82%A3%E3%83%95%E3%82%A1%E3%83%BC%E3%83%89%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E5%85%A5%E9%96%80%E3%82%B9%E3%83%9A%E3%82%AD%E3%83%A5%E3%83%A9%E3%83%9E%E3%83%83%E3%83%97">12.9 【ハンズオン】ディファードレンダリング入門～スペキュラマップ～</h2>
+<p>この節では、Sample_12_04を改造して、ディファードレンダリングでのスペキュラマップの活用を実装していきます。Sample_12_04は実行すると日本刀が表示されているデモを起動することができます。このデモで表示されている日本刀は、本来強いスペキュラ反射は発生しない、日本刀の柄や鞘でもスペキュラ反射が起きています(図12.8)。</br>
+<strong>図12.8</strong></br>
+<img src="fig/12.8.png"></img></br>
+このプログラムをスペキュラマップを利用するように改造して、日本刀の刀身や鞘の装飾部分だけがスペキュラ反射するようにしていきましょう。</br>
+しかし、スペキュラマップを利用する話だけですと、先ほどの法線マップの利用と同様に、6.2.1のスペキュラマップを利用したライティング実装と同じことをするだけです。そこで今回は、プラスアルファの内容としてG-Bufferの節約についても考えていきます。スペキュラマップを利用するということは、スペキュラ強度を図12.1のようにG-Bufferに書きこむ必要があります。ですので、単純に考えると、次のコードのようにスペキュラ強度を書き込む用のG-Bufferを追加することになります。</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//レンダリングターゲットをG-Bufferに変更して書き込む</span>
+RenderTarget* rts[] = {
+	&amp;albedRT,       <span class="hljs-comment">// 0番目のレンダリングターゲット</span>
+	&amp;normalRT, 		<span class="hljs-comment">// 1番目のレンダリングターゲット</span>
+	&amp;worldPosRT     <span class="hljs-comment">// 2番目のレンダリングターゲット</span>
+	&amp;specRT,		<span class="hljs-comment">// スペキュラ強度を書きこむために、3番目のレンダリングターゲットを追加。</span>
+};
+</div></code></pre>
+<p>ここである疑問が生まれます。DirectX12では一度の描画で最大何枚のレンダリングターゲットに書き込むことができるのだろうか？この答えは８枚です。もちろんこの枚数は将来的に増えていく可能性はありますが、今後も何かのグラフィック表現を実現したい場合にG-Bufferが増えていくことが考えられます。例えば、PBRでのライティングを行うのであれば、メタリック、スムース、クリアコートなどのパラメータが必要になる可能性があります。そのため、G-Bufferの使い方を工夫して節約するというのは重要なことです。そこで、今回は、法線を記録しているG-Bufferのwの要素にスペキュラ強度を記憶する実装を行っていきます。G-Bufferへの記憶の仕方を工夫すること以外は、スペキュラマップの利用のプログラムと何も変わりません。では、実装していきましょう。Sample_12_04/Sample_12_04.slnを開いて下さい。</br></p>
+<h3 id="step-1-%E3%82%B9%E3%83%9A%E3%82%AD%E3%83%A5%E3%83%A9%E3%83%9E%E3%83%83%E3%83%97%E3%81%AB%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%99%E3%82%8B%E3%81%9F%E3%82%81%E3%81%AE%E5%A4%89%E6%95%B0%E3%82%92%E8%BF%BD%E5%8A%A0">step-1 スペキュラマップにアクセスするための変数を追加。</h3>
+<p>今回のサンプルもcpp側の実装はすべて終わっているので、シェーダー側からの実装です。まずはG-Buffer作成のシェーダーを改造からです。Assets/shader/model.fxを開いてリスト12.23のプログラムを入力して、スペキュラマップにアクセスできるようにしてください。</br>
+[リスト12.23 model.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// step-1 スペキュラマップにアクセスするための変数を追加。</span>
+Texture2D&lt;float4&gt; g_specularMap : <span class="hljs-keyword">register</span>(t2);
+</div></code></pre>
+<h3 id="step-2-%E3%82%B9%E3%83%9A%E3%82%AD%E3%83%A5%E3%83%A9%E5%BC%B7%E5%BA%A6%E3%82%92psoutnormalw%E3%81%AB%E4%BB%A3%E5%85%A5">step-2 スペキュラ強度をpsOut.normal.wに代入。</h3>
+<p>続いてピクセルシェーダーを改造します。スペキュラマップからスペキュラ強度をサンプリングして、G-Bufferに出力します。法線出力用のデータのw要素にスペキュラ強度を記憶していることに注目してください。では、リスト12.24のプログラムを入力して下さい。</br>
+[リスト12.24 model.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// step-2 スペキュラ強度をpsOut.normal.wに代入。</span>
+psOut.normal.w = g_specularMap.Sample( g_sampler, psIn.uv).r;
+</div></code></pre>
+<h3 id="step-3-%E3%82%B9%E3%83%9A%E3%82%AD%E3%83%A5%E3%83%A9%E5%BC%B7%E5%BA%A6%E3%82%92%E6%B3%95%E7%B7%9A%E3%83%86%E3%82%AF%E3%82%B9%E3%83%81%E3%83%A3%E3%81%AEw%E8%A6%81%E7%B4%A0%E3%81%8B%E3%82%89%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AA%E3%83%B3%E3%82%B0%E3%81%99%E3%82%8B">step-3 スペキュラ強度を法線テクスチャのw要素からサンプリングする。</h3>
+<p>step-2でG-Buffer作成の処理の実装は終わりです。step-3からはディファードライティングを実装していきます。まずは、法線テクスチャからスペキュラ強度をサンプリングするプログラムを実装します。スペキュラ強度が法線テクスチャのw要素に記録されている点に注目してください。では、Assets/shader/sprite.fxを開いてリスト12.25のプログラムを入力してください。</br>
+[リスト12.25 sprite.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// step-3 スペキュラ強度を法線テクスチャのw要素からサンプリングする。</span>
+<span class="hljs-keyword">float</span> specPower = normalTexture.Sample(Sampler, In.uv).w;
+</div></code></pre>
+<h3 id="step-4-%E3%82%B9%E3%83%9A%E3%82%AD%E3%83%A5%E3%83%A9%E5%BC%B7%E5%BA%A6%E3%82%92%E6%B3%95%E7%B7%9A%E3%83%86%E3%82%AF%E3%82%B9%E3%83%81%E3%83%A3%E3%81%AEw%E8%A6%81%E7%B4%A0%E3%81%8B%E3%82%89%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AA%E3%83%B3%E3%82%B0%E3%81%99%E3%82%8B">step-4 スペキュラ強度を法線テクスチャのw要素からサンプリングする。</h3>
+<p>これで最後です。step-3でサンプリングしたスペキュラ強度をスペキュラカラーに乗算します。リスト12.26のプログラムを入力してください。</br>
+[リスト12.26 sprite.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// step-4 スペキュラ強度をスペキュラライトに乗算する。</span>
+specColor *= specPower;
+</div></code></pre>
+<p>ここまで実装出来たら実行して下さい。うまく実装できていると、図12.9のように、日本刀の刀身とサヤの文字の部分だけがスペキュラ反射で輝くようになります。</br>
+<strong>図12.9</strong></br>
+<img src="fig/12.9.png"></img></br></p>
+<note>
+本書では分かりやすさを優先して、ワールド座標のxyz全てをG-Bufferに書きこんで記録しています。ですが、多くのレンダリングエンジンでは、ワールド座標はそのまま記録せずに、正規化スクリーン座標系のZ値のみをG-Bufferに記録しています。これは、SSR( Screen Space Reflection )などの多くのポストエフェクトで深度値が必要になるため、G-Bufferに深度情報が必要になるという点と、正規化スクリーン座標系のZ値さえ記憶しておけば、ビュープロジェクション行列の逆行列を利用することで、ディファードライティングの際にワールド座標に復元することが可能だからです。G-Bufferを節約するということは、レンダリングターゲットの最大枚数の問題だけではなく、メモリ書き込みの節約にもつながるため、ゲームのパフォーマンスの向上も期待できるようになります。Sample_12_05に深度情報からワールド座標を復元するサンプルを用意していますので、興味がある方は参照してみてください。
+</note>
+<!-- 改ページ. -->
+<div style="page-break-before:always"></div>
+</body>
+</html>

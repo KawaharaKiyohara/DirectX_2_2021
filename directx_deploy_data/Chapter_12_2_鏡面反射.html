@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chapter_12_ディファードレンダリング(鏡面反射).md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB">はじめに</h2>
+<p>このチャプターでは、次のサンプルプログラムを利用します。ダウンロードをしてください。</br>
+<strong><a href="https://drive.google.com/file/d/1cJ1Lhh7VyG5HH7BF3--UZGCjjOojLV9R/view?usp=sharing">Sample_12_02.zip</a></strong></br></p>
+<h2 id="126-%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3%E3%83%87%E3%82%A3%E3%83%95%E3%82%A1%E3%83%BC%E3%83%89%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E5%85%A5%E9%96%80--%E9%8F%A1%E9%9D%A2%E5%8F%8D%E5%B0%84">12.6 【ハンズオン】ディファードレンダリング入門 ～ 鏡面反射 ～</h2>
+<p> 続いてディファードレンダリングで鏡面反射を実装してみましょう。このハンズオンは12.5のハンズオンの続きになります。鏡面反射ではピクセルのワールド座標のデータが必要になるため、G-Bufferが１枚追加されます。図12.4が今回のハンズオンで作成されるG-Bufferです。</br>
+<strong>図12.4</strong>
+<img src="fig/スペキュラ反射のG-Buffer.png"></img></br></p>
+<p> では、ハンズオンを行っていきましょう。12.5の内容を全て実装しているサンプルプログラムがあるので、そちらを利用します。Sample_12_1を立ち上げて下さい。</p>
+<h3 id="step-1-%E3%83%A9%E3%82%A4%E3%83%88%E3%81%AE%E6%83%85%E5%A0%B1%E3%81%AB%E8%A6%96%E7%82%B9%E3%82%92%E8%BF%BD%E5%8A%A0">step-1　ライトの情報に視点を追加</h3>
+<p> 今回実装する鏡面反射は[ほげほげ(章番号を入れる)]で勉強したフォン鏡面反射です。フォン鏡面反射の計算には視点の位置が必要になるので、ライティングの情報に視点のデータを追加します。main.cppにリスト12.7のプログラムを入力してください。</br>
+[リスト12.7 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-1 ライトの情報に視点を追加</span>
+light.eyePos = g_camera3D-&gt;GetPosition();
+</div></code></pre>
+<h3 id="step-2-%E3%83%94%E3%82%AF%E3%82%BB%E3%83%AB%E3%81%AE%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E5%BA%A7%E6%A8%99%E3%82%92%E8%A8%98%E6%86%B6%E3%81%99%E3%82%8B%E3%81%9F%E3%82%81%E3%81%AEg-buffer%E3%82%92%E4%BD%9C%E6%88%90">step-2　ピクセルのワールド座標を記憶するためのG-Bufferを作成</h3>
+<p> 鏡面反射の計算では、ピクセルから視点まで伸びるベクトルを計算する必要があります。その計算のためにワールド座標を記憶するためのG-Bufferを作成しましょう。リスト12.8のプログラムを入力してください。</br>
+[リスト12.8 main.cpp]</p>
+<pre class="hljs"><code><div>RenderTarget worldPosRT;
+worldPosRT.Create(
+	FRAME_BUFFER_W, 
+	FRAME_BUFFER_H, 
+	<span class="hljs-number">1</span>, 
+	<span class="hljs-number">1</span>, 
+	DXGI_FORMAT_R32G32B32A32_FLOAT,		<span class="hljs-comment">//ワールド座標を記録するので、32ビット浮動小数点バッファを利用する。</span>
+	DXGI_FORMAT_UNKNOWN
+);
+</div></code></pre>
+<p> ワールド座標はアルベドカラーや法線と違い、大きな数値になるため8ビットのバッファでは精度が足りません。ですので、32ビットの浮動小数点バッファを作成しています。</p>
+<h3 id="step-3-%E3%83%87%E3%82%A3%E3%83%95%E3%82%A1%E3%83%BC%E3%83%89%E3%83%A9%E3%82%A4%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%A7%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B%E3%83%86%E3%82%AF%E3%82%B9%E3%83%81%E3%83%A3%E3%81%AB%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E5%BA%A7%E6%A8%99%E3%83%86%E3%82%AF%E3%82%B9%E3%83%81%E3%83%A3%E3%82%92%E8%BF%BD%E5%8A%A0">step-3　ディファードライティングで使用するテクスチャにワールド座標テクスチャを追加。</h3>
+<p> ディファードライティングで先ほど作成したワールド座標のテクスチャを利用するため、spriteInitData.m_textureに追加します。リスト12.9のプログラムを入力して下さい。</br>
+[リスト12.9 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-3 ディファードライティングで使用するテクスチャにワールド座標テクスチャを追加。</span>
+spriteInitData.m_textures[<span class="hljs-number">2</span>] = &amp;worldPosRT.GetRenderTargetTexture();
+</div></code></pre>
+<h3 id="step-4-2%E7%95%AA%E7%9B%AE%E3%81%AE%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E3%81%ABworldposrt%E3%82%92%E8%BF%BD%E5%8A%A0">step-4　2番目のレンダリングターゲットにworldPosRTを追加</h3>
+<p> step-3までで初期化のプログラムは終了です。続いて、ドローコールを改造します。レンダリングするG-Bufferの種類が増えたので、RenderToGBufferで設定するレンダリングターゲットを増やします。リスト12.10のプログラムを入力してください。</br>
+[リスト12.10 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-4 2番目のレンダリングターゲットにworldPosRTを追加。</span>
+RenderTarget* rts[] = {
+	&amp;albedRT,	<span class="hljs-comment">//0番目のレンダリングターゲット</span>
+	&amp;normalRT,	<span class="hljs-comment">//1番目のレンダリングターゲット</span>
+	&amp;worldPosRT	<span class="hljs-comment">//2番目のレンダリングターゲット</span>
+};
+</div></code></pre>
+<p> これでC++側のプログラムは終了です。では、続いてHLSL側のプログラムを実装していきましょう。</p>
+<h3 id="step-5-%E9%A0%82%E7%82%B9%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%81%8B%E3%82%89%E3%81%AE%E5%87%BA%E5%8A%9B%E3%81%AB%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E5%BA%A7%E6%A8%99%E3%82%92%E8%BF%BD%E5%8A%A0">step-5　頂点シェーダーからの出力にワールド座標を追加。</h3>
+<p> まずは、RenderToGBufferのシェーダーを改造します。G-Bufferにピクセルのワールド座標を描きこむので、頂点シェーダーで計算されたワールド座標をピクセルシェーダーに渡す必要があります。頂点シェーダーからの出力構造体にワールド座標を出力するためのメンバを追加しましょう。model.fxを開いて、リスト12.11のプログラムを入力してください。</br>
+[リスト12.11 model.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-5 頂点シェーダーからの出力にワールド座標を追加。</span>
+float3 worldPos		: TEXCOORD1;	<span class="hljs-comment">//ワールド座標。</span>
+</div></code></pre>
+<h3 id="step-6-%E3%83%94%E3%82%AF%E3%82%BB%E3%83%AB%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%81%8B%E3%82%89%E3%81%AE%E5%87%BA%E5%8A%9B%E3%81%AB%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E5%BA%A7%E6%A8%99%E3%82%92%E8%BF%BD%E5%8A%A0">step-6　ピクセルシェーダーからの出力にワールド座標を追加。</h3>
+<p> 続いて、ピクセルシェーダーからの出力構造体を改造します。ピクセルシェーダーからレンダリングターゲット２番目にワー���ド座標を出力する必要があるので、<code>SV_Target2</code>セマンティクスが指定されたメンバを追加しています。model.fxにリスト12.12のプログラムを入力してください。</br>
+[リスト12.12 model.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step 6 ピクセルシェーダーからの出力にワールド座標を追加。</span>
+float3 worldPos : SV_Target2;	<span class="hljs-comment">//ワールド座標。</span>
+</div></code></pre>
+<p> このシェーダーが実行されると、図12.5のワールド座標のG-Bufferが作成されます。</br>
+<strong>図12.5</strong></br>
+<img src="fig/ワールド座標テクスチャ.png" width=320></img></p>
+<h3 id="step-7-%E9%A0%82%E7%82%B9%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%81%8B%E3%82%89%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E5%BA%A7%E6%A8%99%E3%82%92%E5%87%BA%E5%8A%9B">step-7　頂点シェーダーからワールド座標を出力</h3>
+<p> では、プログラムの本体の改造をしていきましょう。まずは頂点シェーダーからワールド座標を出力できるようにしていきましょう。リスト12.13のプログラムを入力してください。
+[リスト12.13 model.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-7 頂点シェーダーからワールド座標を出力。</span>
+psIn.worldPos = psIn.pos;
+</div></code></pre>
+<h3 id="step-8-%E3%83%94%E3%82%AF%E3%82%BB%E3%83%AB%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%81%8B%E3%82%89%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E5%BA%A7%E6%A8%99%E3%82%92%E5%87%BA%E5%8A%9B">step-8　ピクセルシェーダーからワールド座標を出力</h3>
+<p> 続いて、ピクセルシェーダーを改造しましょう。ピクセルシェーダーの仕事は頂点シェーダー→ラスタライザで計算されたピクセルのワールド座標をG-Bufferに出力するだけです。リスト12.14のプログラムを入力してください。</br>
+[リスト12.14 model.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-8 ピクセルシェーダーからワールド座標を出力。</span>
+psOut.worldPos = psIn.worldPos;
+</div></code></pre>
+<h3 id="step-9-%E5%AE%9A%E6%95%B0%E3%83%90%E3%83%83%E3%83%95%E3%82%A1%E3%81%AB%E8%A6%96%E7%82%B9%E3%81%AE%E4%BD%8D%E7%BD%AE%E3%82%92%E8%BF%BD%E5%8A%A0">step-9　定数バッファに視点の位置を追加</h3>
+<p> 次はディファードライティングのシェーダーを改造します。鏡面反射を実装するので、定数バッファに視点の位置を追加しましょう。sprite.fxを開いてリスト12.15のプログラムを入力してください。</br>
+[リスト12.15 sprite.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-9 定数バッファに視点の位置を追加。</span>
+float3 eyePos;			<span class="hljs-comment">//視点</span>
+</div></code></pre>
+<h3 id="step-10-%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E5%BA%A7%E6%A8%99%E3%83%86%E3%82%AF%E3%82%B9%E3%83%81%E3%83%A3%E3%81%AB%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%99%E3%82%8B%E3%81%9F%E3%82%81%E3%81%AE%E5%A4%89%E6%95%B0%E3%82%92%E8%BF%BD%E5%8A%A0">step-10　ワールド座標テクスチャにアクセスするための変数を追加</h3>
+<p> RenderToGBufferのパスで作成されたワールド座標テクスチャを利用するので、テクスチャにアクセスするための変数を追加します。ワールド座標テクスチャはcpp側のSprite::Drawの中でt2レジスタに関連付けされています。リスト12.16のプログラムを入力してください。</br>
+[リスト12.16 sprite.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-10 ワールド座標テクスチャにアクセスするための変数を追加</span>
+Texture2D&lt;float4&gt; worldPosTexture : <span class="hljs-keyword">register</span>(t2);	<span class="hljs-comment">//ワールド座標。</span>
+</div></code></pre>
+<h3 id="step-11-%E3%82%B9%E3%83%9A%E3%82%AD%E3%83%A5%E3%83%A9%E5%8F%8D%E5%B0%84%E3%82%92%E8%A8%88%E7%AE%97">step-11　スペキュラ反射を計算</h3>
+<p> では、最後にスペキュラ反射を計算するプロググラムを追加しましょう。スペキュラ反射は[Chpaterほげほげ]で解説したプログラムと同じです。リスト12.17のプログラムを入力して下さい。</br>
+[リスト12.17 sprite.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-11 スペキュラ反射を計算。</span>
+float3 worldPos = worldPosTexture.Sample( Sampler, In.uv).xyz;
+float3 toEye = normalize( eyePos - worldPos );
+float3 r = reflect( ligDirection, normal);
+t = max( <span class="hljs-number">0.0f</span>, dot( toEye, r));
+t = <span class="hljs-built_in">pow</span>( t, <span class="hljs-number">5.0f</span>);
+lig += ligColor * t;
+</div></code></pre>
+<h3 id="step-12-%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D">step-12　動作確認</h3>
+<p> ここまで入力できたら実行して動作を確認してください。うまくできていれば、図12.6のようにスペキュラ反射が発生しているはずです。</br>
+<strong>図12.6</strong></br>
+<img src="fig/12.4.png" width=400></img></br></p>
+
+</body>
+</html>

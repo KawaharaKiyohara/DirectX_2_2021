@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chapter_12_ディファードレンダリング(拡散反射).md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB">はじめに</h2>
+<p>このチャプターでは、次のサンプルプログラムを利用します。ダウンロードをしてください。</br>
+<strong><a href="https://drive.google.com/file/d/1TLYYLNm-dgoXPRU18RkZaCo415j-CBlT/view?usp=sharing">Sample_12_01.zip</a></strong></br></p>
+<h1 id="chapter-12-%E3%83%87%E3%82%A3%E3%83%95%E3%82%A1%E3%83%BC%E3%83%89%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0">Chapter 12 ディファードレンダリング</h1>
+<p> このチャプターでは現在主流になってきているディファードレンダリングについてみていきます。</p>
+<h2 id="121-%E3%83%95%E3%82%A9%E3%83%AF%E3%83%BC%E3%83%89%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0">12.1 フォワードレンダリング</h2>
+<p> ディファードレンダリングを見ていく前に、まずは、3Dゲームの黎明期から進化してきたレンダリング手法のフォワードレンダリングについて見ていきましょう。フォワードレンダリングを端的に説明すると、**「ポリゴンをレンダリングする時にライティングの計算を行う」**というものです。モデルのDrawを行うと頂点シェーダー、ピクセルシェーダーが実行されてピクセルカラーが決まります。このタイミングでライティングを行うのがフォワードレンダリングです。これまで皆さんが実装してきたものは全てフォワードレンダリングとなります。</p>
+<h2 id="122-%E3%83%87%E3%82%A3%E3%83%95%E3%82%A1%E3%83%BC%E3%83%89%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0">12.2 ディファードレンダリング</h2>
+<p> ディファードレンダリングはxbox360、PlayStation3のころに生まれたレンダリング手法で、比較的新しい手法となっています。特にPlayStation3はこの手法が向いているアーキテクチャだったため、ディファードレンダリングが採用されているゲームがいくつかありました。ディファードレンダリングを端的に説明すると「ポリゴンをレンダリングする時にはライティングの計算は行わずに後で行う。」というものです。Deferredは遅延という意味なので、遅延レンダリングとも呼ばれます。フォワード系に慣れ親しんでいるとピンと来ないかもしれません。ライティングの計算をポストエフェクト的に行うと言った方が理解しやすいかもしれませんね。</p>
+<h3 id="1221-g-buffer">12.2.1 G-Buffer</h3>
+<p> ではディファードレンダリングで使用されるG-Bufferについてみていきましょう。ディファードレンダリングではポリゴンをレンダリングする時にはライティングの計算は行わずにMRT(MultiRenderingTarget)を活用して、複数枚のテクスチャ(G-Bufferと呼ばれる)にテクスチャカラー、法線情報、スペキュラ強度、深度値などを書き込みます。図12.1はPlayStation3のKillzone2のG-Bufferの内容です</br></p>
+<p><strong>図12.1</strong></br>
+<img src="fig/G-Buffer.png" width="600"></img></br>
+ フォワードレンダリングでは「モデルを描画する=ライティングを行ってレンダリングターゲットに書き込む」だったのですが、ディファードレンダリング「モデルを描画する=ライティングに必要な情報をG-Bufferに書き込む。」というものになります。そして、G-Bufferを使用してポストエフェクト的にライティングの計算を行って、最終画象をレンダリングターゲットに書き込みます。</p>
+<h2 id="123-%E3%83%87%E3%82%A3%E3%83%95%E3%82%A1%E3%83%BC%E3%83%89%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%81%AE%E3%83%A1%E3%83%AA%E3%83%83%E3%83%88">12.3 ディファードレンダリングのメリット</h2>
+<p> なぜ、PlayStation3やXbox360のころからディファードレンダリングを採用しているゲームが増えてきたのでしょうか？当然増えてきたのには何か理由があります。この節ではその理由についてみていきましょう。
+ PlayStation3、Xbox360が登場したことによって、家庭用ゲーム機の世界にもプログラマブルシェーダーの波が押し寄せました。映像を少しでもいいものに、ほかのゲームと違うグラフィック表現などなど、いろいろな工夫が凝らされるようになった結果、1ピクセル当たりの計算量がどんどん増えていきました。例えばPlayStation3が発売されたばかりのころの１ピクセルのプログラムは次のようなものだったと思ってください。</br></p>
+<pre class="hljs"><code><div><span class="hljs-comment">/*!
+ *@brief	ピクセルシェーダー。
+ */</span>
+<span class="hljs-function">float4 <span class="hljs-title">PSMain</span><span class="hljs-params">( VS_OUTPUT In )</span> : COLOR
+</span>{
+	<span class="hljs-comment">//ライトを計算。</span>
+	float4 lig = <span class="hljs-number">0.0f</span>;
+	float3 normal = normalize(In.normal);
+	lig.xyz = CalcDiffuse( In.normal );
+	lig.xyz += CalcSpecular( In.worldPos, normal );	
+	lig += g_ambientLight;
+	float4 color = tex2D( g_diffuseTextureSampler, In.uv );
+	color.xyz *= lig;
+	<span class="hljs-keyword">return</span> color;
+}
+</div></code></pre>
+<p>これが時とともにもっと良いものを求めていった結果複雑化していき、次のようなコードになっていきました。</br></p>
+<pre class="hljs"><code><div><span class="hljs-comment">/*!
+ * @brief	ピクセルシェーダー。
+ */</span>
+<span class="hljs-function">PSOutput <span class="hljs-title">PSMain</span><span class="hljs-params">( VS_OUTPUT In )</span>
+</span>{
+	float4 color = <span class="hljs-number">0.0f</span>;
+	float4 diffuseColor = tex2D(g_diffuseTextureSampler, In.Tex0);
+	color = diffuseColor;
+	float3 normal = normalize(In.Normal);
+	<span class="hljs-keyword">if</span>(g_flags.x){
+		<span class="hljs-comment">//法線マップあり。</span>
+		float3 tangent = normalize(In.Tangent);
+		float3 binSpaceNormal = tex2D( g_normalMapSampler, In.Tex0);
+		float4x4 tangentSpaceMatrix;
+		float3 biNormal = normalize( cross( tangent, normal) );
+		tangentSpaceMatrix[<span class="hljs-number">0</span>] = float4( tangent, <span class="hljs-number">0.0f</span>);
+		tangentSpaceMatrix[<span class="hljs-number">1</span>] = float4( biNormal, <span class="hljs-number">0.0f</span>);
+		tangentSpaceMatrix[<span class="hljs-number">2</span>] = float4( normal, <span class="hljs-number">0.0f</span>);
+		tangentSpaceMatrix[<span class="hljs-number">3</span>] = float4( <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span> );
+		<span class="hljs-comment">//-1.0～1.0の範囲にマッピングする。</span>
+		binSpaceNormal = (binSpaceNormal * <span class="hljs-number">2.0f</span>)- <span class="hljs-number">1.0f</span>;
+		normal = tangentSpaceMatrix[<span class="hljs-number">0</span>] * binSpaceNormal.x + tangentSpaceMatrix[<span class="hljs-number">1</span>] * binSpaceNormal.y + tangentSpaceMatrix[<span class="hljs-number">2</span>] * binSpaceNormal.z; 
+		
+	}
+	float4 lig = DiffuseLight(normal);
+	<span class="hljs-keyword">if</span>(g_flags.z){
+		<span class="hljs-comment">//リムライト。</span>
+		lig.xyz += CalcLimLight(normal, g_light.limLightDir, g_light.limLightColor.xyz);
+	}
+	<span class="hljs-keyword">if</span>(g_flags.w){
+		<span class="hljs-comment">//スペキュラライト。</span>
+		lig.xyz += SpecLight(normal, In.worldPos_depth.xyz, In.Tex0);
+	}
+	<span class="hljs-keyword">if</span>(g_flags.y){
+		<span class="hljs-comment">//影</span>
+		lig *= CalcShadow(In.worldPos_depth.xyz);
+	}
+	<span class="hljs-comment">//自己発光色</span>
+	lig.xyz += g_light.emission;
+	color *= lig;
+	<span class="hljs-comment">//大気錯乱</span>
+	<span class="hljs-keyword">if</span>(g_flags2.y == AtomosphereFuncObjectFromAtomosphere)
+	{
+		color = In.rayColor + color * In.mieColor;
+	}
+	<span class="hljs-comment">//ポイントライト。</span>
+	color.xyz += diffuseColor.xyz * PointLight(normal, In.worldPos_depth.xyz, g_flags.z);
+	<span class="hljs-comment">//アンビエントライトを加算。</span>
+	color.xyz += diffuseColor.xyz * g_light.ambient.xyz;	
+	<span class="hljs-keyword">if</span>(g_fogParam.z &gt; <span class="hljs-number">1.9f</span>){
+		<span class="hljs-comment">//高さフォグ</span>
+		<span class="hljs-keyword">float</span> h = max(In.worldPos_depth.y - g_fogParam.y, <span class="hljs-number">0.0f</span>);
+		<span class="hljs-keyword">float</span> t = min(h / g_fogParam.x, <span class="hljs-number">1.0f</span>);
+		color.xyz = lerp(float3(<span class="hljs-number">0.75f</span>, <span class="hljs-number">0.75f</span>, <span class="hljs-number">0.95f</span>), color.xyz, t);
+	}<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(g_fogParam.z &gt; <span class="hljs-number">0.0f</span>){
+		<span class="hljs-comment">//距離フォグ</span>
+		<span class="hljs-keyword">float</span> z = length(In.worldPos_depth.xyz - g_cameraPos);
+		z = max(z - g_fogParam.x, <span class="hljs-number">0.0f</span>);
+		<span class="hljs-keyword">float</span> t = min( z / g_fogParam.y, <span class="hljs-number">1.0f</span>);
+		color.xyz = lerp(color.xyz, float3(<span class="hljs-number">0.75f</span>, <span class="hljs-number">0.75f</span>, <span class="hljs-number">0.95f</span>), t);
+	}
+	PSOutput psOut = (PSOutput)<span class="hljs-number">0</span>;
+	psOut.color = color;
+	psOut.depth = In.worldPos_depth.w;
+	<span class="hljs-keyword">if</span>(g_flags2.x){
+		psOut.velocity.xy = In.velocity.xy / In.velocity.w-In.screenPos.xy / In.screenPos.w;
+		psOut.velocity.xy *= <span class="hljs-number">0.5f</span>;
+		psOut.velocity.xy += <span class="hljs-number">0.5f</span>;
+		psOut.velocity.zw = <span class="hljs-number">0.0f</span>;
+	}<span class="hljs-keyword">else</span>{
+		<span class="hljs-comment">//速度なし。</span>
+		psOut.velocity = <span class="hljs-number">0.5f</span>;
+	}
+	<span class="hljs-keyword">return</span> psOut;
+}
+</div></code></pre>
+<p> これが１ピクセルに実行されるプログラムです。これによりピクセル単位のプログラムの処理時間が増大していきました。そこで、無駄なピクセルのプログラムは実行しないようにできないか？という考えから生まれてきたのがディファードレンダリングです。フォワードレンダリングは先にライティングを行うため、不要なピクセルのライティングが計算されてしまいます。例えば図12.2のように3Dモデルを画面の奥から手前の順番でレンダリングした場合のことを考えてみてください。</br>
+<strong>図12.2</strong></br>
+<img src="fig/12_2.png" width="600"></img></br>
+ この図は顔のモデルを描画した後で、その手前に三角形の板ポリを描画している図です。これがフォワードレンダリングで行われた場合、三角形の板ポリに遮蔽された部分のライティングの計算が無駄になってしまいます。一方、ディファードレンダリングでは、モデル描画のパスではライティング計算は行わずに、G-Bufferの内容を使って、ポストエフェクト的にライティングの計算を行うため、無駄な計算は発生しません。例えば1920×1080の解像度であれば、どんな順番でモデルを描画したとしても1920×1080回のライティングの計算で完了することになります。</p>
+<h2 id="124-%E3%83%87%E3%82%A3%E3%83%95%E3%82%A1%E3%83%BC%E3%83%89%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%81%AE%E3%83%87%E3%83%A1%E3%83%AA%E3%83%83%E3%83%88">12.4 ディファードレンダリングのデメリット</h2>
+<p> 先ほどはディファードレンダリングのメリットを見ていきましたが、すべてのケースでフォワードレンダリングより優れているわけではありません。ではディファードレンダリングのデメリットについてみていきましょう。</p>
+<h3 id="1241-%E3%83%A1%E3%83%A2%E3%83%AA%E3%81%AE%E9%80%9F%E5%BA%A6%E3%81%A8%E5%AE%B9%E9%87%8F%E3%81%AE%E5%95%8F%E9%A1%8C">12.4.1 メモリの速度と容量の問題</h3>
+<p> ディファード系ではMRT(multiRenderingTarget)を活用するため、フォワード系に比べるとメモリ使用量が増大します。また、モデルの描画パスで複数のG-Bufferに対して書き込みを行うため、メモリの書き込み速度も問題になってきます。CPUやGPUの演算速度とメモリの読み書きの速度の差はどんどん大きくなってきています。そのため、アーキテクチャによってはディファード系の方が遅くなるというのは十分考えられます。実はディファード系がPlayStation3では増えていたが、Xbox360では増えなかったのはこれが理由です。メモリの速度とVRAMの容量がxbox360はPlayStation3より劣っていたため、ディファードに向きでした。</p>
+<h3 id="1242-%E5%8D%8A%E9%80%8F%E6%98%8E%E6%8F%8F%E7%94%BB%E3%81%AE%E5%95%8F%E9%A1%8C">12.4.2 半透明描画の問題</h3>
+<p> ディファード系は半透明オブジェクトの描画に弱いため、半透明のオブジェクトを描画する場合、不透明オブジェクトをディファードで描画した後でフォワードで半透明オブジェクトを描画するなどといった工夫が必要になります。そのため、半透明オブジェクトを多用する日本のゲームには向いていないといわれていました。</br>
+ このようにいいことばかりではなく、ディファードの方が遅くなるケースは実はたくさんあります。最近ですとVRゲームは4K解像度の絵を右目用と左目用の２枚レンダリングを行う必要があり、ディファードでレンダリングを行うと4K解像度の複数枚のG-Bufferへの書き込みが発生してメモリ帯域を圧迫します。</p>
+<h2 id="125-%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3%E3%83%87%E3%82%A3%E3%83%95%E3%82%A1%E3%83%BC%E3%83%89%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E5%85%A5%E9%96%80--%E6%8B%A1%E6%95%A3%E5%8F%8D%E5%B0%84">12.5 【ハンズオン】ディファードレンダリング入門 ～ 拡散反射 ～</h2>
+<p> では、ハンズオンでディファードレンダリングを実装してみましょう。Sample_12_01を立ち上げてください。</p>
+<h3 id="step-1-%E3%83%A2%E3%83%87%E3%83%AB%E3%82%92%E5%88%9D%E6%9C%9F%E5%8C%96">step-1 	モデルを初期化。</h3>
+<p> まず、レンダリングを行うモデルを用意します。シェーダーにmodel.fxを指定していますが、このシェーダーではライティングの計算は行っていません。このシェーダーの目的はアルベドカラーと法線をG-bufferに出力することです。</br></p>
+<p>[リスト 12.1 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-1 モデルを用意。</span>
+ModelInitData modelInitData;
+modelInitData.m_tkmFilePath = <span class="hljs-string">"Assets/modelData/unityChan.tkm"</span>;
+modelInitData.m_fxFilePath = <span class="hljs-string">"Assets/shader/model.fx"</span>;
+Model model;
+model.Init(modelInitData);
+</div></code></pre>
+<h3 id="step-2-g-buffer%E3%82%92%E4%BD%9C%E6%88%90">step-2 G-Bufferを作成</h3>
+<p> アルベドカラーと法線を出力するためのG-Bufferを作成します。</br>
+[リスト 12.2 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-2 G-Bufferを作成。</span>
+RenderTarget albedRT;	<span class="hljs-comment">//アルベドカラー書き込み用のレンダリングターゲット。</span>
+albedRT.Create(
+	FRAME_BUFFER_W, FRAME_BUFFER_H, 
+	<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, 
+	DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D32_FLOAT);
+RenderTarget normalRT;	<span class="hljs-comment">//法線書き込み用のレンダリングターゲット。</span>
+normalRT.Create(
+	FRAME_BUFFER_W, FRAME_BUFFER_H, 
+	<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, DXGI_FORMAT_R8G8B8A8_UNORM, XGI_FORMAT_UNKNOWN);
+
+</div></code></pre>
+<h3 id="step-3-%E3%83%9D%E3%82%B9%E3%83%88%E3%82%A8%E3%83%95%E3%82%A7%E3%82%AF%E3%83%88%E7%9A%84%E3%81%AB%E3%83%87%E3%82%A3%E3%83%95%E3%82%A1%E3%83%BC%E3%83%89%E3%83%A9%E3%82%A4%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%82%92%E8%A1%8C%E3%81%86%E3%81%9F%E3%82%81%E3%81%AE%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E6%BA%96%E5%82%99">step-3 ポストエフェクト的にディファードライティングを行うためのスプライトを準備。</h3>
+<p> 続いて、ポストエフェクト的にライティングを行うので、画面全体にレンダリングされるスプライトを準備します。ここで指定しているsprite.fxでライティングの計算が行われます。</p>
+<p>[リスト 12.3 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-3 ポストエフェクト的にディファードライティングを行うためのスプライトを準備。</span>
+SpriteInitData spriteInitData;
+<span class="hljs-comment">//画面全体にレンダリングするので幅と高さはフレームバッファの幅と高さと同じ。</span>
+spriteInitData.m_width = FRAME_BUFFER_W;
+spriteInitData.m_height = FRAME_BUFFER_H;
+<span class="hljs-comment">//使用するテクスチャはアルベドテクスチャと法線テクスチャ。</span>
+spriteInitData.m_textures[<span class="hljs-number">0</span>] = &amp;albedRT.GetRenderTargetTexture();
+spriteInitData.m_textures[<span class="hljs-number">1</span>] = &amp;normalRT.GetRenderTargetTexture();
+spriteInitData.m_fxFilePath = <span class="hljs-string">"Assets/shader/sprite.fx"</span>;
+spriteInitData.m_expandConstantBuffer = &amp;light;
+spriteInitData.m_expandConstantBufferSize = <span class="hljs-keyword">sizeof</span>(light);
+<span class="hljs-comment">//初期化データを使ってスプライトを作成。</span>
+Sprite defferdLightinSpr;
+defferdLightinSpr.Init(spriteInitData);
+</div></code></pre>
+<p> このスプライトの描画でモデルのドローで作成されるテクスチャが利用されます。</p>
+<h3 id="step-4-%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E3%82%92g-buffer%E3%81%AB%E5%A4%89%E6%9B%B4%E3%81%97%E3%81%A6%E6%9B%B8%E3%81%8D%E8%BE%BC%E3%82%80">step-4 レンダリングターゲットをG-Bufferに変更して書き込む。</h3>
+<p> この箇所がフォワードレンダリングでのモデルのドローにあたる部分です。これまでここで直接フレームバッファ(画面)にレンダリングしていたのですが、ディファードではレンダリング先がG-Bufferになります。</br>
+[リスト 12.4 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-4 レンダリングターゲットをG-Bufferに変更して書き込む。</span>
+RenderTarget* rts[] = {
+	&amp;albedRT,
+	&amp;normalRT
+};
+<span class="hljs-comment">//まず、レンダリングターゲットとして設定できるようになるまで待つ。</span>
+renderContext.WaitUntilToPossibleSetRenderTargets(<span class="hljs-number">2</span>, rts);
+<span class="hljs-comment">//レンダリングターゲットを設定。</span>
+renderContext.SetRenderTargets(<span class="hljs-number">2</span>, rts);
+<span class="hljs-comment">//レンダリングターゲットをクリア。</span>
+renderContext.ClearRenderTargetViews(<span class="hljs-number">2</span>, rts);
+model.Draw(renderContext);
+
+<span class="hljs-comment">//レンダリングターゲットへの書き込み待ち。</span>
+renderContext.WaitUntilFinishDrawingToRenderTargets(<span class="hljs-number">2</span>, rts);
+</div></code></pre>
+<p> このモデルのドローで図12.1と図12.2の２枚のテクスチャ(G-Buffer)が作成されます。この2枚のテクスチャを使用してstep-5でライティングの計算が行われます。</br>
+<strong>図12.1 アルベド</strong></br>
+<img src="fig/12.1.png" width=320></img></p>
+<p><strong>図12.2 法線</strong></br>
+<img src="fig/12.2.png" width=320></img></br></p>
+<h3 id="step-5-%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E5%85%88%E3%82%92%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%83%90%E3%83%83%E3%83%95%E3%82%A1%E3%81%AB%E6%88%BB%E3%81%97%E3%81%A6%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%81%99%E3%82%8B">step-5 レンダリング先をフレームバッファに戻してスプライトをレンダリングする</h3>
+<p> G-Bufferの作成が終わったら、次はディファードライティングです。step-4で作成されたアルベドテクスチャと法線テクスチャを使ってライティングの計算が行われます。</br>
+[リスト 12.5 main.cpp]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-5 レンダリング先をフレームバッファに戻してスプライトをレンダリングする</span>
+g_graphicsEngine-&gt;ChangeRenderTargetToFrameBuffer(renderContext);
+<span class="hljs-comment">//G-Bufferの内容を元にしてスプライトをレンダリング。</span>
+defferdLightinSpr.Draw(renderContext);
+</div></code></pre>
+<p> このスプライトのドローで、step-4で作成されたテクスチャを使用して、ライティングの計算がおこなれます。</br>
+<strong>図12.3 ディファードライティング</strong></br>
+<img src="fig/12.3.png"></img></br></p>
+<h3 id="step-6-g-buffer%E3%81%AB%E5%87%BA%E5%8A%9B">step-6 G-Bufferに出力。</h3>
+<p> 続いて、シェーダー側��model.fxです。モデルシェーダーではライティングの計算のような複雑な計算は行われておらず、アルベドと法線をレンダリングターゲットに出力しているだけのシンプルなプログラムになっています。</br>
+[リスト 12.6 model.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-6 G-Bufferに出力。</span>
+SPSOut psOut;
+<span class="hljs-comment">//アルベドカラーを出力。</span>
+psOut.albedo = g_texture.Sample(g_sampler, psIn.uv);
+<span class="hljs-comment">//法線を出力。</span>
+<span class="hljs-comment">//出力は0～1に丸められてしまうのでマイナスの値が失われてしまう。</span>
+<span class="hljs-comment">//なので-1～1を0～1に変換する。</span>
+<span class="hljs-comment">//(-1 ～ 1) ÷ 2.0       = ( -0.5 ～ 0.5 )</span>
+<span class="hljs-comment">//( -0.5 ～ 0.5) + 0.5  = (  0.0 ～ 1.0 )</span>
+psOut.normal = ( psIn.normal / <span class="hljs-number">2.0f</span> ) + <span class="hljs-number">0.5f</span>;
+<span class="hljs-keyword">return</span> psOut;
+</div></code></pre>
+<h3 id="step-7-g-buffer%E3%81%AE%E5%86%85%E5%AE%B9%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%A9%E3%82%A4%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">step-7 G-Bufferの内容を使ってライティング。</h3>
+<p> いよいよ最後です。sprite.fxでは作成されたG-Bufferの情報を元にライティングの計算を行います。ライティングの計算自体はフォワードレンダリングで行っているものと違いはありません。</br>
+[リスト 12.6 sprite.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">//step-7 G-Bufferの内容を使ってライティング。</span>
+float4 albedo = albedoTexture.Sample(Sampler, In.uv);
+float3 normal = normalTexture.Sample(Sampler, In.uv).xyz;
+normal = (normal * <span class="hljs-number">2.0f</span>)<span class="hljs-number">-1.0f</span>;
+<span class="hljs-comment">//ライトを計算。</span>
+float3 lig = <span class="hljs-number">0.0f</span>;
+<span class="hljs-keyword">float</span> t = max( <span class="hljs-number">0.0f</span>, dot( normal, ligDirection) * <span class="hljs-number">-1.0f</span>);
+lig = ligColor * t;
+float4 finalColor = albedo;
+finalColor.xyz *= lig;
+<span class="hljs-keyword">return</span> finalColor;
+</div></code></pre>
+<p> 今回のハンズオンではライティングの計算もシンプルだったので、余り恩恵は受けませんが、この後のチャプターで勉強する物理ベースライティングでは、１ピクセル辺りのライティングの計算が更にヘビーになります。そのような重いシェーダーになってきたときはディファードレンダリングの恩恵が大きくなっていきます。</p>
+
+</body>
+</html>

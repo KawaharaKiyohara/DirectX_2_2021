@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chapter_12_ディファードレンダリング(法線マップの利用).md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB">はじめに</h2>
+<p>このチャプターでは、次のサンプルプログラムを利用します。ダウンロードをしてください。</br>
+<strong><a href="https://drive.google.com/file/d/1Ct2sKoXrjy9Du0vaOpFN1qx2bVgNuZSz/view?usp=sharing">Sample_12_03.zip</a></strong></br></p>
+<h2 id="128-%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3%E3%83%87%E3%82%A3%E3%83%95%E3%82%A1%E3%83%BC%E3%83%89%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E5%85%A5%E9%96%80%E6%B3%95%E7%B7%9A%E3%83%9E%E3%83%83%E3%83%97">12.8 【ハンズオン】ディファードレンダリング入門～法線マップ～</h2>
+<p>この節では、法線マップが貼られているモデルをディファードレンダリングでレンダリングする方法を見ていきましょう。しかし、これは何も難しい話ではありません。単にG-Bufferを作成するモデル描画パスで法線マップを使って法線を計算し、それをG-Bufferに出力するだけです。ですので、内容的には6.1.9の法線の計算のプログラムと全く同じです。では、Sample_12_03/Sample_12_03.slnを立ち上げて下さい。</p>
+<h3 id="step-1-%E9%A0%82%E7%82%B9%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%81%AE%E5%85%A5%E5%8A%9B%E3%81%AB%E6%8E%A5%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%81%A8%E5%BE%93%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%82%92%E8%BF%BD%E5%8A%A0">step-1 頂点シェーダーの入力に接ベクトルと従ベクトルを追加</h3>
+<p>今回のハンズオンも6.1.9の法線マップの実装と同じように、必要なデータはすべてシェーダーからアクセスできるようになっているため、cpp側を改造する必要はないので、シェーダー側の実装のみとなります。<code>Assets/shader/model.fx</code>を開いてください。まずは、頂点シェーダーの入力に接ベクトルと従ベクトルを追加します。リスト12.18のプログラムを入力してください。</br>
+[リスト12.18 model.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// step-1 頂点シェーダーの入力に接ベクトルと従ベクトルを追加</span>
+float3 tangent : TANGENT;
+float3 biNormal : BINORMAL;
+</div></code></pre>
+<h3 id="step-2-%E3%83%94%E3%82%AF%E3%82%BB%E3%83%AB%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%80%E3%83%BC%E3%81%AE%E5%85%A5%E5%8A%9B%E3%81%AB%E6%8E%A5%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%81%A8%E5%BE%93%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%82%92%E8%BF%BD%E5%8A%A0">step-2 ピクセルシェーダーの入力に接ベクトルと従ベクトルを追加</h3>
+<p>続いて、ピクセルシェーダーの入力にも接ベクトルと従ベクトルを追加します。リスト12.19のプログラムを入力してください。</br>
+[リスト12.19 model.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// step-2 ピクセルシェーダーの入力に接ベクトルと従ベクトルを追加</span>
+float3 tangent  : TANGENT;      <span class="hljs-comment">// 接ベクトル</span>
+float3 biNormal : BINORMAL;     <span class="hljs-comment">// 従ベクトル</span>
+</div></code></pre>
+<h3 id="step-3-%E6%B3%95%E7%B7%9A%E3%83%9E%E3%83%83%E3%83%97%E3%81%AB%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%99%E3%82%8B%E3%81%9F%E3%82%81%E3%81%AE%E5%A4%89%E6%95%B0%E3%82%92%E8%BF%BD%E5%8A%A0">step-3 法線マップにアクセスするための変数を追加</h3>
+<p>次は、法線マップにアクセスするための変数を追加します。リスト12.19のプログラムを入力してください。</br></p>
+<pre class="hljs"><code><div><span class="hljs-comment">// step-3 法線マップにアクセスするための変数を追加</span>
+Texture2D&lt;float4&gt; g_normalMap : <span class="hljs-keyword">register</span>(t1);
+</div></code></pre>
+<h3 id="step-4-%E6%8E%A5%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%81%A8%E5%BE%93%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%82%92%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E7%A9%BA%E9%96%93%E3%81%AB%E5%A4%89%E6%8F%9B%E3%81%99%E3%82%8B">step-4 接ベクトルと従ベクトルをワールド空間に変換する</h3>
+<p>続いて、頂点シェーダーの改造です。接ベクトルと従ベクトルを頂点シェーダーからピクセルシェーダーに渡す処理を実装します。リスト12.20のプログラムを入力してください。</br></p>
+<p>[リスト12.20 model.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// step-4 接ベクトルと従ベクトルをワールド空間に変換する</span>
+psIn.tangent = normalize(mul(mWorld, vsIn.tangent));
+  psIn.biNormal = normalize(mul(mWorld, vsIn.biNormal));
+</div></code></pre>
+<h3 id="step-5-%E6%B3%95%E7%B7%9A%E3%83%9E%E3%83%83%E3%83%97%E3%81%8B%E3%82%89%E3%82%BF%E3%83%B3%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9%E3%81%AE%E6%B3%95%E7%B7%9A%E3%82%92%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AA%E3%83%B3%E3%82%B0%E3%81%99%E3%82%8B">step-5 法線マップからタンジェントスペースの法線をサンプリングする</h3>
+<p>続いて、ピクセルシェーダーです。法線マップから法線をサンプリングするプログラムを追加します。リスト12.21のプログラムを入力してください。</br>
+[リスト12.21 model.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// step-5 法線マップからタンジェントスペースの法線をサンプリングする</span>
+float3 localNormal = g_normalMap.Sample(g_sampler, psIn.uv).xyz;
+<span class="hljs-comment">// タンジェントスペースの法線を0～1の範囲から-1～1の範囲に復元する</span>
+localNormal = (localNormal - <span class="hljs-number">0.5f</span>) * <span class="hljs-number">2.0f</span>;
+</div></code></pre>
+<h3 id="step-6-%E3%82%BF%E3%83%B3%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9%E3%81%AE%E6%B3%95%E7%B7%9A%E3%82%92%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9%E3%81%AB%E5%A4%89%E6%8F%9B%E3%81%99%E3%82%8B">step-6 タンジェントスペースの法線をワールドスペースに変換する</h3>
+<p>では、これで最後です。接ベクトルなどの、タンジェントスペースの基底軸を利用して法線をワールドスペースに変換しましょう。リスト12.22のプログラムを入力してください。</p>
+<p>[リスト12.22 model.fx]</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// step-6 タンジェントスペースの法線をワールドスペースに変換する</span>
+float3 normal = psIn.tangent * localNormal.x + psIn.biNormal * localNormal.y + psIn.normal * localNormal.z;
+</div></code></pre>
+<p>ここで計算した法線が、このプロ宇グラムの後で、G-Bufferに出力可能な範囲に変換されて、出力されています。ディファードレンダリングでの法線マップの利用は、フォワードレンダリングでの利用となにも変わりません。では、実行してみてください。うまく実装できていると、図12.7のようにキャラクターの衣服の部分のシワが、法線マップによって表現されるようになります。</br>
+<strong>図12.7</strong></br>
+<img src="fig/12.7.png"></img></br></p>
+
+</body>
+</html>
