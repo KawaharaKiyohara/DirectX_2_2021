@@ -180,3 +180,6 @@ normal = psIn.tangent * localNormal.x + psIn.biNormal * localNormal.y + normal *
 **図6.9**</br>
 <img src="fig/6.9.png"></img></br>
 
+## 評価テスト
+次の評価テストを行いなさい。</br>
+[評価テストへジャンプ](https://docs.google.com/forms/d/e/1FAIpQLSc8ktBkwumknxv9JSaPXnAaUyvH12t-EIqOTq3XH5sOGAXtTA/viewform?usp=sf_link)
